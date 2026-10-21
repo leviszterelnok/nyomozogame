@@ -34,11 +34,12 @@
     return D.users.find(function (u) { return u.username === username; }) || null;
   }
 
-  // Pontos egyezés: felhasználónév vagy név (kis/nagybetű nem számít, a @ opcionális)
+  // Pontos egyezés csak a felhasználónévre (kis/nagybetű nem számít, a @ opcionális).
+  // Részleges név vagy a megjelenő név nem talál profilt.
   function userByExactName(term) {
     var t = term.trim().toLowerCase().replace(/^@/, '');
     return D.users.find(function (u) {
-      return u.username.toLowerCase() === t || u.name.toLowerCase() === t;
+      return u.username.toLowerCase() === t;
     }) || null;
   }
 
