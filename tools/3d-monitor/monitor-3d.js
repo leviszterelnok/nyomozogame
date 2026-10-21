@@ -295,6 +295,8 @@
     screen.material = screenMat;
     ledMat.emissiveIntensity = 1.2;
     screenLight.intensity = 0.35;
+    // A játék a 'power' üzenetre ugyanazt csinálja, mint a saját bekapcsoló gombja (bejelentkezés)
+    if (gameFrame.contentWindow) gameFrame.contentWindow.postMessage('power', '*');
   }
 
   // ---- Jegyzet és toll az asztalon (csak vizuál, nem kijelölhető) ----
@@ -361,6 +363,40 @@
   var screenLight = new THREE.PointLight(0x7fd6ff, 0, 1.2, 2);   // kezdetben kikapcsolt
   screenLight.position.set(0, 0.95, 0.05);
   scene.add(screenLight);
+
+  // ---- A játék képernyője: CSS 3D (a játék iframe-je a képernyő síkjára kerül) ----
+  // A CSS3DRenderer 1 egységet 1 pixelnek vesz, ezért a jelenetet 1000-szeresre nagyítjuk
+  // (1 m = 1000 egység), a kamerát is. Így a perspektíva megegyezik a WebGL-lel.
+  var CSS_SCALE = 1000;
+  var cssRenderer = new THREE.CSS3DRenderer();
+  cssRenderer.setSize(window.innerWidth, window.innerHeight);
+  cssRenderer.domElement.style.position = 'absolute';
+  cssRenderer.domElement.style.top = '0';
+  cssRenderer.domElement.style.left = '0';
+  cssRenderer.domElement.style.pointerEvents = 'none';   // a WebGL-réteg kapja a kattintást
+  stage.appendChild(cssRenderer.domElement);
+
+  var GAME_W = 1000;                                       // az iframe szélessége px-ben
+  var GAME_H = Math.round(GAME_W * SCREEN_H / SCREEN_W);   // ugyanaz az arány, mint a képernyő
+
+  var gameFrame = document.createElement('iframe');
+  gameFrame.src = '../../index.html?embed=1';
+  gameFrame.title = 'Nyomozós játék';
+  gameFrame.style.width = GAME_W + 'px';
+  gameFrame.style.height = GAME_H + 'px';
+  gameFrame.style.border = '0';
+  gameFrame.style.background = '#000';
+  gameFrame.style.pointerEvents = 'auto';                  // a játék saját elemei kapják a kattintást
+  var gameObj = new THREE.CSS3DObject(gameFrame);
+  // GAME_W px = SCREEN_W * CSS_SCALE egység
+  var cssS = SCREEN_W * CSS_SCALE / GAME_W;
+  gameObj.scale.set(cssS, cssS, 1);
+  // A képernyő közepe a világban, a sík kissé előtt (a keret takarja a szélét)
+  mon.updateMatrixWorld(true);
+  gameObj.position.copy(new THREE.Vector3(0, 0.3, 0.033).applyMatrix4(mon.matrixWorld).multiplyScalar(CSS_SCALE));
+  var cssScene = new THREE.Scene();
+  cssScene.add(gameObj);
+  var cssCam = new THREE.PerspectiveCamera(camera.fov, camera.aspect, 1, 100000);
 
   // ---- Kijelölhető elemek ----
   var pickables = [bezel, tube, screen, keyboard, deskTopMesh(), powerBtn];
@@ -462,6 +498,15 @@
     if (showPlane) updatePlaneOverlay();
 
     renderer.render(scene, camera);
+
+    // A CSS-réteg kamerája: ugyanaz a nézet, 1000-szeres léptékben
+    cssCam.fov = camera.fov;
+    cssCam.aspect = camera.aspect;
+    cssCam.updateProjectionMatrix();
+    cssCam.position.copy(camera.position).multiplyScalar(CSS_SCALE);
+    cssCam.quaternion.copy(camera.quaternion);
+    cssCam.updateMatrixWorld();
+    cssRenderer.render(cssScene, cssCam);
   }
   requestAnimationFrame(animate);
 
@@ -470,6 +515,7 @@
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    cssRenderer.setSize(window.innerWidth, window.innerHeight);
   });
 
   // Hozzáférés a konzolból és a későbbi integrációhoz
