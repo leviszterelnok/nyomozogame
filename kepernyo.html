@@ -33,7 +33,10 @@
 
         <form id="login-form" autocomplete="off">
           <label for="password">Jelszó</label>
-          <input id="password" name="password" type="password" required>
+          <!-- Jelszókezelő ne ajánljon mentett jelszót és ne ugorjon fel a popup -->
+          <input id="password" name="password" type="password" required
+                 autocomplete="new-password"
+                 data-lpignore="true" data-1p-ignore data-bwignore data-form-type="other">
           <button type="submit">Belépés</button>
         </form>
         <p id="login-error" class="error" role="alert"></p>
