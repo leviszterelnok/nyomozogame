@@ -29,9 +29,10 @@
   scene.fog = new THREE.FogExp2(0x0a0908, 0.1);
 
   // Szélesebb látószög, a kamera közel a képernyőhöz, a képernyő közepére nézve
-  var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 50);
-  var camBase = new THREE.Vector3(0, 1.07, 0.62);
-  var lookAt = new THREE.Vector3(0, 1.07, -0.12);
+  // Széles látószög: az asztal (billentyűzet, egér, jegyzet, toll) és a monitor is látszik
+  var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.05, 50);
+  var camBase = new THREE.Vector3(0, 1.02, 0.8);
+  var lookAt = new THREE.Vector3(0, 0.92, -0.12);
   camera.position.copy(camBase);
   camera.lookAt(lookAt);
 
@@ -316,6 +317,10 @@
     g.stroke();
   }, true);
 
+  // Számítógép-egér a billentyűzet bal oldalán (csak vizuál, nem kijelölhető)
+  var mouseObj = box(0.06, 0.03, 0.1, beige, -0.36, 0.765, 0.3, desk);
+  mouseObj.name = 'Egér';
+
   // Jegyzet: kék borító és lapok (a lapok felső oldalán vonalas papír)
   var coverMat = new THREE.MeshStandardMaterial({ color: 0x2a3b6b, roughness: 0.7 });
   var pageSideMat = new THREE.MeshStandardMaterial({ color: 0xefeadb, roughness: 0.9 });
@@ -447,12 +452,9 @@
     return { corners: corners, normal: normal };
   }
 
-  // ---- Nézet: enyhe egérkövetés ----
-  var pointer = { x: 0, y: 0 };
-  window.addEventListener('pointermove', function (e) {
-    pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-    pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
-  });
+  // ---- Nézet: lassú automatikus oldalirányú mozgás ----
+  // Nem egérfüggő: a képernyőn (iframe) az egér nem küld pointermove-ot az ablaknak,
+  // ezért a kamera nem akadna meg. A nézet az egész asztalt és a monitort mutatja.
 
   // ---- Animáció ----
   var t0 = performance.now();
@@ -461,8 +463,8 @@
     var t = (now - t0) / 1000;
 
     camera.position.set(
-      camBase.x + pointer.x * 0.05,
-      camBase.y - pointer.y * 0.03,
+      camBase.x + Math.sin(t * 0.25) * 0.18,
+      camBase.y + Math.sin(t * 0.17) * 0.02,
       camBase.z
     );
     camera.lookAt(lookAt);
