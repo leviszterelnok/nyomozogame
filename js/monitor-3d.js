@@ -29,10 +29,10 @@
   scene.fog = new THREE.FogExp2(0x0a0908, 0.1);
 
   // Szélesebb látószög, a kamera közel a képernyőhöz, a képernyő közepére nézve
-  // Széles látószög: az asztal (billentyűzet, egér, jegyzet, toll) és a monitor is látszik
-  var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.05, 50);
-  var camBase = new THREE.Vector3(0, 1.02, 0.8);
-  var lookAt = new THREE.Vector3(0, 0.92, -0.12);
+  // Közeli kamera, széles látószög. Az egér a nézetet mozgatja (lásd lent).
+  var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.05, 50);
+  var camBase = new THREE.Vector3(0, 1.1, 0.5);
+  var lookAt = new THREE.Vector3(0, 1.0, -0.12);
   camera.position.copy(camBase);
   camera.lookAt(lookAt);
 
@@ -426,6 +426,9 @@
         powerBtn.position.z = 0.03;
         setTimeout(function () { powerBtn.position.z = 0.036; }, 120);
         powerOn();
+      } else if (hits[0].object === screen) {
+        // A képernyőre kattintva a játék veszi át az egeret
+        setGameMode(true);
       }
     }
   });
@@ -452,9 +455,25 @@
     return { corners: corners, normal: normal };
   }
 
-  // ---- Nézet: lassú automatikus oldalirányú mozgás ----
-  // Nem egérfüggő: a képernyőn (iframe) az egér nem küld pointermove-ot az ablaknak,
-  // ezért a kamera nem akadna meg. A nézet az egész asztalt és a monitort mutatja.
+  // ---- Egér-vezérelt nézet ----
+  // Két mód: 'nézet' (alapból): az egér forgatja a kamerát, a képernyő átlátszó az egérnek.
+  // 'játék': a képernyőre kattintva az iframe kapja az egeret, a kamera megáll.
+  // Vissza: ha az egér a képernyőről a kerethez (canvas) visszatér, újra 'nézet' lesz.
+  var pointerTarget = { x: 0, y: 0 };
+  var pointerCur = { x: 0, y: 0 };
+  var gameMode = false;
+
+  function setGameMode(on) {
+    gameMode = on;
+    gameFrame.style.pointerEvents = on ? 'auto' : 'none';
+  }
+  setGameMode(false);
+
+  canvas.addEventListener('pointermove', function (e) {
+    pointerTarget.x = (e.clientX / window.innerWidth) * 2 - 1;
+    pointerTarget.y = (e.clientY / window.innerHeight) * 2 - 1;
+    if (gameMode) setGameMode(false);
+  });
 
   // ---- Animáció ----
   var t0 = performance.now();
@@ -462,12 +481,18 @@
     requestAnimationFrame(animate);
     var t = (now - t0) / 1000;
 
-    camera.position.set(
-      camBase.x + Math.sin(t * 0.25) * 0.18,
-      camBase.y + Math.sin(t * 0.17) * 0.02,
-      camBase.z
+    // Az egér pozíciója sima átmenettel fordítja a kamerát (játék módban megáll)
+    pointerCur.x += (pointerTarget.x - pointerCur.x) * 0.08;
+    pointerCur.y += (pointerTarget.y - pointerCur.y) * 0.08;
+    var yaw = pointerCur.x * 0.5;                    // balra-jobbra: ±0,5 rad
+    var pitch = -0.16 - pointerCur.y * 0.45;         // fel-le: lefelé nézve az asztal látszik
+    var dir = new THREE.Vector3(
+      Math.sin(yaw) * Math.cos(pitch),
+      Math.sin(pitch),
+      -Math.cos(yaw) * Math.cos(pitch)
     );
-    camera.lookAt(lookAt);
+    camera.position.copy(camBase);
+    camera.lookAt(camBase.clone().add(dir));
 
     // Finom CRT-villogás
     screenMat.emissiveIntensity = 0.85 + Math.sin(t * 37) * 0.02 + Math.sin(t * 1.3) * 0.02;
