@@ -1,16 +1,12 @@
 /*
  * Nyomozós játék – fő logika
  * Sorrend: kikapcsolt monitor -> bejelentkezés -> betöltő -> asztal
- * Adatok: assets/config.yml, assets/desktop.yml, assets/te_login_info.txt
+ * Adatok: js/data.js (GAME_DATA). Nincs fetch, így dupla kattintással is fut.
  */
 (function () {
   'use strict';
 
   // ---------- Beállítások ----------
-  var CONFIG_PATH = 'assets/config.yml';
-  var DESKTOP_PATH = 'assets/desktop.yml';
-  var INFO_PATH = 'assets/te_login_info.txt';
-
   // A betöltő képernyő sorai (2003-as hangulat)
   var BOOT_LINES = [
     'AjtOS betöltése...',
@@ -43,31 +39,9 @@
   var progressBar = $('#progress-bar');
   var desktopIcons = $('#desktop-icons');
 
-  // ---------- Adatok betöltése ----------
-  // Megjegyzés: a fetch() file:// megnyitásnál a böngészőktől általában hibát kap,
-  // ezért a projektet helyi szerveren kell futtatni (lásd docs/DOCS.md).
-  function loadText(path) {
-    return fetch(path, { cache: 'no-store' }).then(function (res) {
-      if (!res.ok) throw new Error(path + ' – HTTP ' + res.status);
-      return res.text();
-    });
-  }
-
-  var dataPromise = Promise.all([
-    loadText(CONFIG_PATH),
-    loadText(DESKTOP_PATH),
-    loadText(INFO_PATH)
-  ]).then(function (parts) {
-    return {
-      config: parseYaml(parts[0]),
-      desktop: parseYaml(parts[1]),
-      info: parts[2]
-    };
-  });
-  // Ha valami hibás, a hiba csak a bekapcsolásnál jelenik meg
-  dataPromise.catch(function (err) { console.error(err); });
-
-  var data = null;
+  // ---------- Adatok (js/data.js) ----------
+  // A GAME_DATA objektumot a data.js tölti be, nincs fetch.
+  var data = GAME_DATA;
 
   // ---------- Képernyőváltás ----------
   function showScreen(name) {
@@ -78,14 +52,8 @@
 
   // ---------- 1. Monitor bekapcsolása ----------
   powerBtn.addEventListener('click', function () {
-    offError.textContent = '';
-    dataPromise.then(function (loaded) {
-      data = loaded;
-      showScreen('login');
-      passwordInput.focus();
-    }, function () {
-      offError.textContent = 'Nem sikerült betölteni az assets fájlokat. Helyi szerveren futtasd (lásd docs/DOCS.md).';
-    });
+    showScreen('login');
+    passwordInput.focus();
   });
 
   // ---------- 2. Info gomb (<h>…</h> részek kiemelése) ----------
@@ -126,9 +94,9 @@
     e.preventDefault();
     loginError.textContent = '';
 
-    var expected = String(data.config.password == null ? '' : data.config.password);
+    var expected = String(data.config.password || '');
     if (expected === '') {
-      loginError.textContent = 'Nincs jelszó beállítva (assets/config.yml, "password:").';
+      loginError.textContent = 'Nincs jelszó beállítva (js/data.js, config.password).';
       return;
     }
 
@@ -166,7 +134,7 @@
     showScreen('desktop');
   }
 
-  // Ikonok a desktop.yml alapján (x, y: pixel a bal felső sarokhoz)
+  // Ikonok a data.js desktop.icons listája alapján (x, y: pixel a bal felső sarokhoz)
   function renderDesktopIcons() {
     desktopIcons.textContent = '';
     var icons = data.desktop.icons || [];
