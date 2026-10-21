@@ -74,14 +74,19 @@ var GAME_DATA = {
       notFoundMs: 3000
     },
     // Felhasználók. avatar: profilkép (assets/ alatt), friends: a felhasználónevek.
+    // posts (nem kötelező): a felhasználó saját bejegyzései. Ezek csak a profilján látszanak,
+    // a főoldalon nem, csak akkor, ha rákeresel a felhasználóra. A szerző automatikusan ő lesz.
     users: [
       { username: "kovacs_anna", name: "Kovács Anna", avatar: "assets/profil_anna.png", friends: ["szabo_bence", "nagy_lili"] },
       { username: "szabo_bence", name: "Szabó Bence", avatar: "assets/profil_bence.png", friends: ["kovacs_anna"] },
-      { username: "nagy_lili",   name: "Nagy Lili",   avatar: "",                        friends: ["kovacs_anna", "szabo_bence"] }
+      { username: "nagy_lili",   name: "Nagy Lili",   avatar: "",                        friends: ["kovacs_anna", "szabo_bence"],
+        posts: [
+          { id: 101, date: "2026-10-21 10:00", text: "Ez a bejegyzés csak Lili profilján látszik, a főoldalon nem." }
+        ] }
     ],
-    // Bejegyzések. A szövegbe <img src="assets/kep.png"> is írható.
-    // Bejegyzés nem törölhető.
-    posts: [
+    // Főoldali bejegyzések: mindig ezek látszanak a főoldalon. A szövegbe <img src="assets/kep.png"> is írható.
+    // Bejegyzés nem törölhető. A szerző profilján is megjelennek.
+    main_menu_posts: [
       { id: 1, author: "kovacs_anna", date: "2026-10-19 18:02",
         text: "Új kedvenc kávézó a belvárosban! <img src=\"assets/kep_kave.png\"> Ha valaki arra jár, szóljon." },
       { id: 2, author: "szabo_bence", date: "2026-10-20 09:15",

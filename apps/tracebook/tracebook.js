@@ -8,6 +8,7 @@
 
   var D = GAME_DATA.tracebook;
   var T = D.texts;
+  var mainPosts = D.main_menu_posts || [];  // ezek látszanak a főoldalon
 
   var form = document.getElementById('tb-search');
   var input = document.getElementById('tb-q');
@@ -44,6 +45,23 @@
   // Legújabb elöl
   function sortedPosts(list) {
     return list.slice().sort(function (a, b) { return b.date.localeCompare(a.date); });
+  }
+
+  // Egy felhasználó bejegyzései: a főoldali (szerzőre szűrve) + a saját listájából.
+  // Azonos id csak egyszer szerepel.
+  function postsFor(username) {
+    var user = userByUsername(username);
+    var own = ((user && user.posts) || []).map(function (p) {
+      return Object.assign({ author: username }, p);
+    });
+    var fromMain = mainPosts.filter(function (p) { return p.author === username; });
+    var seen = {};
+    var merged = [];
+    fromMain.concat(own).forEach(function (p) {
+      var key = String(p.id);
+      if (!seen[key]) { seen[key] = true; merged.push(p); }
+    });
+    return sortedPosts(merged);
   }
 
   // Szöveg: a <img src="..."> részek képként, a többi szövegként jelenik meg
@@ -123,7 +141,7 @@
   function showMain() {
     view.textContent = '';
     view.appendChild(el('h2', 'tb-h', T.mainTitle));
-    view.appendChild(postList(sortedPosts(D.posts), T.noPostsAtAll));
+    view.appendChild(postList(sortedPosts(mainPosts), T.noPostsAtAll));
     view.scrollTop = 0;
   }
 
@@ -175,7 +193,7 @@
 
     // Bejegyzések (a nézet görgethető)
     view.appendChild(el('h3', 'tb-h', T.profilePosts));
-    var mine = sortedPosts(D.posts.filter(function (p) { return p.author === username; }));
+    var mine = postsFor(username);
     view.appendChild(postList(mine, T.noPosts));
     view.scrollTop = 0;
   }
@@ -198,7 +216,7 @@
 
     // Egyébként a bejegyzések szövegében keresünk
     var low = t.toLowerCase();
-    var found = sortedPosts(D.posts.filter(function (p) {
+    var found = sortedPosts(mainPosts.filter(function (p) {
       return p.text.toLowerCase().indexOf(low) !== -1;
     }));
     if (found.length) {

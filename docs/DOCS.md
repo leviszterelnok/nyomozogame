@@ -39,7 +39,8 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 ## Változásnapló
 
-- **v0.2.0** – Asztal háttere (`desktop.background`). Ablakkezelő (`js/wm.js`, `css/wm.css`): húzható, átméretezhető ablakok, csak az asztal területén belül, apponként 1 ablak. Három app külön mappában (`apps/tracebook`, `apps/amail`, `apps/notes`), mindegyik külön HTML/CSS/JS. Tracebook: főoldal, keresés, profil, bejegyzések (`tracebook.posts`). Amail: lista, szűrés, levél nézet, válasz, `sendMail()` (még nincs bekötve). Notes: egyfájlos jegyzet, localStorage-ba mentve.
+- **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
+- **v0.2.0** – Asztal háttere (`desktop.background`). Ablakkezelő (`js/wm.js`, `css/wm.css`): húzható, átméretezhető ablakok, csak az asztal területén belül, apponként 1 ablak. Három app külön mappában (`apps/tracebook`, `apps/amail`, `apps/notes`), mindegyik külön HTML/CSS/JS. Tracebook: főoldal, keresés, profil, bejegyzések (`tracebook.main_menu_posts`, felhasználónként `users[].posts`). Amail: lista, szűrés, levél nézet, válasz, `sendMail()` (még nincs bekötve). Notes: egyfájlos jegyzet, localStorage-ba mentve.
 - **v0.1.5** – Bekapcsoló gomb helye és mérete a `config.powerButton`-ban. A gomb jól látható (sötét alap, fehér keret). A képpont-mérő bekerült: `tools/kepponto-mero.html`.
 - **v0.1.4** – Javítás: a kijelző háttere alapból átlátszó, így a monitor-kép látszik. A kikapcsolt monitor (`#screen-off`) fekete.
 - **v0.1.3** – A monitor-kép (`config.images.backdrop`) mindig látszik, a bekapcsoló gomb hozzá igazodik. A kijelző (`config.area`) háttere beállítható (`background`). Fontos ikon: sárga outline, nem "!" jelölés. Nem fontos ikon: szürke kijelölés. Minden kép a `data.js`-ben szerkeszthető.
@@ -51,7 +52,8 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 - `desktop.background`: asztal háttere.
 - `apps`: az appok címe, fájlja és kezdeti mérete. Új app: itt és a `desktop.icons`-ban.
-- `tracebook.users`: felhasználók (`username`, `name`, `avatar`, `friends`). `tracebook.posts`: bejegyzések (`author`, `date`, `text`). A szövegbe `<img src="assets/kep.png">` írható. `tracebook.texts`: minden felirat, a nem létező felhasználó üzenete (`notFound`) és az időtartama (`notFoundMs`, ms).
+- `tracebook.users`: felhasználók (`username`, `name`, `avatar`, `friends`, opcionálisan `posts`). A `posts` a felhasználó saját bejegyzései: csak a profilján látszanak, a főoldalon és a szövegkeresésben nem.
+- `tracebook.main_menu_posts`: a főoldali bejegyzések (`id`, `author`, `date`, `text`). Mindig ezek látszanak a főoldalon, a szerzőjük profilján is megjelennek. A szövegbe `<img src="assets/kep.png">` írható. `tracebook.texts`: minden felirat, a nem létező felhasználó üzenete (`notFound`) és az időtartama (`notFoundMs`, ms).
 - `amail.mails`: beérkezett levelek. `amail.outgoing`: piszkozatok. `amail.texts`: feliratok.
 - `notes`: cím és feliratok.
 
