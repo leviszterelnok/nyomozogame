@@ -7,8 +7,8 @@
   'use strict';
 
   // ---- Méretek (méterben) ----
-  var SCREEN_W = 0.5;   // képernyő szélessége
-  var SCREEN_H = 0.4;   // képernyő magassága
+  var SCREEN_W = 0.76;  // képernyő szélessége (széles monitor)
+  var SCREEN_H = 0.46;  // képernyő magassága
 
   var stage = document.getElementById('stage');
   var overlayPoly = document.getElementById('plane');
@@ -78,7 +78,7 @@
   }, true);
 
   // Képernyő tartalma: egyszerű bejelentkező képernyő-szerű kép (később a játék váltja)
-  var screenTex = canvasTex(512, 400, function (g, w, h) {
+  var screenTex = canvasTex(620, 375, function (g, w, h) {
     var grd = g.createRadialGradient(w / 2, h / 2, 20, w / 2, h / 2, w * 0.7);
     grd.addColorStop(0, '#0d3b52');
     grd.addColorStop(1, '#021018');
@@ -105,7 +105,9 @@
   var wood = new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.6 });
   var floorMat = new THREE.MeshStandardMaterial({ color: 0x1d150f, roughness: 0.9 });
   var wallMat = new THREE.MeshStandardMaterial({ color: 0x241c15, roughness: 0.95 });
-  var ledMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, emissive: 0x00ff88, emissiveIntensity: 1.2 });
+  var ledMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, emissive: 0x00ff88, emissiveIntensity: 0 });
+  // Kikapcsolt képernyő: fekete üveg
+  var screenOffMat = new THREE.MeshStandardMaterial({ color: 0x020202, roughness: 0.2 });
   var shadeMat = new THREE.MeshStandardMaterial({ color: 0xd9a25a, emissive: 0xffa040, emissiveIntensity: 0.6, side: THREE.DoubleSide, roughness: 0.8 });
   var screenMat = new THREE.MeshStandardMaterial({
     map: screenTex,
@@ -136,6 +138,40 @@
 
   function box(w, h, d, mat, x, y, z, parent) {
     return addMesh(new THREE.BoxGeometry(w, h, d), mat, x, y, z, parent);
+  }
+
+  // Csonkagúla-test (téglalap keresztmetszet, két végén más méret): a CRT tubus.
+  // Minden lap normálját a test közepe felé nem mutató irányba állítja.
+  function makeFrustum(wf, hf, wb, hb, len) {
+    var v = [
+      -wf / 2, -hf / 2, 0,   wf / 2, -hf / 2, 0,   wf / 2, hf / 2, 0,   -wf / 2, hf / 2, 0,
+      -wb / 2, -hb / 2, -len, wb / 2, -hb / 2, -len, wb / 2, hb / 2, -len, -wb / 2, hb / 2, -len
+    ];
+    var center = new THREE.Vector3(0, 0, -len / 2);
+    var idx = [];
+    function quad(a, b, c, d) {
+      var P = function (i) { return new THREE.Vector3(v[i * 3], v[i * 3 + 1], v[i * 3 + 2]); };
+      var pa = P(a), pb = P(b), pc = P(c), pd = P(d);
+      var n = new THREE.Vector3().subVectors(pb, pa).cross(new THREE.Vector3().subVectors(pc, pa));
+      var fc = new THREE.Vector3().add(pa).add(pb).add(pc).add(pd).multiplyScalar(0.25);
+      if (n.dot(fc.sub(center)) < 0) {
+        idx.push(a, c, b, a, d, c);
+      } else {
+        idx.push(a, b, c, a, c, d);
+      }
+    }
+    quad(4, 5, 6, 7);  // hátsó lap
+    quad(0, 1, 5, 4);  // alsó
+    quad(1, 2, 6, 5);  // jobb
+    quad(2, 3, 7, 6);  // felső
+    quad(3, 0, 4, 7);  // bal
+    quad(0, 3, 2, 1);  // elülső (a keret takarja)
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
+    geo.setIndex(idx);
+    var flat = geo.toNonIndexed();   // lapos árnyalás
+    flat.computeVertexNormals();
+    return flat;
   }
 
   // open: true -> nyitott henger (lámpaernyő)
@@ -215,39 +251,91 @@
   scene.add(mon);
 
   // Előlap (keret)
-  var bezel = box(0.66, 0.56, 0.06, beige, 0, 0.28, 0, mon);
+  var bezel = box(0.92, 0.6, 0.06, beige, 0, 0.3, 0, mon);
   bezel.name = 'Monitor-keret';
 
-  // Hosszú, csonkakúpos "tubus" hátul: a szögletes CRT-test.
-  // A 4 oldalú henger 45 fokos forgatással szögletes lesz, Rx(-90) után a hátsó vég kisebb.
-  var tube = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.42, 0.42, 4, 1, false), beigeDark);
-  tube.rotation.set(-Math.PI / 2, Math.PI / 4, 0);
-  tube.position.set(0, 0.28, -0.21);
+  // Hosszú, csonkakúpos "tubus" hátul: a szögletes CRT-test (a hátsó vég kisebb).
+  var tube = new THREE.Mesh(makeFrustum(0.86, 0.56, 0.5, 0.34, 0.45), beigeDark);
+  tube.position.set(0, 0.3, 0);
   tube.castShadow = true;
   tube.receiveShadow = true;
   tube.name = 'Tubus';
   mon.add(tube);
 
   // Képernyő (sík): ez a kijelölhető felület
-  var screen = new THREE.Mesh(new THREE.PlaneGeometry(SCREEN_W, SCREEN_H), screenMat);
-  screen.position.set(0, 0.28, 0.031);
+  var screen = new THREE.Mesh(new THREE.PlaneGeometry(SCREEN_W, SCREEN_H), screenOffMat);
+  screen.position.set(0, 0.3, 0.031);
   screen.name = 'Képernyő';
   mon.add(screen);
 
   // Üveg-réteg a képernyő előtt
   var glass = new THREE.Mesh(new THREE.PlaneGeometry(SCREEN_W, SCREEN_H), glassMat);
-  glass.position.set(0, 0.28, 0.034);
+  glass.position.set(0, 0.3, 0.034);
   mon.add(glass);
 
   // Gombok és LED az előlap alján
-  var knobA = cyl(0.018, 0.018, 0.02, 24, black, 0.22, 0.04, 0.035, mon);
+  var knobA = cyl(0.018, 0.018, 0.02, 24, black, -0.36, 0.04, 0.035, mon);
   knobA.rotation.x = Math.PI / 2;
   knobA.name = 'Gomb';
-  var knobB = cyl(0.018, 0.018, 0.02, 24, black, 0.27, 0.04, 0.035, mon);
+  var knobB = cyl(0.018, 0.018, 0.02, 24, black, -0.31, 0.04, 0.035, mon);
   knobB.rotation.x = Math.PI / 2;
   knobB.name = 'Gomb';
-  var led = box(0.02, 0.02, 0.01, ledMat, 0.13, 0.04, 0.036, mon);
+  var led = box(0.02, 0.02, 0.01, ledMat, 0.33, 0.04, 0.036, mon);
   led.name = 'LED';
+
+  // Bekapcsoló gomb: a játék gombja, a bejelentkezést indítja (app.js: #power-btn -> 'login')
+  var powerBtn = box(0.05, 0.02, 0.015, black, 0.4, 0.04, 0.036, mon);
+  powerBtn.name = 'Bekapcsoló gomb';
+  var isOn = false;
+
+  // Bekapcsolás: a képernyő és a LED felkapcsolódik. Egyszer kapcsol be, mint a játékban.
+  function powerOn() {
+    if (isOn) return;
+    isOn = true;
+    screen.material = screenMat;
+    ledMat.emissiveIntensity = 1.2;
+    screenLight.intensity = 0.35;
+  }
+
+  // ---- Jegyzet és toll az asztalon (csak vizuál, nem kijelölhető) ----
+  var paperTex = canvasTex(256, 180, function (g, w, h) {
+    g.fillStyle = '#f4f1e6';
+    g.fillRect(0, 0, w, h);
+    g.strokeStyle = 'rgba(90,140,200,0.55)';
+    g.lineWidth = 1;
+    for (var y = 22; y < h; y += 14) {
+      g.beginPath();
+      g.moveTo(0, y);
+      g.lineTo(w, y);
+      g.stroke();
+    }
+    g.strokeStyle = 'rgba(200,60,60,0.5)';
+    g.beginPath();
+    g.moveTo(26, 0);
+    g.lineTo(26, h);
+    g.stroke();
+  }, true);
+
+  // Jegyzet: kék borító és lapok (a lapok felső oldalán vonalas papír)
+  var coverMat = new THREE.MeshStandardMaterial({ color: 0x2a3b6b, roughness: 0.7 });
+  var pageSideMat = new THREE.MeshStandardMaterial({ color: 0xefeadb, roughness: 0.9 });
+  var paperMat = new THREE.MeshStandardMaterial({ map: paperTex, roughness: 0.9 });
+  var notebook = box(0.3, 0.012, 0.21, coverMat, 0.45, 0.756, 0.25);
+  notebook.name = 'Jegyzet';
+  var pagesGeo = new THREE.BoxGeometry(0.28, 0.01, 0.195);
+  var pages = new THREE.Mesh(pagesGeo, [pageSideMat, pageSideMat, paperMat, pageSideMat, pageSideMat, pageSideMat]);
+  pages.position.set(0.45, 0.7675, 0.25);
+  pages.castShadow = true;
+  pages.receiveShadow = true;
+  scene.add(pages);
+
+  // Toll a jegyzet bal oldalán (a nézőhöz képest), az asztalon fekve
+  var penMat = new THREE.MeshStandardMaterial({ color: 0x1b2a6b, roughness: 0.35 });
+  var pen = new THREE.Mesh(new THREE.CylinderGeometry(0.0065, 0.0065, 0.15, 12), penMat);
+  pen.rotation.x = Math.PI / 2;
+  pen.position.set(0.265, 0.7565, 0.25);
+  pen.castShadow = true;
+  scene.add(pen);
 
   // ---- Távoli asztal lámpával ----
   box(1.5, 0.05, 0.7, wood, 1.6, 0.725, -2.5);
@@ -270,12 +358,12 @@
   scene.add(lampLight);
 
   // A képernyő kék fénye az asztalra
-  var screenLight = new THREE.PointLight(0x7fd6ff, 0.35, 1.2, 2);
+  var screenLight = new THREE.PointLight(0x7fd6ff, 0, 1.2, 2);   // kezdetben kikapcsolt
   screenLight.position.set(0, 0.95, 0.05);
   scene.add(screenLight);
 
   // ---- Kijelölhető elemek ----
-  var pickables = [bezel, tube, screen, keyboard, deskTopMesh()];
+  var pickables = [bezel, tube, screen, keyboard, deskTopMesh(), powerBtn];
 
   function deskTopMesh() {
     return desk.children[0];
@@ -294,6 +382,12 @@
     var hits = raycaster.intersectObjects(pickables, false);
     if (hits.length) {
       var h = hits[0];
+      if (h.object === powerBtn) {
+        // Gombnyomás: a gomb egy pillanatra lenyomódik, és bekapcsol
+        powerBtn.position.z = 0.03;
+        setTimeout(function () { powerBtn.position.z = 0.036; }, 120);
+        powerOn();
+      }
       var name = h.object.name || 'Asztal';
       pickedEl.textContent = 'Kijelölt elem: ' + name +
         ' (távolság: ' + h.distance.toFixed(2) + ' m)';
