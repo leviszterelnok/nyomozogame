@@ -1,0 +1,307 @@
+<title>Képpont-mérő</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Terv: semleges, pontos eszköz. Egy akcentszín (kék) a kijelölt pontokhoz. Két sorban: kép, mellette adatok. */
+:root {
+  --bg: #f4f3ef;
+  --fg: #1c1c1a;
+  --muted: #6c6a63;
+  --line: #d6d3c9;
+  --panel: #ffffff;
+  --accent: #2357d6;
+  --warn: #9a5a00;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131313;
+    --fg: #ebe9e3;
+    --muted: #9a978e;
+    --line: #353535;
+    --panel: #1d1d1d;
+    --accent: #7ea6ff;
+    --warn: #e5b26a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131313;
+  --fg: #ebe9e3;
+  --muted: #9a978e;
+  --line: #353535;
+  --panel: #1d1d1d;
+  --accent: #7ea6ff;
+  --warn: #e5b26a;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px;
+}
+
+h1 { font-size: 20px; margin: 0 0 4px; }
+.lead { color: var(--muted); margin: 0 0 16px; font-size: 14px; }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+.toolbar input[type="file"] { max-width: 100%; }
+
+button {
+  font: inherit;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 320px); gap: 16px; align-items: start; }
+@media (max-width: 760px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+
+.picture {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 0;
+}
+.canvas-wrap { position: relative; display: inline-block; max-width: 100%; line-height: 0; cursor: crosshair; }
+.canvas-wrap img { display: block; max-width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.empty { color: var(--muted); padding: 48px 16px; text-align: center; line-height: normal; }
+
+.marker {
+  position: absolute;
+  width: 14px; height: 14px;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: rgba(35, 87, 214, 0.25);
+  pointer-events: none;
+}
+.marker::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 16px; top: -6px;
+  white-space: nowrap;
+  font: 12px/1 system-ui, sans-serif;
+  color: #fff;
+  background: var(--accent);
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+.box {
+  position: absolute;
+  border: 2px dashed var(--accent);
+  background: rgba(35, 87, 214, 0.08);
+  pointer-events: none;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 0;
+}
+.panel h2 { font-size: 14px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 600; font-size: 12px; }
+td.num { text-align: right; }
+.missing { color: var(--muted); }
+
+textarea {
+  width: 100%;
+  min-height: 150px;
+  font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.note { font-size: 13px; color: var(--warn); margin: 12px 0 0; }
+.row-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.status { font-size: 13px; color: var(--muted); margin-top: 6px; min-height: 1.2em; }
+</style>
+
+<h1>Képpont-mérő</h1>
+<p class="lead">Tölts fel egy képet, válaszd ki, mit jelölsz, és kattints a képre. A % értékek a kép méretéhez képest vannak.</p>
+
+<div class="toolbar">
+  <input id="file" type="file" accept="image/*">
+  <button type="button" data-mode="c1" aria-pressed="true">Kijelző bal-felső sarka</button>
+  <button type="button" data-mode="c2" aria-pressed="false">Kijelző jobb-alsó sarka</button>
+  <button type="button" data-mode="pw" aria-pressed="false">Bekapcsoló gomb</button>
+  <button type="button" id="reset">Törlés</button>
+</div>
+
+<div class="layout">
+  <div class="picture">
+    <div id="empty" class="empty">Még nincs kép. Tölts fel egyet fent.</div>
+    <div id="canvas" class="canvas-wrap" hidden>
+      <img id="pic" alt="Feltöltött kép">
+      <div id="overlay"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <h2>Mért pontok</h2>
+      <table>
+        <thead><tr><th>Pont</th><th class="num">X %</th><th class="num">Y %</th></tr></thead>
+        <tbody>
+          <tr><td>Kijelző bal-felső</td><td class="num" id="v-c1x">—</td><td class="num" id="v-c1y">—</td></tr>
+          <tr><td>Kijelző jobb-alsó</td><td class="num" id="v-c2x">—</td><td class="num" id="v-c2y">—</td></tr>
+          <tr><td>Bekapcsoló gomb</td><td class="num" id="v-pwx">—</td><td class="num" id="v-pwy">—</td></tr>
+        </tbody>
+      </table>
+      <div class="row-actions">
+        <button type="button" id="copy">Másolás</button>
+      </div>
+      <div id="status" class="status" aria-live="polite"></div>
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <h2>Beillesztés a data.js-be</h2>
+      <textarea id="snippet" readonly spellcheck="false"></textarea>
+      <p class="note">A játékban az ablak %-a számít. Ha a kép kitölti az ablakot, a számok megegyeznek; ha nem, a játékban kell finomítani.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var pts = { c1: null, c2: null, pw: null };
+  var mode = 'c1';
+  var pic = document.getElementById('pic');
+  var canvas = document.getElementById('canvas');
+  var overlay = document.getElementById('overlay');
+  var empty = document.getElementById('empty');
+  var snippet = document.getElementById('snippet');
+  var status = document.getElementById('status');
+
+  function fmt(v) { return v == null ? '—' : v.toFixed(1); }
+
+  function setPressed() {
+    document.querySelectorAll('[data-mode]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === mode));
+    });
+  }
+
+  function render() {
+    // Táblázat
+    ['c1', 'c2', 'pw'].forEach(function (k) {
+      var id = k === 'pw' ? 'pw' : k;
+      var p = pts[k];
+      document.getElementById('v-' + id + 'x').textContent = p ? fmt(p.x) : '—';
+      document.getElementById('v-' + id + 'y').textContent = p ? fmt(p.y) : '—';
+    });
+
+    // Jelölések a képen
+    overlay.textContent = '';
+    if (pts.c1 && pts.c2) {
+      var box = document.createElement('div');
+      box.className = 'box';
+      box.style.left = Math.min(pts.c1.x, pts.c2.x) + '%';
+      box.style.top = Math.min(pts.c1.y, pts.c2.y) + '%';
+      box.style.width = Math.abs(pts.c2.x - pts.c1.x) + '%';
+      box.style.height = Math.abs(pts.c2.y - pts.c1.y) + '%';
+      overlay.appendChild(box);
+    }
+    [['c1', 'Bal-felső'], ['c2', 'Jobb-alsó'], ['pw', 'Gomb']].forEach(function (pair) {
+      var p = pts[pair[0]];
+      if (!p) return;
+      var m = document.createElement('div');
+      m.className = 'marker';
+      m.setAttribute('data-label', pair[1]);
+      m.style.left = p.x + '%';
+      m.style.top = p.y + '%';
+      overlay.appendChild(m);
+    });
+
+    // Snippet
+    var lines = [];
+    if (pts.c1 && pts.c2) {
+      lines.push('area: { x1: ' + pts.c1.x.toFixed(1) + ', y1: ' + pts.c1.y.toFixed(1) +
+        ', x2: ' + pts.c2.x.toFixed(1) + ', y2: ' + pts.c2.y.toFixed(1) + ', background: "transparent" }');
+    } else {
+      lines.push('// Jelöld ki a kijelző két sarkát az area-hoz');
+    }
+    if (pts.pw) {
+      lines.push('powerButton: { x: ' + pts.pw.x.toFixed(1) + ', y: ' + pts.pw.y.toFixed(1) + ', size: 48 }');
+    } else {
+      lines.push('// powerButton: jelöld ki a bekapcsoló gombot');
+    }
+    snippet.value = lines.join('\n');
+  }
+
+  document.getElementById('file').addEventListener('change', function (e) {
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      pic.src = reader.result; // data URL, nincs hálózati kérés
+      empty.hidden = true;
+      canvas.hidden = false;
+      status.textContent = 'Kép betöltve: ' + f.name;
+    };
+    reader.readAsDataURL(f);
+  });
+
+  document.querySelectorAll('[data-mode]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      mode = b.getAttribute('data-mode');
+      setPressed();
+      status.textContent = 'Kattints a képre a kijelöléshez.';
+    });
+  });
+
+  pic.addEventListener('click', function (e) {
+    var r = pic.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width * 100;
+    var y = (e.clientY - r.top) / r.height * 100;
+    x = Math.max(0, Math.min(100, x));
+    y = Math.max(0, Math.min(100, y));
+    pts[mode] = { x: x, y: y };
+    render();
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    pts = { c1: null, c2: null, pw: null };
+    render();
+    status.textContent = 'Törölve.';
+  });
+
+  document.getElementById('copy').addEventListener('click', function () {
+    var text = snippet.value;
+    var fallback = function () {
+      snippet.select();
+      status.textContent = 'Jelöld ki a szöveget és másold (Ctrl+C).';
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        status.textContent = 'Másolva.';
+      }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  setPressed();
+  render();
+})();
+</script>
