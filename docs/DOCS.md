@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.0 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.2 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -29,7 +29,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 ## Beállítások szerkesztése
 
 - **Jelszó:** `js/data.js` → `config.password`
-- **Ikonok:** `js/data.js` → `desktop.icons`. Új ikon: új `{ name: …, x: …, y: …, important: …, appicon: …, launch: … }` sor a listába.
+- **Ikonok:** `js/data.js` → `desktop.icons`. Új ikon: új `{ name: …, important: …, appicon: …, launch: … }` sor a listába. Az ikonok rácson, felülről lefelé, oszloponként rendeződnek (a sorrend számít).
 - **Info szöveg:** `js/data.js` → `info`. A `<h>…</h>` közé írt rész lesz kiemelve.
 - **Játéktér területe:** `js/data.js` → `config.area` (`x1`, `y1` = bal felső sarok, `x2`, `y2` = jobb alsó sarok). Számok = %, `"120px"` = pixel. A kijelző háttere: `background` (szín vagy kép).
 - **Képek:** `js/data.js` → `config.images` (`backdrop` = monitor-kép, mindig látszik; `avatar` = profilkép). Ikonképek: `desktop.icons` → `appicon`.
@@ -40,6 +40,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 ## Változásnapló
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
+- **v0.2.2** – Asztali ikonok kisebbek, rácson (x/y már nincs). Új `js/mail.js`: `sendAmail(mail, opts)` levelet ad a beérkezetthez; piros pötty az Amail ikonján, szöveges értesítés a jobb alsó sarokban. Az értesítés szövege és ideje `amail.notification`-ben vagy `sendAmail` opts-ban állítható. Az Amail megnyitásakor a pötty eltűnik.
 - **v0.2.0** – Asztal háttere (`desktop.background`). Ablakkezelő (`js/wm.js`, `css/wm.css`): húzható, átméretezhető ablakok, csak az asztal területén belül, apponként 1 ablak. Három app külön mappában (`apps/tracebook`, `apps/amail`, `apps/notes`), mindegyik külön HTML/CSS/JS. Tracebook: főoldal, keresés, profil, bejegyzések (`tracebook.main_menu_posts`, felhasználónként `users[].posts`). Amail: lista, szűrés, levél nézet, válasz, `sendMail()` (még nincs bekötve). Notes: egyfájlos jegyzet, localStorage-ba mentve.
 - **v0.1.5** – Bekapcsoló gomb helye és mérete a `config.powerButton`-ban. A gomb jól látható (sötét alap, fehér keret). A képpont-mérő bekerült: `tools/kepponto-mero.html`.
 - **v0.1.4** – Javítás: a kijelző háttere alapból átlátszó, így a monitor-kép látszik. A kikapcsolt monitor (`#screen-off`) fekete.
@@ -59,7 +60,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 ## Ismert hiányosságok / nyitott kérdések
 
-- Amail küldés: a `sendMail()` (apps/amail/amail.js) még csak konzolba ír és "még nincs bekötve" üzenetet ad. A valódi küldést később kell megírni.
+- Amail válasz küldése (a játékos írja): a `sendMail()` (apps/amail/amail.js) még csak konzolba ír. A játék levélküldése a `sendAmail()` (js/mail.js), az már működik.
 - A képek hiányoznak az `assets/` mappából (profilképek, appikonok, bejegyzés-képek): a böngésző hibát jelez, ahol nincs kép.
 - Az ablakkezelőben nincs az ablakok közti sorrend mentése, és nincs mobil támogatás.
 
