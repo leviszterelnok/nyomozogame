@@ -1,7 +1,8 @@
 /*
- * 3D monitor prototípus (Three.js r128).
+ * 3D monitor (Three.js r128). A főoldal (index.html) ezt futtatja.
  * Minden geometria kódból épül, nincs külső modellfájl. Textúrák canvas-ból készülnek.
- * A kijelölt képernyő-sík (screen) adatai a window.Monitor3D-n keresztül érhetők el.
+ * A játék képernyője (kepernyo.html) a monitor síkján, CSS 3D iframe-ként fut.
+ * A képernyő-sík adatai a window.Monitor3D-n keresztül érhetők el.
  */
 (function () {
   'use strict';
@@ -11,10 +12,6 @@
   var SCREEN_H = 0.46;  // képernyő magassága
 
   var stage = document.getElementById('stage');
-  var overlayPoly = document.getElementById('plane');
-  var btnPlane = document.getElementById('btn-plane');
-  var pickedEl = document.getElementById('picked');
-  var infoEl = document.getElementById('info');
 
   // ---- Renderer, jelenet, kamera ----
   var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -380,7 +377,7 @@
   var GAME_H = Math.round(GAME_W * SCREEN_H / SCREEN_W);   // ugyanaz az arány, mint a képernyő
 
   var gameFrame = document.createElement('iframe');
-  gameFrame.src = '../../index.html?embed=1';
+  gameFrame.src = 'kepernyo.html?embed=1';
   gameFrame.title = 'Nyomozós játék';
   gameFrame.style.width = GAME_W + 'px';
   gameFrame.style.height = GAME_H + 'px';
@@ -417,18 +414,12 @@
     raycaster.setFromCamera(mouse, camera);
     var hits = raycaster.intersectObjects(pickables, false);
     if (hits.length) {
-      var h = hits[0];
-      if (h.object === powerBtn) {
+      if (hits[0].object === powerBtn) {
         // Gombnyomás: a gomb egy pillanatra lenyomódik, és bekapcsol
         powerBtn.position.z = 0.03;
         setTimeout(function () { powerBtn.position.z = 0.036; }, 120);
         powerOn();
       }
-      var name = h.object.name || 'Asztal';
-      pickedEl.textContent = 'Kijelölt elem: ' + name +
-        ' (távolság: ' + h.distance.toFixed(2) + ' m)';
-    } else {
-      pickedEl.textContent = '';
     }
   });
 
@@ -454,24 +445,6 @@
     return { corners: corners, normal: normal };
   }
 
-  // A képernyő-sík körvonalának kirajzolása (SVG)
-  var showPlane = false;
-  btnPlane.addEventListener('click', function () {
-    showPlane = !showPlane;
-    btnPlane.textContent = showPlane ? 'Képernyő-sík elrejtése' : 'Képernyő-sík mutatása';
-    overlayPoly.setAttribute('points', '');
-    infoEl.textContent = '';
-  });
-
-  function updatePlaneOverlay() {
-    var info = screenInfo();
-    overlayPoly.setAttribute('points', info.corners.map(function (c) {
-      return c.px.x.toFixed(1) + ',' + c.px.y.toFixed(1);
-    }).join(' '));
-    var n = info.normal;
-    infoEl.textContent = 'Normálvektor: (' + n.x.toFixed(2) + ', ' + n.y.toFixed(2) + ', ' + n.z.toFixed(2) + ')';
-  }
-
   // ---- Nézet: enyhe egérkövetés ----
   var pointer = { x: 0, y: 0 };
   window.addEventListener('pointermove', function (e) {
@@ -494,8 +467,6 @@
 
     // Finom CRT-villogás
     screenMat.emissiveIntensity = 0.85 + Math.sin(t * 37) * 0.02 + Math.sin(t * 1.3) * 0.02;
-
-    if (showPlane) updatePlaneOverlay();
 
     renderer.render(scene, camera);
 

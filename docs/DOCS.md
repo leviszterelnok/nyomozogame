@@ -1,19 +1,21 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.6 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.7 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
 ## Futtatás
 
-Nincs szerver, nincs Python: a `index.html` fájlt dupla kattintással megnyithatod a böngészőben.
+Nincs szerver, nincs Python: az `index.html` fájlt dupla kattintással megnyithatod a böngészőben (3D monitor, a játék képernyője a monitoron fut). A játék képernyője külön is megnyitható: `kepernyo.html`.
 Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 ## Felépítés
 
 | Fájl | Tartalom |
 |---|---|
-| `index.html` | Képernyők (monitor, bejelentkezés, betöltő, asztal) |
+| `index.html` | Főoldal: 3D monitor, asztal, könyvespolc, lámpa. A monitor bekapcsolója a játék képernyőjét indítja |
+| `kepernyo.html` | A játék képernyője (monitor, bejelentkezés, betöltő, asztal). Az `index.html` ezt ágyazza be `?embed=1` módban |
+| `js/monitor-3d.js`, `css/monitor.css` | A 3D jelenet (Three.js r128) és megjelenése |
 | `css/style.css` | Megjelenés, reszponzív alapok |
 | `js/data.js` | Minden beállítás: jelszó, asztali ikonok, info szöveg (`GAME_DATA`) |
 | `js/app.js` | Képernyőváltás, jelszó, info gomb, betöltő, asztal, ikonok |
@@ -24,7 +26,6 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 | `apps/amail/` | Amail (HTML, CSS, JS) |
 | `apps/notes/` | Notes (HTML, CSS, JS) |
 | `tools/kepponto-mero.html` | Képpont-mérő: kép feltöltése, kattintással % értékek, a data.js-be másolható sorok |
-| `tools/3d-monitor/` | 3D monitor prototípus (Three.js r128, CDN-ről). Kódból épül, nincs modellfájl. Még nincs bekötve a játékba |
 | `assets/szamitogep.png` | Háttér és számítógép (hiányzik, még feltöltendő) |
 | `assets/nyomozo_fej.png` | Profilkép (hiányzik, még feltöltendő) |
 | `assets/tracebook.png`, `notes.png`, `amail.png` | Ikonképek (hiányoznak, még feltöltendők) |
@@ -44,6 +45,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
 - **v0.2.4** – Prototípus: `tools/3d-monitor/` (index.html, style.css, monitor-3d.js). Three.js r128 CDN-ről (classic script, file:// alatt is fut). Kódból épített régi dobozos monitor, asztal, könyvespolc és távoli lámpa. Kattintásos kijelölés (raycast), képernyő-sík körvonala SVG-ben (`window.Monitor3D.screenInfo()`). A játék még a képpontos háttérrel fut.
+- **v0.2.7** – A 3D monitor a főoldal (`index.html`), a debug-panel (felső szöveg, sík-gomb) törölve. A játék képernyője `kepernyo.html`-be került, `?embed=1` módban fut. A 3D-s kód `js/monitor-3d.js`, megjelenés `css/monitor.css`. A `tools/3d-monitor/` mappa megszűnt.
 - **v0.2.6** – Beágyazott mód (`?embed=1`): háttérkép és saját gomb nélkül, `'power'` postMessage-re bejelentkező képernyő (`js/app.js`, `css/style.css`). A 3D monitor képernyőjén a játék iframe-je fut (CSS3DRenderer, unpkg, Three.js r128). Kattintás a képernyőn a böngésző saját találatával megy (file:// alatt nem lehet iframe-be UV-alapú kattintást küldeni).
 - **v0.2.5** – 3D prototípus: szélesebb monitor (csonkagúla-tubus), kikapcsolt képernyő, a bekapcsoló gomb (raycast) felkapcsolja a képernyőt, mint a játék gombja. Asztalon jegyzet és toll (csak vizuál).
 - **v0.2.3** – Új `js/game_logic.js` (`Game`): az asztal megjelenésétől indul, az első levelet 30 mp múlva küldi (`game.introMailDelay`, `game.introMail` a data.js-ben). Haladás: `Game.setFlag` / `Game.hasFlag`.
