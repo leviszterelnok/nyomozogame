@@ -31,14 +31,14 @@
         </div>
         <p id="info-text" class="info-text" hidden></p>
 
-        <form id="login-form" autocomplete="off">
+        <!-- Nem <form>: a böngésző jelszókezelője így nem ajánl jelszót és nem ugrik fel -->
+        <div id="login-form" class="login-form">
           <label for="password">Jelszó</label>
-          <!-- Jelszókezelő ne ajánljon mentett jelszót és ne ugorjon fel a popup -->
-          <input id="password" name="password" type="password" required
-                 autocomplete="new-password"
+          <input id="password" name="password" type="password"
+                 autocomplete="off"
                  data-lpignore="true" data-1p-ignore data-bwignore data-form-type="other">
-          <button type="submit">Belépés</button>
-        </form>
+          <button id="login-btn" type="button">Belépés</button>
+        </div>
         <p id="login-error" class="error" role="alert"></p>
       </div>
     </section>

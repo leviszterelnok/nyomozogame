@@ -156,8 +156,9 @@
     box.classList.add('shake');
   }
 
-  loginForm.addEventListener('submit', function (e) {
-    e.preventDefault();
+  // Bejelentkezés: nem űrlapküldéssel, hanem gombbal és Enterrel (így a böngésző
+  // jelszókezelője nem kezeli a belépést mentendő űrlapként)
+  function tryLogin() {
     loginError.textContent = '';
 
     var expected = String(data.config.password || '');
@@ -174,6 +175,10 @@
       shakeLoginBox();
       passwordInput.select();
     }
+  }
+  $('#login-btn').addEventListener('click', tryLogin);
+  passwordInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') tryLogin();
   });
 
   // ---------- 4. Betöltő ----------
