@@ -113,6 +113,15 @@
     passwordInput.focus();
   });
 
+  // ---------- Beágyazott mód (?embed=1): a 3D monitor (tools/3d-monitor) képernyőjeként ----------
+  // Ilyenkor nincs háttérkép és saját gomb; a 3D monitor a 'power' üzenettel kéri a bekapcsolást.
+  if (/[?&]embed=1/.test(location.search)) {
+    document.body.classList.add('embed');
+  }
+  window.addEventListener('message', function (e) {
+    if (e.data === 'power') powerBtn.click();
+  });
+
   // ---------- 2. Info gomb (<h>…</h> részek kiemelése) ----------
   function renderInfo() {
     var text = data.info || '';
