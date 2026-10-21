@@ -30,6 +30,11 @@ html, body {
   height: 100vh;
   overflow: hidden;
   z-index: 1;
+  background: transparent; /* a monitor-kép látszik alatta, ha a kijelző nincs letakarva */
+}
+
+/* Kikapcsolt monitor: a kijelző fekete */
+#screen-off {
   background: #000;
 }
 

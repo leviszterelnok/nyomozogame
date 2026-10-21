@@ -19,7 +19,8 @@ var GAME_DATA = {
     // Számok = a böngészőablak %-a (pl. 10 = 10%). "120px" alakú szöveg = pixel.
     // Alapértelmezés: a teljes ablak (0,0 -> 100,100).
     // background: a kijelző háttere: szín (pl. "#000") vagy kép (pl. "assets/hatter.png").
-    area: { x1: 0, y1: 0, x2: 100, y2: 100, background: "#000" }
+    // "transparent": a monitor-kép látszik alatta. A kikapcsolt monitor mindig fekete.
+    area: { x1: 0, y1: 0, x2: 100, y2: 100, background: "transparent" }
   },
 
   // Info gomb szövege a profilkép mellett.

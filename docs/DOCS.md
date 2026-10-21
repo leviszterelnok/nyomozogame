@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.1.3 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.1.4 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -33,6 +33,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 ## Változásnapló
 
+- **v0.1.4** – Javítás: a kijelző háttere alapból átlátszó, így a monitor-kép látszik. A kikapcsolt monitor (`#screen-off`) fekete.
 - **v0.1.3** – A monitor-kép (`config.images.backdrop`) mindig látszik, a bekapcsoló gomb hozzá igazodik. A kijelző (`config.area`) háttere beállítható (`background`). Fontos ikon: sárga outline, nem "!" jelölés. Nem fontos ikon: szürke kijelölés. Minden kép a `data.js`-ben szerkeszthető.
 - **v0.1.2** – Játéktér területe beállítható (`config.area`), az ablak többi része fekete.
 - **v0.1.1** – Nincs fetch: az adatok a `js/data.js`-ben vannak, a `file://` megnyitás is működik. A YAML-olvasó és a `.yml`/`.txt` fájlok törölve.
