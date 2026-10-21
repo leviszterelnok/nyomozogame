@@ -7,7 +7,7 @@ var GAME_DATA = {
   // Jelszó a bejelentkezéshez
   // FIGYELEM: a böngészőből olvasható, ez iskolai játékhoz elég, biztonságnak nem.
   config: {
-    password: "valami-jelszo",
+    password: "197009",
 
     // Képek. A monitor-kép mindig látszik az ablakban, a többi kép a kijelzőn belül jelenik meg.
     images: {
@@ -19,12 +19,7 @@ var GAME_DATA = {
     // Számok = a böngészőablak %-a (pl. 10 = 10%). "120px" alakú szöveg = pixel.
     // Alapértelmezés: a teljes ablak (0,0 -> 100,100).
     // background: a kijelző háttere: szín (pl. "#000") vagy kép (pl. "assets/hatter.png").
-    // "transparent": a monitor-kép látszik alatta. A kikapcsolt monitor mindig fekete.
-    area: { x1: 0, y1: 0, x2: 100, y2: 100, background: "transparent" },
-
-    // Bekapcsoló gomb: a közepe (x, y) az ablak %-ában (vagy "px"), size: átmérő pixelben.
-    // A monitor-kép alján kell lennie, ehhez igazítsd.
-    powerButton: { x: 50, y: 80, size: 48 }
+    area: { x1: 83.1, y1: 78.1, x2: 17.3, y2: 7.2, background: "#000" }
   },
 
   // Info gomb szövege a profilkép mellett.
