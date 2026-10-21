@@ -189,6 +189,42 @@
   backWall.receiveShadow = true;
   scene.add(backWall);
 
+  // Oldalsó falak és mennyezet: zárt, sötét szoba
+  var sideWallL = new THREE.Mesh(new THREE.PlaneGeometry(6.5, 4), wallMat);
+  sideWallL.rotation.y = Math.PI / 2;
+  sideWallL.position.set(-2.6, 2, -1.2);
+  sideWallL.receiveShadow = true;
+  scene.add(sideWallL);
+  var sideWallR = new THREE.Mesh(new THREE.PlaneGeometry(6.5, 4), wallMat);
+  sideWallR.rotation.y = -Math.PI / 2;
+  sideWallR.position.set(2.6, 2, -1.2);
+  sideWallR.receiveShadow = true;
+  scene.add(sideWallR);
+  var ceiling = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 6.5), wallMat);
+  ceiling.rotation.x = Math.PI / 2;
+  ceiling.position.set(0, 4, -1.2);
+  scene.add(ceiling);
+
+  // Falikép a jobb oldali falon: sötét, festett tájkép
+  var paintingTex = canvasTex(256, 192, function (g, w, h) {
+    var gr = g.createLinearGradient(0, 0, w, h);
+    gr.addColorStop(0, '#2b3d5c');
+    gr.addColorStop(1, '#6b3a2a');
+    g.fillStyle = gr;
+    g.fillRect(0, 0, w, h);
+    g.fillStyle = 'rgba(230,210,160,0.7)';
+    g.beginPath();
+    g.arc(w * 0.7, h * 0.35, 28, 0, Math.PI * 2);
+    g.fill();
+  }, true);
+  var painting = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.8, 0.6),
+    new THREE.MeshStandardMaterial({ map: paintingTex, roughness: 0.8 })
+  );
+  painting.rotation.y = -Math.PI / 2;
+  painting.position.set(2.57, 1.6, -1.5);
+  scene.add(painting);
+
   // Könyvespolc: polcok és könyvek (egy közös doboz-geometria, színes anyagokkal)
   var planks = [0.1, 0.6, 1.1, 1.6, 2.1];
   planks.forEach(function (p) {
@@ -351,6 +387,62 @@
   cyl(0.01, 0.01, 0.4, 8, black, 1.45, 0.97, -2.6);
   cyl(0.07, 0.13, 0.18, 24, shadeMat, 1.45, 1.2, -2.6, null, true);
 
+  // ---- További bútorok és tárgyak ----
+  // Szőnyeg az asztal alatt
+  var rug = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.6, 1.8),
+    new THREE.MeshStandardMaterial({ color: 0x4a1d1d, roughness: 0.95 })
+  );
+  rug.rotation.x = -Math.PI / 2;
+  rug.position.set(0, 0.002, 0.1);
+  rug.receiveShadow = true;
+  scene.add(rug);
+
+  // Parafa tábla cetlikkel a hátsó falon, fa kerettel
+  var corkTex = canvasTex(512, 320, function (g, w, h) {
+    g.fillStyle = '#b08050';
+    g.fillRect(0, 0, w, h);
+    for (var i = 0; i < 400; i++) {
+      g.fillStyle = 'rgba(70,40,15,' + (Math.random() * 0.25) + ')';
+      g.fillRect(Math.random() * w, Math.random() * h, 2, 2);
+    }
+    var colors = ['#f6f0a0', '#f3d6e0', '#cfe8ff', '#ffffff'];
+    for (var n = 0; n < 9; n++) {
+      g.save();
+      g.translate(30 + Math.random() * (w - 120), 25 + Math.random() * (h - 100));
+      g.rotate((Math.random() - 0.5) * 0.3);
+      g.fillStyle = colors[n % colors.length];
+      g.fillRect(0, 0, 80, 60);
+      g.fillStyle = 'rgba(40,40,40,0.6)';
+      for (var l = 0; l < 4; l++) {
+        g.fillRect(8, 12 + l * 11, 60 - Math.random() * 20, 2);
+      }
+      g.fillStyle = '#c03030';
+      g.beginPath();
+      g.arc(40, 4, 3, 0, Math.PI * 2);
+      g.fill();
+      g.restore();
+    }
+  }, true);
+  box(1.3, 0.85, 0.04, wood, 1.05, 1.9, -3.18);
+  var board = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.2, 0.75),
+    new THREE.MeshStandardMaterial({ map: corkTex, roughness: 0.9 })
+  );
+  board.position.set(1.05, 1.9, -3.155);
+  scene.add(board);
+
+  // Bögre és növény az asztalon (a monitor mellett)
+  var mugMat = new THREE.MeshStandardMaterial({ color: 0x8a2c2c, roughness: 0.5 });
+  cyl(0.04, 0.04, 0.1, 20, mugMat, -0.58, 0.8, -0.12);
+  var potMat = new THREE.MeshStandardMaterial({ color: 0x6b3d2a, roughness: 0.8 });
+  var leafMat = new THREE.MeshStandardMaterial({ color: 0x2f6b34, roughness: 0.9 });
+  cyl(0.07, 0.05, 0.12, 16, potMat, 0.72, 0.81, -0.2);
+  addMesh(new THREE.SphereGeometry(0.1, 16, 12), leafMat, 0.72, 0.98, -0.2);
+
+  // Bal oldali szekrény a falnál
+  box(0.5, 1.6, 0.9, wood, -2.35, 0.8, -1.2);
+
   // ---- Fények ----
   // Hideg, halvány alapfény: sötét könyvtár
   scene.add(new THREE.AmbientLight(0x2a3142, 0.25));
@@ -426,7 +518,7 @@
         powerBtn.position.z = 0.03;
         setTimeout(function () { powerBtn.position.z = 0.036; }, 120);
         powerOn();
-      } else if (hits[0].object === screen) {
+      } else if (hits[0].object === screen || hits[0].object === bezel) {
         // A képernyőre kattintva a játék veszi át az egeret
         setGameMode(true);
       }
@@ -470,7 +562,15 @@
   }
   setGameMode(false);
 
+  // A képernyő és a keret fölött az egér nem forgatja a nézetet (nem mozog a kamera)
+  var frameHover = [bezel, screen];
   canvas.addEventListener('pointermove', function (e) {
+    var r = canvas.getBoundingClientRect();
+    mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+    mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    if (raycaster.intersectObjects(frameHover, false).length > 0) return;
+
     pointerTarget.x = (e.clientX / window.innerWidth) * 2 - 1;
     pointerTarget.y = (e.clientY / window.innerHeight) * 2 - 1;
     if (gameMode) setGameMode(false);
