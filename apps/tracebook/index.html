@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracebook</title>
+  <link rel="stylesheet" href="tracebook.css">
+</head>
+<body>
+  <div class="tb">
+    <header class="tb-top">
+      <form id="tb-search" class="tb-search" role="search" autocomplete="off">
+        <input id="tb-q" type="search" aria-label="Keresés">
+        <button type="submit" id="tb-go">Keresés</button>
+        <button type="button" id="tb-clear" class="tb-clear" aria-label="Keresés törlése" hidden>×</button>
+      </form>
+    </header>
+
+    <main id="tb-view" class="tb-view" aria-live="polite"></main>
+
+    <div id="tb-toast" class="tb-toast" role="status" hidden></div>
+  </div>
+
+  <!-- Adatok (felhasználók, bejegyzések, szövegek) a js/data.js-ből -->
+  <script src="../../js/data.js"></script>
+  <script src="tracebook.js"></script>
+</body>
+</html>

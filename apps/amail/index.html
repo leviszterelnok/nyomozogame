@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amail</title>
+  <link rel="stylesheet" href="amail.css">
+</head>
+<body>
+  <div class="am">
+    <header class="am-top">
+      <div class="am-tabs">
+        <button type="button" id="am-tab-inbox" class="am-tab">Beérkezett</button>
+        <button type="button" id="am-tab-drafts" class="am-tab">Piszkozatok</button>
+      </div>
+      <div class="am-filter">
+        <input id="am-filter" type="search" aria-label="Szűrés">
+        <button type="button" id="am-clear" class="am-clear" hidden>×</button>
+      </div>
+    </header>
+
+    <!-- Lista: beérkezett levelek vagy piszkozatok -->
+    <section id="am-list" class="am-list" aria-label="Levelek"></section>
+
+    <!-- Egy levél teljes nézete -->
+    <section id="am-detail" class="am-detail" hidden>
+      <div class="am-bar">
+        <button type="button" id="am-back" class="am-btn">Vissza</button>
+        <button type="button" id="am-reply" class="am-btn">Válasz</button>
+        <button type="button" id="am-send-draft" class="am-btn" hidden>Küldés</button>
+      </div>
+      <div id="am-meta" class="am-meta"></div>
+      <div id="am-body" class="am-body"></div>
+
+      <!-- Válasz írása -->
+      <form id="am-compose" class="am-compose" hidden autocomplete="off">
+        <label>Címzett <input id="am-to" type="text"></label>
+        <label>Tárgy <input id="am-subject" type="text"></label>
+        <label>Szöveg <textarea id="am-text" rows="6"></textarea></label>
+        <div class="am-bar">
+          <button type="submit" class="am-btn" id="am-send">Küldés</button>
+        </div>
+      </form>
+      <p id="am-status" class="am-status" role="status"></p>
+    </section>
+  </div>
+
+  <!-- Adatok (levelek, előre megadott levelek) a js/data.js-ből -->
+  <script src="../../js/data.js"></script>
+  <script src="amail.js"></script>
+</body>
+</html>

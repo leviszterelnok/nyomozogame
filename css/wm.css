@@ -1,0 +1,95 @@
+/* ===== Ablakkezelő (js/wm.js) ===== */
+
+/* Ablakréteg: az asztal területe a tálca felett. Az ikonokat ne takarja el. */
+.windows {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 40px; /* a tálca magassága */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.win {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--win-gray, #c0c0c0);
+  border: 2px outset #fff;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+  min-width: 0;
+}
+
+.win-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px 3px 8px;
+  background: #808080;      /* inaktív ablak */
+  color: #fff;
+  font: bold 13px Tahoma, Verdana, sans-serif;
+  cursor: move;
+  user-select: none;
+  touch-action: none;
+}
+.win.focused .win-title { background: var(--win-navy, #000080); }
+
+.win-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.win-close {
+  margin-left: auto;
+  width: 22px;
+  height: 20px;
+  padding: 0;
+  background: var(--win-gray, #c0c0c0);
+  color: #000;
+  border: 1px outset #fff;
+  font: bold 14px/1 Tahoma, sans-serif;
+  cursor: pointer;
+}
+.win-close:active { border-style: inset; }
+
+.win-body {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: #fff;
+}
+
+/* Átméretező fogantyú a jobb alsó sarokban */
+.win-grip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+  background: linear-gradient(135deg, transparent 50%, #808080 50%);
+}
+
+/* Húzás/átméretezés közben az iframe ne fogja fel az egeret */
+.windows.dragging .win-body { pointer-events: none; }
+
+/* Tálca gombok */
+.task-btn {
+  max-width: 160px;
+  padding: 4px 10px;
+  background: var(--win-gray, #c0c0c0);
+  border: 2px outset #fff;
+  font: 13px Tahoma, Verdana, sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.task-btn.active {
+  border-style: inset;
+  font-weight: bold;
+}

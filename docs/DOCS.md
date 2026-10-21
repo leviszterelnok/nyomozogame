@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.1.5 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.0 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -17,6 +17,10 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 | `css/style.css` | Megjelenés, reszponzív alapok |
 | `js/data.js` | Minden beállítás: jelszó, asztali ikonok, info szöveg (`GAME_DATA`) |
 | `js/app.js` | Képernyőváltás, jelszó, info gomb, betöltő, asztal, ikonok |
+| `js/wm.js`, `css/wm.css` | Ablakkezelő: ablakok, tálca, mozgatás, átméretezés |
+| `apps/tracebook/` | Tracebook (HTML, CSS, JS) |
+| `apps/amail/` | Amail (HTML, CSS, JS) |
+| `apps/notes/` | Notes (HTML, CSS, JS) |
 | `tools/kepponto-mero.html` | Képpont-mérő: kép feltöltése, kattintással % értékek, a data.js-be másolható sorok |
 | `assets/szamitogep.png` | Háttér és számítógép (hiányzik, még feltöltendő) |
 | `assets/nyomozo_fej.png` | Profilkép (hiányzik, még feltöltendő) |
@@ -35,6 +39,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 ## Változásnapló
 
+- **v0.2.0** – Asztal háttere (`desktop.background`). Ablakkezelő (`js/wm.js`, `css/wm.css`): húzható, átméretezhető ablakok, csak az asztal területén belül, apponként 1 ablak. Három app külön mappában (`apps/tracebook`, `apps/amail`, `apps/notes`), mindegyik külön HTML/CSS/JS. Tracebook: főoldal, keresés, profil, bejegyzések (`tracebook.posts`). Amail: lista, szűrés, levél nézet, válasz, `sendMail()` (még nincs bekötve). Notes: egyfájlos jegyzet, localStorage-ba mentve.
 - **v0.1.5** – Bekapcsoló gomb helye és mérete a `config.powerButton`-ban. A gomb jól látható (sötét alap, fehér keret). A képpont-mérő bekerült: `tools/kepponto-mero.html`.
 - **v0.1.4** – Javítás: a kijelző háttere alapból átlátszó, így a monitor-kép látszik. A kikapcsolt monitor (`#screen-off`) fekete.
 - **v0.1.3** – A monitor-kép (`config.images.backdrop`) mindig látszik, a bekapcsoló gomb hozzá igazodik. A kijelző (`config.area`) háttere beállítható (`background`). Fontos ikon: sárga outline, nem "!" jelölés. Nem fontos ikon: szürke kijelölés. Minden kép a `data.js`-ben szerkeszthető.
@@ -42,7 +47,19 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 - **v0.1.1** – Nincs fetch: az adatok a `js/data.js`-ben vannak, a `file://` megnyitás is működik. A YAML-olvasó és a `.yml`/`.txt` fájlok törölve.
 - **v0.1** – Alap váz: monitor bekapcsolása, bejelentkezés (kör profilkép, info gomb, jelszó), régi stílusú betöltő ("AjtOS"), asztal tálcával, ikonok a desktop.yml alapján, ikon launch = konzolba írás.
 
+## Appok adatai (js/data.js)
+
+- `desktop.background`: asztal háttere.
+- `apps`: az appok címe, fájlja és kezdeti mérete. Új app: itt és a `desktop.icons`-ban.
+- `tracebook.users`: felhasználók (`username`, `name`, `avatar`, `friends`). `tracebook.posts`: bejegyzések (`author`, `date`, `text`). A szövegbe `<img src="assets/kep.png">` írható. `tracebook.texts`: minden felirat, a nem létező felhasználó üzenete (`notFound`) és az időtartama (`notFoundMs`, ms).
+- `amail.mails`: beérkezett levelek. `amail.outgoing`: piszkozatok. `amail.texts`: feliratok.
+- `notes`: cím és feliratok.
+
 ## Ismert hiányosságok / nyitott kérdések
+
+- Amail küldés: a `sendMail()` (apps/amail/amail.js) még csak konzolba ír és "még nincs bekötve" üzenetet ad. A valódi küldést később kell megírni.
+- A képek hiányoznak az `assets/` mappából (profilképek, appikonok, bejegyzés-képek): a böngésző hibát jelez, ahol nincs kép.
+- Az ablakkezelőben nincs az ablakok közti sorrend mentése, és nincs mobil támogatás.
 
 - A képek (`assets/*.png`) még nincsenek a repóban; ezért a képek helyén hibás kép vagy szürke alap látszik.
 - A bekapcsoló gomb helye alapból becsült (`config.powerButton`), a képhez kell igazítani.

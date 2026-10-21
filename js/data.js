@@ -39,10 +39,90 @@ var GAME_DATA = {
   // appicon   : az ikon képe (assets/ alatt). Ha hiányzik, szürke alap látszik.
   // launch    : az app azonosítója. Jelenleg csak a konzolba íródik.
   desktop: {
+    // Asztal háttere: szín (pl. "#008080") vagy kép (pl. "assets/hatter.png")
+    background: "#008080",
     icons: [
       { name: "Tracebook", x: 30,  y: 30,  important: true,  appicon: "assets/tracebook.png", launch: "tracebook" },
       { name: "Notes",     x: 30,  y: 130, important: false, appicon: "assets/notes.png",     launch: "notes" },
       { name: "Amail",     x: 30,  y: 230, important: true,  appicon: "assets/amail.png",     launch: "amail" }
     ]
+  },
+
+  // Appok ablakai. src: az app HTML-je (apps/<név>/index.html).
+  // width, height: kezdeti méret pixelben. Egy appból egyszerre csak 1 ablak lehet.
+  apps: {
+    tracebook: { title: "Tracebook", src: "apps/tracebook/index.html", width: 640, height: 440 },
+    amail:     { title: "Amail",     src: "apps/amail/index.html",     width: 640, height: 440 },
+    notes:     { title: "Notes",     src: "apps/notes/index.html",     width: 480, height: 360 }
+  },
+
+  // ---------- Tracebook ----------
+  tracebook: {
+    texts: {
+      searchPlaceholder: "Keresés (felhasználónév vagy név)…",
+      searchButton: "Keresés",
+      clearSearch: "×",
+      mainTitle: "Főoldal",
+      searchResultTitle: "Találatok erre: ",
+      backToMain: "← Főoldal",
+      profileFriends: "Ismerősök",
+      profilePosts: "Bejegyzések",
+      noFriends: "Nincs még ismerős.",
+      noPosts: "Ettől a felhasználótól még nincs bejegyzés.",
+      noPostsAtAll: "Még nincs bejegyzés.",
+      notFound: "Nem találtuk meg azt a felhasználót",
+      notFoundMs: 3000
+    },
+    // Felhasználók. avatar: profilkép (assets/ alatt), friends: a felhasználónevek.
+    users: [
+      { username: "kovacs_anna", name: "Kovács Anna", avatar: "assets/profil_anna.png", friends: ["szabo_bence", "nagy_lili"] },
+      { username: "szabo_bence", name: "Szabó Bence", avatar: "assets/profil_bence.png", friends: ["kovacs_anna"] },
+      { username: "nagy_lili",   name: "Nagy Lili",   avatar: "",                        friends: ["kovacs_anna", "szabo_bence"] }
+    ],
+    // Bejegyzések. A szövegbe <img src="assets/kep.png"> is írható.
+    // Bejegyzés nem törölhető.
+    posts: [
+      { id: 1, author: "kovacs_anna", date: "2026-10-19 18:02",
+        text: "Új kedvenc kávézó a belvárosban! <img src=\"assets/kep_kave.png\"> Ha valaki arra jár, szóljon." },
+      { id: 2, author: "szabo_bence", date: "2026-10-20 09:15",
+        text: "Ma reggel 6:30-kor futottam. A telefonom a térképen is elmentette az útvonalat, pedig nem kértem." },
+      { id: 3, author: "nagy_lili", date: "2026-10-20 21:40",
+        text: "Gondolkodjatok el, mielőtt kiposztoltok egy képet: a fotón látszik a házszám vagy a rendszám is?" }
+    ]
+  },
+
+  // ---------- Amail ----------
+  amail: {
+    texts: {
+      searchPlaceholder: "Szűrés feladóra vagy tárgyra…",
+      clearFilter: "Szűrő törlése",
+      noMatch: "Nincs találat.",
+      back: "← Vissza",
+      reply: "Válasz",
+      send: "Küldés",
+      drafts: "Piszkozatok",
+      inbox: "Beérkezett",
+      sendStub: "A küldés még nincs bekötve."
+    },
+    // Beérkezett levelek
+    mails: [
+      { id: 1, from: "info@suli-portal.example", to: "te@example.com", subject: "Jelszó-visszaállítás kérése", date: "2026-10-21 07:10",
+        body: "Valaki jelszó-visszaállítást kért a fiókodhoz.\nHa nem te voltál, ne kattints semmilyen linkre, és változtasd meg a jelszavadat." },
+      { id: 2, from: "kovacs_anna@example.com", to: "te@example.com", subject: "Holnapi találkozó", date: "2026-10-20 16:30",
+        body: "Szia! Holnap 17:00 jó neked a könyvtár előtt?" }
+    ],
+    // Előre megadott levelek, amiket később lehet küldeni (sendMail)
+    outgoing: [
+      { id: "o1", to: "kovacs_anna@example.com", subject: "Köszönöm", body: "Köszi a segítséget, holnap találkozunk." }
+    ]
+  },
+
+  // ---------- Notes ----------
+  notes: {
+    title: "jegyzet.txt",
+    placeholder: "Írj ide valamit…",
+    saveLabel: "Mentés",
+    savedText: "Mentve",
+    unsavedText: "Nincs mentve"
   }
 };

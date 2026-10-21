@@ -38,6 +38,7 @@
   var bootLog = $('#boot-log');
   var progressBar = $('#progress-bar');
   var desktopIcons = $('#desktop-icons');
+  var desktopScreen = $('#screen-desktop');
 
   // ---------- Adatok (js/data.js) ----------
   // A GAME_DATA objektumot a data.js tölti be, nincs fetch.
@@ -97,6 +98,7 @@
   applyArea();
   applyImages();
   applyPowerButton();
+  applyDesktopBackground();
 
   // ---------- Képernyőváltás ----------
   function showScreen(name) {
@@ -224,9 +226,21 @@
     });
   }
 
-  // Egyelőre csak konzolba írja a launch értéket
+  // Appot indít: ablakot nyit (js/wm.js). A launch az app azonosítója (data.js apps).
   function launchApp(icon) {
-    console.log('[launch] ' + (icon.launch || icon.name || '(nincs launch)'));
+    if (window.WM && icon.launch) {
+      WM.open(icon.launch);
+    } else {
+      console.log('[launch] ' + (icon.launch || icon.name || '(nincs launch)'));
+    }
+  }
+
+  // Asztal háttere (desktop.background): szín vagy kép
+  function applyDesktopBackground() {
+    var bg = (data.desktop && data.desktop.background) || '#008080';
+    desktopScreen.style.background = /\.(png|jpe?g|gif|webp)$/i.test(bg)
+      ? 'url("' + bg + '") center / cover no-repeat'
+      : bg;
   }
 
   $('#start-btn').addEventListener('click', function () {
