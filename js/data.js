@@ -19,11 +19,12 @@ var GAME_DATA = {
     // Számok = a böngészőablak %-a (pl. 10 = 10%). "120px" alakú szöveg = pixel.
     // Alapértelmezés: a teljes ablak (0,0 -> 100,100).
     // background: a kijelző háttere: szín (pl. "#000") vagy kép (pl. "assets/hatter.png").
-    area: { x1: 83.1, y1: 78.1, x2: 17.3, y2: 7.2, background: "#000" },
+    area: { x1: 17.2, y1: 6.4, x2: 83.8, y2: 75.0, background: "#000" },
 
     // Bekapcsoló gomb: a közepe (x, y) az ablak %-ában (vagy "px"), size: átmérő pixelben.
     // A monitor-kép alján kell lennie, ehhez igazítsd.
-    powerButton: { x: 50, y: 80, size: 48 }
+    powerButton: { x: 50.1, y: 81.4, size: 48 }
+
   },
 
   // Info gomb szövege a profilkép mellett.
@@ -43,8 +44,9 @@ var GAME_DATA = {
     background: "#008080",
     icons: [
       { name: "Tracebook", important: true,  appicon: "assets/tracebook.png", launch: "tracebook" },
-      { name: "Notes",     important: false, appicon: "assets/notes.png",     launch: "notes" },
-      { name: "Amail",     important: true,  appicon: "assets/amail.png",     launch: "amail" }
+      { name: "Notes",     important: true,  appicon: "assets/notes.png",     launch: "notes" },
+      { name: "Amail",     important: true,  appicon: "assets/amail.png",     launch: "amail" },
+      { name: "Trash",     important: false, appicon: "assets/trash.png",     launch: "nothing" }
     ]
   },
 
