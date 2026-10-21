@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.1.1 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.1.2 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -26,11 +26,13 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 - **Jelszó:** `js/data.js` → `config.password`
 - **Ikonok:** `js/data.js` → `desktop.icons`. Új ikon: új `{ name: …, x: …, y: …, important: …, appicon: …, launch: … }` sor a listába.
 - **Info szöveg:** `js/data.js` → `info`. A `<h>…</h>` közé írt rész lesz kiemelve.
+- **Játéktér területe:** `js/data.js` → `config.area` (`x1`, `y1` = bal felső sarok, `x2`, `y2` = jobb alsó sarok). Számok = %, `"120px"` = pixel. Az ablak többi része fekete.
 - **Bekapcsoló gomb helye:** `css/style.css` → `:root` → `--power-x`, `--power-y` (a monitor alján lévő pont, képernyő %-ban). A képhez kell igazítani.
 - **Betöltő szövegei:** `js/app.js` → `BOOT_LINES`.
 
 ## Változásnapló
 
+- **v0.1.2** – Játéktér területe beállítható (`config.area`), az ablak többi része fekete.
 - **v0.1.1** – Nincs fetch: az adatok a `js/data.js`-ben vannak, a `file://` megnyitás is működik. A YAML-olvasó és a `.yml`/`.txt` fájlok törölve.
 - **v0.1** – Alap váz: monitor bekapcsolása, bejelentkezés (kör profilkép, info gomb, jelszó), régi stílusú betöltő ("AjtOS"), asztal tálcával, ikonok a desktop.yml alapján, ikon launch = konzolba írás.
 

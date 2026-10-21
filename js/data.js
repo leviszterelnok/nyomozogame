@@ -7,7 +7,12 @@ var GAME_DATA = {
   // Jelszó a bejelentkezéshez
   // FIGYELEM: a böngészőből olvasható, ez iskolai játékhoz elég, biztonságnak nem.
   config: {
-    password: "valami-jelszo"
+    password: "valami-jelszo",
+
+    // Játéktér területe: honnan (x1, y1) hová (x2, y2) tart a képernyő.
+    // Számok = a böngészőablak %-a (pl. 10 = 10%). "120px" alakú szöveg = pixel.
+    // Alapértelmezés: a teljes ablak (0,0 -> 100,100). A többi terület fekete.
+    area: { x1: 0, y1: 0, x2: 100, y2: 100 }
   },
 
   // Info gomb szövege a profilkép mellett.
