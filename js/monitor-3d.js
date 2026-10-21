@@ -28,9 +28,10 @@
   scene.background = new THREE.Color(0x0a0908);
   scene.fog = new THREE.FogExp2(0x0a0908, 0.1);
 
-  var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.05, 50);
-  var camBase = new THREE.Vector3(0, 1.22, 0.95);   // közel a monitorhoz
-  var lookAt = new THREE.Vector3(0, 0.9, -0.2);
+  // Szélesebb látószög, a kamera közel a képernyőhöz, a képernyő közepére nézve
+  var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 50);
+  var camBase = new THREE.Vector3(0, 1.07, 0.62);
+  var lookAt = new THREE.Vector3(0, 1.07, -0.12);
   camera.position.copy(camBase);
   camera.lookAt(lookAt);
 
@@ -373,7 +374,8 @@
   cssRenderer.domElement.style.pointerEvents = 'none';   // a WebGL-réteg kapja a kattintást
   stage.appendChild(cssRenderer.domElement);
 
-  var GAME_W = 1000;                                       // az iframe szélessége px-ben
+  // 760 px = a képernyő szélessége (1 px = 1 mm): így a szöveg nagyobb a képernyőn
+  var GAME_W = 760;                                        // az iframe szélessége px-ben
   var GAME_H = Math.round(GAME_W * SCREEN_H / SCREEN_W);   // ugyanaz az arány, mint a képernyő
 
   var gameFrame = document.createElement('iframe');
