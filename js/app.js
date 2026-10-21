@@ -52,10 +52,15 @@
   function applyArea() {
     var a = (data.config && data.config.area) || { x1: 0, y1: 0, x2: 100, y2: 100 };
     var stage = $('#stage');
-    stage.style.left = toCssUnit(a.x1);
-    stage.style.top = toCssUnit(a.y1);
-    stage.style.width = 'calc(' + toCssUnit(a.x2) + ' - ' + toCssUnit(a.x1) + ')';
-    stage.style.height = 'calc(' + toCssUnit(a.y2) + ' - ' + toCssUnit(a.y1) + ')';
+    // A sarkok fordítva is megadhatók (pl. x1 > x2): min/max rendezi a két értéket
+    var l = 'min(' + toCssUnit(a.x1) + ', ' + toCssUnit(a.x2) + ')';
+    var r = 'max(' + toCssUnit(a.x1) + ', ' + toCssUnit(a.x2) + ')';
+    var t = 'min(' + toCssUnit(a.y1) + ', ' + toCssUnit(a.y2) + ')';
+    var b = 'max(' + toCssUnit(a.y1) + ', ' + toCssUnit(a.y2) + ')';
+    stage.style.left = l;
+    stage.style.top = t;
+    stage.style.width = 'calc(' + r + ' - ' + l + ')';
+    stage.style.height = 'calc(' + b + ' - ' + t + ')';
 
     // Kijelző háttere: szín vagy kép (képnél a fájl neve .png/.jpg/... végű)
     var bg = a.background || '#000';

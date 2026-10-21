@@ -236,8 +236,11 @@ textarea {
     // Snippet
     var lines = [];
     if (pts.c1 && pts.c2) {
-      lines.push('area: { x1: ' + pts.c1.x.toFixed(1) + ', y1: ' + pts.c1.y.toFixed(1) +
-        ', x2: ' + pts.c2.x.toFixed(1) + ', y2: ' + pts.c2.y.toFixed(1) + ', background: "transparent" }');
+      // Mindig bal-felső (x1,y1) és jobb-alsó (x2,y2) a sorrend, akárhogy kattintottál
+      var ax1 = Math.min(pts.c1.x, pts.c2.x), ax2 = Math.max(pts.c1.x, pts.c2.x);
+      var ay1 = Math.min(pts.c1.y, pts.c2.y), ay2 = Math.max(pts.c1.y, pts.c2.y);
+      lines.push('area: { x1: ' + ax1.toFixed(1) + ', y1: ' + ay1.toFixed(1) +
+        ', x2: ' + ax2.toFixed(1) + ', y2: ' + ay2.toFixed(1) + ', background: "transparent" }');
     } else {
       lines.push('// Jelöld ki a kijelző két sarkát az area-hoz');
     }
