@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.1.3 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.1.5 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -17,6 +17,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 | `css/style.css` | Megjelenés, reszponzív alapok |
 | `js/data.js` | Minden beállítás: jelszó, asztali ikonok, info szöveg (`GAME_DATA`) |
 | `js/app.js` | Képernyőváltás, jelszó, info gomb, betöltő, asztal, ikonok |
+| `tools/kepponto-mero.html` | Képpont-mérő: kép feltöltése, kattintással % értékek, a data.js-be másolható sorok |
 | `assets/szamitogep.png` | Háttér és számítógép (hiányzik, még feltöltendő) |
 | `assets/nyomozo_fej.png` | Profilkép (hiányzik, még feltöltendő) |
 | `assets/tracebook.png`, `notes.png`, `amail.png` | Ikonképek (hiányoznak, még feltöltendők) |
@@ -28,11 +29,14 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 - **Info szöveg:** `js/data.js` → `info`. A `<h>…</h>` közé írt rész lesz kiemelve.
 - **Játéktér területe:** `js/data.js` → `config.area` (`x1`, `y1` = bal felső sarok, `x2`, `y2` = jobb alsó sarok). Számok = %, `"120px"` = pixel. A kijelző háttere: `background` (szín vagy kép).
 - **Képek:** `js/data.js` → `config.images` (`backdrop` = monitor-kép, mindig látszik; `avatar` = profilkép). Ikonképek: `desktop.icons` → `appicon`.
-- **Bekapcsoló gomb helye:** `css/style.css` → `:root` → `--power-x`, `--power-y` (a monitor alján lévő pont, képernyő %-ban). A képhez kell igazítani.
+- **Bekapcsoló gomb helye és mérete:** `js/data.js` → `config.powerButton` (`x`, `y` = a gomb közepe az ablak %-ában, `size` = átmérő px). A képhez kell igazítani.
+- **Képpont-mérő:** nyisd meg a `tools/kepponto-mero.html` fájlt böngészőben, töltsd fel a képet, kattints a kijelző sarkaira és a gombra. Az alsó szövegdobozt másold a `js/data.js`-be.
 - **Betöltő szövegei:** `js/app.js` → `BOOT_LINES`.
 
 ## Változásnapló
 
+- **v0.1.5** – Bekapcsoló gomb helye és mérete a `config.powerButton`-ban. A gomb jól látható (sötét alap, fehér keret). A képpont-mérő bekerült: `tools/kepponto-mero.html`.
+- **v0.1.4** – Javítás: a kijelző háttere alapból átlátszó, így a monitor-kép látszik. A kikapcsolt monitor (`#screen-off`) fekete.
 - **v0.1.3** – A monitor-kép (`config.images.backdrop`) mindig látszik, a bekapcsoló gomb hozzá igazodik. A kijelző (`config.area`) háttere beállítható (`background`). Fontos ikon: sárga outline, nem "!" jelölés. Nem fontos ikon: szürke kijelölés. Minden kép a `data.js`-ben szerkeszthető.
 - **v0.1.2** – Játéktér területe beállítható (`config.area`), az ablak többi része fekete.
 - **v0.1.1** – Nincs fetch: az adatok a `js/data.js`-ben vannak, a `file://` megnyitás is működik. A YAML-olvasó és a `.yml`/`.txt` fájlok törölve.
@@ -41,7 +45,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 ## Ismert hiányosságok / nyitott kérdések
 
 - A képek (`assets/*.png`) még nincsenek a repóban; ezért a képek helyén hibás kép vagy szürke alap látszik.
-- A bekapcsoló gomb helye a monitoron becsült (`--power-x`, `--power-y`), a képhez kell igazítani.
+- A bekapcsoló gomb helye alapból becsült (`config.powerButton`), a képhez kell igazítani.
 - A `<h>` jelölés: jelenleg `<h>…</h>` párban van értelmezve. Ha más jelölésre gondoltatok, szólni kell.
 - A jelszó a böngészőből olvasható (a `js/data.js` nyílt fájl). Iskolai játékhoz elfogadható, de nem biztonság.
 - Az app-indítás (launch) egyelőre csak konzolba ír.

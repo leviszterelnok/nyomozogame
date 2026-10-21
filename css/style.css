@@ -1,10 +1,6 @@
 /* ===== Nyomozós játék – stílusok ===== */
 
 :root {
-  /* A bekapcsoló gomb helye a monitor alján (képernyő %-ban). Ezt a képhez kell igazítani. */
-  --power-x: 50%;
-  --power-y: 80%;
-
   --win-gray: #c0c0c0;
   --win-navy: #000080;
   --desk-teal: #008080;
@@ -30,6 +26,11 @@ html, body {
   height: 100vh;
   overflow: hidden;
   z-index: 1;
+  background: transparent; /* a monitor-kép látszik alatta, ha a kijelző nincs letakarva */
+}
+
+/* Kikapcsolt monitor: a kijelző fekete */
+#screen-off {
   background: #000;
 }
 
@@ -64,14 +65,13 @@ html, body {
 .power-btn {
   position: fixed;
   z-index: 2;
-  left: var(--power-x);
-  top: var(--power-y);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); /* a js/app.js állítja a helyét (config.powerButton) */
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 }
 .power-btn:hover,

@@ -64,6 +64,16 @@
       : bg;
   }
 
+  // Bekapcsoló gomb helye és mérete (config.powerButton). A megadott pont a gomb közepe.
+  function applyPowerButton() {
+    var pb = (data.config && data.config.powerButton) || { x: 50, y: 80, size: 48 };
+    var size = Number(pb.size) || 48;
+    powerBtn.style.width = size + 'px';
+    powerBtn.style.height = size + 'px';
+    powerBtn.style.left = toCssUnit(pb.x);
+    powerBtn.style.top = toCssUnit(pb.y);
+  }
+
   // Monitor-kép és profilkép a data.js-ből
   function applyImages() {
     var imgs = (data.config && data.config.images) || {};
@@ -73,6 +83,7 @@
 
   applyArea();
   applyImages();
+  applyPowerButton();
 
   // ---------- Képernyőváltás ----------
   function showScreen(name) {
