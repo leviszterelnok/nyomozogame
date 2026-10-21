@@ -34,8 +34,9 @@
         <!-- Nem <form>: a böngésző jelszókezelője így nem ajánl jelszót és nem ugrik fel -->
         <div id="login-form" class="login-form">
           <label for="password">Jelszó</label>
-          <input id="password" name="password" type="password"
-                 autocomplete="off"
+          <!-- Sima szövegmező, pontokkal maszkolva (js/app.js): a Firefox nem kezeli jelszóként -->
+          <input id="password" name="jelszo-mezo" type="text"
+                 autocomplete="off" spellcheck="false"
                  data-lpignore="true" data-1p-ignore data-bwignore data-form-type="other">
           <button id="login-btn" type="button">Belépés</button>
         </div>

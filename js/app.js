@@ -158,6 +158,13 @@
 
   // Bejelentkezés: nem űrlapküldéssel, hanem gombbal és Enterrel (így a böngésző
   // jelszókezelője nem kezeli a belépést mentendő űrlapként)
+  // A jelszó a szövegmezőben pontokkal látszik; a valódi értéket a secret tárolja
+  // (a böngésző így nem kezeli jelszóként, nincs jelszókezelő popup).
+  var secret = '';
+  function renderSecret() {
+    passwordInput.value = new Array(secret.length + 1).join('•');
+  }
+
   function tryLogin() {
     loginError.textContent = '';
 
@@ -167,18 +174,38 @@
       return;
     }
 
-    if (passwordInput.value === expected) {
-      passwordInput.value = '';
+    if (secret === expected) {
+      secret = '';
+      renderSecret();
       startBoot();
     } else {
+      secret = '';
+      renderSecret();
       loginError.textContent = 'Hibás jelszó.';
       shakeLoginBox();
-      passwordInput.select();
     }
   }
   $('#login-btn').addEventListener('click', tryLogin);
+
   passwordInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') tryLogin();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      tryLogin();
+    } else if (e.key === 'Backspace') {
+      e.preventDefault();
+      secret = secret.slice(0, -1);
+      renderSecret();
+    } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      secret += e.key;
+      renderSecret();
+    }
+  });
+  passwordInput.addEventListener('paste', function (e) {
+    e.preventDefault();
+    var text = (e.clipboardData || window.clipboardData).getData('text');
+    secret += text;
+    renderSecret();
   });
 
   // ---------- 4. Betöltő ----------
