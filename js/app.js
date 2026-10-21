@@ -82,7 +82,15 @@
   // Monitor-kép és profilkép a data.js-ből
   function applyImages() {
     var imgs = (data.config && data.config.images) || {};
-    if (imgs.backdrop) $('#backdrop').src = imgs.backdrop;
+    // A keret a monitor-kép arányát veszi fel, így a % értékek a képhez igazodnak
+    var frame = $('#frame');
+    var back = $('#backdrop');
+    back.onload = function () {
+      if (back.naturalWidth && back.naturalHeight) {
+        frame.style.setProperty('--ar', back.naturalWidth / back.naturalHeight);
+      }
+    };
+    if (imgs.backdrop) back.src = imgs.backdrop;
     if (imgs.avatar) $('#avatar').src = imgs.avatar;
   }
 
