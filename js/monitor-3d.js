@@ -31,7 +31,7 @@
   // Szélesebb látószög, a kamera közel a képernyőhöz, a képernyő közepére nézve
   // Közeli kamera, széles látószög. Az egér a nézetet mozgatja (lásd lent).
   var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.05, 50);
-  var camBase = new THREE.Vector3(0, 1.1, 0.5);
+  var camBase = new THREE.Vector3(0, 1.1, 0.85);   // nézelődés: a monitor kicsit távolabb
   var lookAt = new THREE.Vector3(0, 1.0, -0.12);
   camera.position.copy(camBase);
   camera.lookAt(lookAt);
@@ -562,18 +562,21 @@
   }
   setGameMode(false);
 
-  // A képernyő és a keret fölött az egér nem forgatja a nézetet (nem mozog a kamera)
+  // Játék módban az egér a kereten belül marad a játék módban; a keret elhagyásakor
+  // visszatér a nézelődés. Nézelődés módban az egér mindenhol forgatja a kamerát.
   var frameHover = [bezel, screen];
   canvas.addEventListener('pointermove', function (e) {
     var r = canvas.getBoundingClientRect();
     mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
     mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
     raycaster.setFromCamera(mouse, camera);
-    if (raycaster.intersectObjects(frameHover, false).length > 0) return;
+    if (gameMode) {
+      if (raycaster.intersectObjects(frameHover, false).length > 0) return;
+      setGameMode(false);   // kiment a keretről: vissza nézelődés módba
+    }
 
     pointerTarget.x = (e.clientX / window.innerWidth) * 2 - 1;
     pointerTarget.y = (e.clientY / window.innerHeight) * 2 - 1;
-    if (gameMode) setGameMode(false);
   });
 
   // ---- Animáció ----

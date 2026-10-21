@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.10 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.11 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -45,6 +45,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
 - **v0.2.4** – Prototípus: `tools/3d-monitor/` (index.html, style.css, monitor-3d.js). Three.js r128 CDN-ről (classic script, file:// alatt is fut). Kódból épített régi dobozos monitor, asztal, könyvespolc és távoli lámpa. Kattintásos kijelölés (raycast), képernyő-sík körvonala SVG-ben (`window.Monitor3D.screenInfo()`). A játék még a képpontos háttérrel fut.
+- **v0.2.11** – 3D monitor: nézelődés alapban (az egér mindenhol forgatja a kamerát, a képernyő felett is). Kattintás a képernyőre vagy keretre: a kamera közelebb megy, szembe fordul, és ott marad. A keret elhagyásakor vissza nézelődés. A kamera alapállapotban kicsit távolabb van.
 - **v0.2.10** – 3D monitor: a képernyő és a keret fölött az egér nem mozgatja a kamerát; a keretre vagy a képernyőre kattintva a kamera szembe fordul. Szoba: oldalsó falak, mennyezet, falikép, parafa tábla cetlikkel, szőnyeg, szekrény, bögre, növény.
 - **v0.2.9** – 3D monitor: a monitor közelebb került a nézőhöz. Képernyő-kattintásra a kamera egyenesen szembe fordul a képernyővel (sima átmenettel), kilépéskor visszatér az egérvezérelt nézet.
 - **v0.2.8** – 3D monitor: az egér forgatja a kamerát (sima átmenettel), közelebbi kamera, az asztal (billentyűzet, egér, jegyzet, toll) részben látszik. A képernyőre kattintva a játék veszi át az egeret, a kamera megáll; a kurzor a kerethez visszatérve újra a nézetet vezérli (az iframe felett a böngésző nem küld egérmozgást az oldalnak).
