@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.3 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.4 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -24,6 +24,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 | `apps/amail/` | Amail (HTML, CSS, JS) |
 | `apps/notes/` | Notes (HTML, CSS, JS) |
 | `tools/kepponto-mero.html` | Képpont-mérő: kép feltöltése, kattintással % értékek, a data.js-be másolható sorok |
+| `tools/3d-monitor/` | 3D monitor prototípus (Three.js r128, CDN-ről). Kódból épül, nincs modellfájl. Még nincs bekötve a játékba |
 | `assets/szamitogep.png` | Háttér és számítógép (hiányzik, még feltöltendő) |
 | `assets/nyomozo_fej.png` | Profilkép (hiányzik, még feltöltendő) |
 | `assets/tracebook.png`, `notes.png`, `amail.png` | Ikonképek (hiányoznak, még feltöltendők) |
@@ -42,6 +43,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 ## Változásnapló
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
+- **v0.2.4** – Prototípus: `tools/3d-monitor/` (index.html, style.css, monitor-3d.js). Three.js r128 CDN-ről (classic script, file:// alatt is fut). Kódból épített régi dobozos monitor, asztal, könyvespolc és távoli lámpa. Kattintásos kijelölés (raycast), képernyő-sík körvonala SVG-ben (`window.Monitor3D.screenInfo()`). A játék még a képpontos háttérrel fut.
 - **v0.2.3** – Új `js/game_logic.js` (`Game`): az asztal megjelenésétől indul, az első levelet 30 mp múlva küldi (`game.introMailDelay`, `game.introMail` a data.js-ben). Haladás: `Game.setFlag` / `Game.hasFlag`.
 - **v0.2.2** – Asztali ikonok kisebbek, rácson (x/y már nincs). Új `js/mail.js`: `sendAmail(mail, opts)` levelet ad a beérkezetthez; piros pötty az Amail ikonján, szöveges értesítés a jobb alsó sarokban. Az értesítés szövege és ideje `amail.notification`-ben vagy `sendAmail` opts-ban állítható. Az Amail megnyitásakor a pötty eltűnik.
 - **v0.2.0** – Asztal háttere (`desktop.background`). Ablakkezelő (`js/wm.js`, `css/wm.css`): húzható, átméretezhető ablakok, csak az asztal területén belül, apponként 1 ablak. Három app külön mappában (`apps/tracebook`, `apps/amail`, `apps/notes`), mindegyik külön HTML/CSS/JS. Tracebook: főoldal, keresés, profil, bejegyzések (`tracebook.main_menu_posts`, felhasználónként `users[].posts`). Amail: lista, szűrés, levél nézet, válasz, `sendMail()` (még nincs bekötve). Notes: egyfájlos jegyzet, localStorage-ba mentve.
