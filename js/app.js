@@ -56,9 +56,23 @@
     stage.style.top = toCssUnit(a.y1);
     stage.style.width = 'calc(' + toCssUnit(a.x2) + ' - ' + toCssUnit(a.x1) + ')';
     stage.style.height = 'calc(' + toCssUnit(a.y2) + ' - ' + toCssUnit(a.y1) + ')';
+
+    // Kijelző háttere: szín vagy kép (képnél a fájl neve .png/.jpg/... végű)
+    var bg = a.background || '#000';
+    stage.style.background = /\.(png|jpe?g|gif|webp)$/i.test(bg)
+      ? 'url("' + bg + '") center / cover no-repeat'
+      : bg;
+  }
+
+  // Monitor-kép és profilkép a data.js-ből
+  function applyImages() {
+    var imgs = (data.config && data.config.images) || {};
+    if (imgs.backdrop) $('#backdrop').src = imgs.backdrop;
+    if (imgs.avatar) $('#avatar').src = imgs.avatar;
   }
 
   applyArea();
+  applyImages();
 
   // ---------- Képernyőváltás ----------
   function showScreen(name) {

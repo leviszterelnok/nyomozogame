@@ -29,6 +29,19 @@ html, body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  z-index: 1;
+  background: #000;
+}
+
+/* Monitor-kép: az ablak egészét kitölti, mindig látszik */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+  z-index: 0;
 }
 
 /* Képernyők: egymásra kerülnek, csak az .active látszik */
@@ -49,7 +62,8 @@ html, body {
 
 /* ===== 1. Monitor ===== */
 .power-btn {
-  position: absolute;
+  position: fixed;
+  z-index: 2;
   left: var(--power-x);
   top: var(--power-y);
   transform: translate(-50%, -50%);
@@ -248,8 +262,15 @@ html, body {
 .icon:hover,
 .icon:focus-visible {
   border-color: #fff;
-  background: rgba(0, 0, 128, 0.35);
+  background: rgba(192, 192, 192, 0.3);
   outline: none;
+}
+
+/* Fontos ikon: kiemelt kijelölés (sárga) */
+.icon.important:hover,
+.icon.important:focus-visible {
+  border-color: #ff0;
+  background: rgba(0, 0, 128, 0.35);
 }
 
 .icon-img {
@@ -273,20 +294,10 @@ html, body {
   text-shadow: 1px 1px 0 #000;
 }
 
-/* Fontos ikon: piros jelölés a jobb felső sarokban */
-.icon.important .icon-img::after {
-  content: "!";
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #c00;
-  color: #fff;
-  font: bold 13px/18px Tahoma, sans-serif;
-  text-align: center;
-  border: 1px solid #fff;
+/* Fontos ikon: vékony sárga outline a kép körül, nem jel */
+.icon.important .icon-img {
+  outline: 2px solid #ff0;
+  outline-offset: 2px;
 }
 
 .taskbar {

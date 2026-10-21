@@ -9,10 +9,17 @@ var GAME_DATA = {
   config: {
     password: "valami-jelszo",
 
+    // Képek. A monitor-kép mindig látszik az ablakban, a többi kép a kijelzőn belül jelenik meg.
+    images: {
+      backdrop: "assets/szamitogep.png",   // számítógép / monitor kép (teljes ablak)
+      avatar: "assets/nyomozo_fej.png"     // profilkép a bejelentkezésnél
+    },
+
     // Játéktér területe: honnan (x1, y1) hová (x2, y2) tart a képernyő.
     // Számok = a böngészőablak %-a (pl. 10 = 10%). "120px" alakú szöveg = pixel.
-    // Alapértelmezés: a teljes ablak (0,0 -> 100,100). A többi terület fekete.
-    area: { x1: 0, y1: 0, x2: 100, y2: 100 }
+    // Alapértelmezés: a teljes ablak (0,0 -> 100,100).
+    // background: a kijelző háttere: szín (pl. "#000") vagy kép (pl. "assets/hatter.png").
+    area: { x1: 0, y1: 0, x2: 100, y2: 100, background: "#000" }
   },
 
   // Info gomb szövege a profilkép mellett.
@@ -24,7 +31,7 @@ var GAME_DATA = {
 
   // Asztali ikonok
   // x, y      : pixel koordináta a bal felső sarokhoz (az asztal bal felső sarkától)
-  // important : true -> piros "!" jelölés, false -> nincs jelölés
+  // important : true -> sárga keret az ikonon, false -> nincs keret (szürke kijelölés)
   // appicon   : az ikon képe (assets/ alatt). Ha hiányzik, szürke alap látszik.
   // launch    : az app azonosítója. Jelenleg csak a konzolba íródik.
   desktop: {
