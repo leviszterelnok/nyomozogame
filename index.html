@@ -7,19 +7,20 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Teljes képernyős "játéktér": ebben váltanak a képernyők -->
+  <!-- Monitor-kép: mindig látszik, a bekapcsoló gomb ehhez igazodik -->
+  <img id="backdrop" class="backdrop" src="assets/szamitogep.png" alt="Számítógép, este 8:30">
+  <button id="power-btn" class="power-btn" type="button" aria-label="Monitor bekapcsolása"></button>
+
+  <!-- A kijelző (config.area): ebben váltanak a képernyők -->
   <main id="stage">
 
     <!-- 1. Kikapcsolt monitor: csak a gép látszik, a gomb a monitor alján van -->
     <section id="screen-off" class="screen active" aria-label="Monitor">
-      <img class="scene-img" src="assets/szamitogep.png" alt="Számítógép, este 8:30">
-      <button id="power-btn" class="power-btn" type="button" aria-label="Monitor bekapcsolása"></button>
       <p id="off-error" class="off-error" role="alert"></p>
     </section>
 
     <!-- 2. Bejelentkezés -->
     <section id="screen-login" class="screen" aria-label="Bejelentkezés">
-      <img class="scene-img" src="assets/szamitogep.png" alt="">
       <div class="login-box">
         <div class="avatar-wrap">
           <img id="avatar" src="assets/nyomozo_fej.png" alt="Nyomozó profilképe">
