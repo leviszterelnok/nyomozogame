@@ -191,7 +191,7 @@
     showScreen('desktop');
   }
 
-  // Ikonok a data.js desktop.icons listája alapján (x, y: pixel a bal felső sarokhoz)
+  // Ikonok a data.js desktop.icons listája alapján, rácson (a sorrend számít)
   function renderDesktopIcons() {
     desktopIcons.textContent = '';
     var icons = data.desktop.icons || [];
@@ -200,8 +200,7 @@
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'icon' + (icon.important === true ? ' important' : '');
-      btn.style.left = (Number(icon.x) || 0) + 'px';
-      btn.style.top = (Number(icon.y) || 0) + 'px';
+      btn.setAttribute('data-launch', icon.launch || '');
       btn.title = icon.name || '';
 
       // Kép: ha nincs vagy nem tölthető be, a szürke alap marad
@@ -224,6 +223,7 @@
       btn.addEventListener('click', function () { launchApp(icon); });
       desktopIcons.appendChild(btn);
     });
+    if (window.Mail) Mail.applyDots();
   }
 
   // Appot indít: ablakot nyit (js/wm.js). A launch az app azonosítója (data.js apps).

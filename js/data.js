@@ -34,7 +34,7 @@ var GAME_DATA = {
     "Ez a szöveg példa: a <h>…</h> közé írt részek kiemelve jelennek meg.",
 
   // Asztali ikonok
-  // x, y      : pixel koordináta a bal felső sarokhoz (az asztal bal felső sarkától)
+  // A sorrend határozza meg a rácson az elhelyezést (felülről lefelé, oszloponként).
   // important : true -> sárga keret az ikonon, false -> nincs keret (szürke kijelölés)
   // appicon   : az ikon képe (assets/ alatt). Ha hiányzik, szürke alap látszik.
   // launch    : az app azonosítója. Jelenleg csak a konzolba íródik.
@@ -42,9 +42,9 @@ var GAME_DATA = {
     // Asztal háttere: szín (pl. "#008080") vagy kép (pl. "assets/hatter.png")
     background: "#008080",
     icons: [
-      { name: "Tracebook", x: 30,  y: 30,  important: true,  appicon: "assets/tracebook.png", launch: "tracebook" },
-      { name: "Notes",     x: 30,  y: 130, important: false, appicon: "assets/notes.png",     launch: "notes" },
-      { name: "Amail",     x: 30,  y: 230, important: true,  appicon: "assets/amail.png",     launch: "amail" }
+      { name: "Tracebook", important: true,  appicon: "assets/tracebook.png", launch: "tracebook" },
+      { name: "Notes",     important: false, appicon: "assets/notes.png",     launch: "notes" },
+      { name: "Amail",     important: true,  appicon: "assets/amail.png",     launch: "amail" }
     ]
   },
 
@@ -109,6 +109,11 @@ var GAME_DATA = {
       inbox: "Beérkezett",
       sendStub: "A küldés még nincs bekötve."
     },
+    // A játékos saját címe (sendAmail alapértelmezett címzettje)
+    owner: "te@example.com",
+    // Értesítés új levélnél (sendAmail felülírhatja): {from}, {subject} behelyettesíthető
+    notification: { text: "Értesítést kaptál az Amailtól", duration: 4000, dot: true, toast: true },
+
     // Beérkezett levelek
     mails: [
       { id: 1, from: "info@suli-portal.example", to: "te@example.com", subject: "Jelszó-visszaállítás kérése", date: "2026-10-21 07:10",

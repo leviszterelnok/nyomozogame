@@ -93,3 +93,33 @@
   border-style: inset;
   font-weight: bold;
 }
+
+/* Értesítés: piros pötty az ikon jobb felső sarkában */
+.icon.has-notify .icon-img::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #d00;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+}
+
+/* Értesítés: szöveg a jobb alsó sarokban, a tálca fölött */
+.notify {
+  position: absolute;
+  right: 10px;
+  bottom: 50px;
+  z-index: 1000;
+  max-width: 70%;
+  padding: 8px 12px;
+  background: #d4d0c8;
+  color: #000;
+  border: 2px outset #fff;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  font: bold 13px Tahoma, sans-serif;
+}
+.notify[hidden] { display: none; }

@@ -179,5 +179,16 @@
     statusEl.textContent = r && r.ok ? 'Elküldve.' : (r && r.reason) || T.sendStub;
   });
 
+  // A játék (sendAmail) frissíti a listát: a szülő ablak küldi a levelek listáját
+  window.addEventListener('message', function (e) {
+    if (e.source === window.parent && e.data && e.data.type === 'amail:list') {
+      D.mails = e.data.mails || [];
+      renderList();
+    }
+  });
+
+  // Betöltéskor kérjük a levelek listáját a játéktól
+  window.parent.postMessage({ type: 'amail:ready' }, '*');
+
   showList();
 })();

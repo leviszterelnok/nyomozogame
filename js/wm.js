@@ -114,6 +114,9 @@
 
   // App megnyitása: egy appból csak egy ablak lehet
   function open(appId) {
+    // Értesítés a többi modulnak (pl. mail.js: az Amail megnyitásakor nullázza a pöttyöt)
+    document.dispatchEvent(new CustomEvent('wm:open', { detail: { appId: appId } }));
+
     var apps = (window.GAME_DATA && GAME_DATA.apps) || {};
     var app = apps[appId];
     if (!app) {
@@ -196,5 +199,14 @@
     });
   });
 
-  window.WM = { open: open, close: closeApp };
+  window.WM = {
+    open: open,
+    close: closeApp,
+    // Az app ablakában lévő iframe ablaka (ha nyitva van), különben null
+    frame: function (appId) {
+      var w = windows[appId];
+      var f = w && w.el.querySelector('iframe');
+      return f ? f.contentWindow : null;
+    }
+  };
 })();
