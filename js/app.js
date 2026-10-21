@@ -189,6 +189,7 @@
   function openDesktop() {
     renderDesktopIcons();
     showScreen('desktop');
+    if (window.Game) Game.start();   // a játék eseményei az asztal megjelenésétől
   }
 
   // Ikonok a data.js desktop.icons listája alapján, rácson (a sorrend számít)

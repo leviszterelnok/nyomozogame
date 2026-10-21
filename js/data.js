@@ -134,5 +134,16 @@ var GAME_DATA = {
     saveLabel: "Mentés",
     savedText: "Mentve",
     unsavedText: "Nincs mentve"
+  },
+
+  // Játék menete (js/game_logic.js)
+  game: {
+    // Az asztal megjelenése után ennyi ms múlva érkezik az első levél
+    introMailDelay: 30000,
+    introMail: {
+      from: "info@suli-portal.example",
+      subject: "Üdvözlünk az Amailben",
+      body: "Szia!\n\nEz az első levél a rendszerből. Nézz körül nyugodtan a gépen.\n\nÜdv,\nAz ügyeletes"
+    }
   }
 };

@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.2 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.3 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -17,6 +17,8 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 | `css/style.css` | Megjelenés, reszponzív alapok |
 | `js/data.js` | Minden beállítás: jelszó, asztali ikonok, info szöveg (`GAME_DATA`) |
 | `js/app.js` | Képernyőváltás, jelszó, info gomb, betöltő, asztal, ikonok |
+| `js/game_logic.js` | Játéklogika: haladás, időzített események (pl. az első levél) |
+| `js/mail.js` | `sendAmail()`: levélküldés, értesítések |
 | `js/wm.js`, `css/wm.css` | Ablakkezelő: ablakok, tálca, mozgatás, átméretezés |
 | `apps/tracebook/` | Tracebook (HTML, CSS, JS) |
 | `apps/amail/` | Amail (HTML, CSS, JS) |
@@ -40,6 +42,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 ## Változásnapló
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
+- **v0.2.3** – Új `js/game_logic.js` (`Game`): az asztal megjelenésétől indul, az első levelet 30 mp múlva küldi (`game.introMailDelay`, `game.introMail` a data.js-ben). Haladás: `Game.setFlag` / `Game.hasFlag`.
 - **v0.2.2** – Asztali ikonok kisebbek, rácson (x/y már nincs). Új `js/mail.js`: `sendAmail(mail, opts)` levelet ad a beérkezetthez; piros pötty az Amail ikonján, szöveges értesítés a jobb alsó sarokban. Az értesítés szövege és ideje `amail.notification`-ben vagy `sendAmail` opts-ban állítható. Az Amail megnyitásakor a pötty eltűnik.
 - **v0.2.0** – Asztal háttere (`desktop.background`). Ablakkezelő (`js/wm.js`, `css/wm.css`): húzható, átméretezhető ablakok, csak az asztal területén belül, apponként 1 ablak. Három app külön mappában (`apps/tracebook`, `apps/amail`, `apps/notes`), mindegyik külön HTML/CSS/JS. Tracebook: főoldal, keresés, profil, bejegyzések (`tracebook.main_menu_posts`, felhasználónként `users[].posts`). Amail: lista, szűrés, levél nézet, válasz, `sendMail()` (még nincs bekötve). Notes: egyfájlos jegyzet, localStorage-ba mentve.
 - **v0.1.5** – Bekapcsoló gomb helye és mérete a `config.powerButton`-ban. A gomb jól látható (sötét alap, fehér keret). A képpont-mérő bekerült: `tools/kepponto-mero.html`.
