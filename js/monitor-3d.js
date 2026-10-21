@@ -289,6 +289,14 @@
   var bezel = box(0.92, 0.6, 0.06, beige, 0, 0.3, 0, mon);
   bezel.name = 'Monitor-keret';
 
+  // Belső keret: a képernyő körül kiálló sávok, így a kijelző mélyebben ül a monitorban
+  var frameParts = [bezel];
+  frameParts.push(box(0.92, 0.07, 0.024, beige, 0, 0.565, 0.042, mon));    // felső sáv
+  frameParts.push(box(0.84, 0.012, 0.024, beige, 0, 0.065, 0.042, mon));   // alsó vékony sáv
+  frameParts.push(box(0.08, 0.46, 0.024, beige, -0.42, 0.3, 0.042, mon));  // bal sáv
+  frameParts.push(box(0.08, 0.46, 0.024, beige, 0.42, 0.3, 0.042, mon));   // jobb sáv
+  frameParts.forEach(function (p) { p.name = 'Monitor-keret'; });
+
   // Hosszú, csonkakúpos "tubus" hátul: a szögletes CRT-test (a hátsó vég kisebb).
   var tube = new THREE.Mesh(makeFrustum(0.86, 0.56, 0.5, 0.34, 0.45), beigeDark);
   tube.position.set(0, 0.3, 0);
@@ -307,6 +315,13 @@
   var glass = new THREE.Mesh(new THREE.PlaneGeometry(SCREEN_W, SCREEN_H), glassMat);
   glass.position.set(0, 0.3, 0.034);
   mon.add(glass);
+
+  // Kiugró részletek: talp, szellőzőrácsok a tubus tetején, hátsó dudor
+  box(0.36, 0.04, 0.24, beige, 0, -0.01, -0.05, mon);
+  [-0.2, 0, 0.2].forEach(function (x) {
+    box(0.2, 0.01, 0.02, black, x, 0.53, -0.25, mon);
+  });
+  box(0.2, 0.12, 0.12, beigeDark, 0, 0.3, -0.51, mon);
 
   // Gombok és LED az előlap alján
   var knobA = cyl(0.018, 0.018, 0.02, 24, black, -0.36, 0.04, 0.035, mon);
@@ -495,7 +510,7 @@
   var cssCam = new THREE.PerspectiveCamera(camera.fov, camera.aspect, 1, 100000);
 
   // ---- Kijelölhető elemek ----
-  var pickables = [bezel, tube, screen, keyboard, deskTopMesh(), powerBtn];
+  var pickables = frameParts.concat([tube, screen, keyboard, deskTopMesh(), powerBtn]);
 
   function deskTopMesh() {
     return desk.children[0];
@@ -518,7 +533,7 @@
         powerBtn.position.z = 0.03;
         setTimeout(function () { powerBtn.position.z = 0.036; }, 120);
         powerOn();
-      } else if (hits[0].object === screen || hits[0].object === bezel) {
+      } else if (hits[0].object === screen || frameParts.indexOf(hits[0].object) >= 0) {
         // A képernyőre kattintva a játék veszi át az egeret
         setGameMode(true);
       }
@@ -564,7 +579,7 @@
 
   // Játék módban az egér a kereten belül marad a játék módban; a keret elhagyásakor
   // visszatér a nézelődés. Nézelődés módban az egér mindenhol forgatja a kamerát.
-  var frameHover = [bezel, screen];
+  var frameHover = frameParts.concat([screen]);
   canvas.addEventListener('pointermove', function (e) {
     var r = canvas.getBoundingClientRect();
     mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
