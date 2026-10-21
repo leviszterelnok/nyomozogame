@@ -246,7 +246,7 @@
 
   // ---- Régi, dobozos monitor ----
   var mon = new THREE.Group();
-  mon.position.set(0, 0.77, -0.15);
+  mon.position.set(0, 0.77, 0.0);   // közelebb a nézőhöz (a korábbi -0,15 helyett)
   scene.add(mon);
 
   // Előlap (keret)
@@ -462,6 +462,7 @@
   var pointerTarget = { x: 0, y: 0 };
   var pointerCur = { x: 0, y: 0 };
   var gameMode = false;
+  var focusAmt = 0;   // 0 = egérrel forgatott nézet, 1 = szembe a képernyővel (játék mód)
 
   function setGameMode(on) {
     gameMode = on;
@@ -491,8 +492,13 @@
       Math.sin(pitch),
       -Math.cos(yaw) * Math.cos(pitch)
     );
-    camera.position.copy(camBase);
-    camera.lookAt(camBase.clone().add(dir));
+    // Játék módban a kamera egyenesen szembe áll a képernyővel, nézetmódban az egérrel forog
+    focusAmt += ((gameMode ? 1 : 0) - focusAmt) * 0.06;
+    var screenPos = screen.getWorldPosition(new THREE.Vector3());
+    var focusPos = screenPos.clone().add(new THREE.Vector3(0, 0, 0.55));
+    var mouseLook = camBase.clone().add(dir);
+    camera.position.lerpVectors(camBase, focusPos, focusAmt);
+    camera.lookAt(mouseLook.lerp(screenPos, focusAmt));
 
     // Finom CRT-villogás
     screenMat.emissiveIntensity = 0.85 + Math.sin(t * 37) * 0.02 + Math.sin(t * 1.3) * 0.02;
