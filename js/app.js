@@ -43,6 +43,23 @@
   // A GAME_DATA objektumot a data.js tölti be, nincs fetch.
   var data = GAME_DATA;
 
+  // ---------- Játéktér területe (config.area) ----------
+  // Szám = % (pl. 10), "px"-es szöveg = pixel (pl. "120px"). Mindkét érték keverhető.
+  function toCssUnit(v) {
+    return (typeof v === 'string' && /px$/.test(v)) ? v : (Number(v) || 0) + '%';
+  }
+
+  function applyArea() {
+    var a = (data.config && data.config.area) || { x1: 0, y1: 0, x2: 100, y2: 100 };
+    var stage = $('#stage');
+    stage.style.left = toCssUnit(a.x1);
+    stage.style.top = toCssUnit(a.y1);
+    stage.style.width = 'calc(' + toCssUnit(a.x2) + ' - ' + toCssUnit(a.x1) + ')';
+    stage.style.height = 'calc(' + toCssUnit(a.y2) + ' - ' + toCssUnit(a.y1) + ')';
+  }
+
+  applyArea();
+
   // ---------- Képernyőváltás ----------
   function showScreen(name) {
     Object.keys(screens).forEach(function (key) {

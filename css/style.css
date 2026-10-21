@@ -21,8 +21,11 @@ html, body {
   font-family: Tahoma, Verdana, "Trebuchet MS", sans-serif;
 }
 
+/* A játéktér területe; a helyét és méretét a js/app.js állítja (config.area) */
 #stage {
-  position: relative;
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
