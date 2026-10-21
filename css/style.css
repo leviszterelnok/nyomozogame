@@ -34,13 +34,25 @@ html, body {
   background: #000;
 }
 
-/* Monitor-kép: az ablak egészét kitölti, mindig látszik */
-.backdrop {
+/* Keret: a monitor-kép arányában, az ablakba illesztve (a sávok feketék).
+   Minden %-os érték (kijelző, gomb) ehhez a kerethez képest értendő. */
+.frame {
+  --ar: 1.7778; /* alapérték, a js/app.js a monitor-kép valódi arányára állítja */
   position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(100vw, calc(100vh * var(--ar)));
+  height: min(100vh, calc(100vw / var(--ar)));
+}
+
+/* Monitor-kép: a keret egészét kitölti, mindig látszik */
+.backdrop {
+  position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: fill;
   background: #000;
   z-index: 0;
 }
@@ -63,7 +75,7 @@ html, body {
 
 /* ===== 1. Monitor ===== */
 .power-btn {
-  position: fixed;
+  position: absolute;
   z-index: 2;
   transform: translate(-50%, -50%); /* a js/app.js állítja a helyét (config.powerButton) */
   width: 48px;
