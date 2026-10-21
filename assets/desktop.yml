@@ -1,0 +1,28 @@
+# Asztali ikonok
+# x, y      : pixel koordináta a bal felső sarokhoz (az asztal bal felső sarkától)
+# important : true -> piros "!" jelölés az ikonon, false -> nincs jelölés
+# appicon   : az ikon képe (assets/ alatt). Ha hiányzik, szürke alap látszik.
+# launch    : az app azonosítója. Jelenleg csak a konzolba íródik ki.
+# Fontos: megjegyzés csak külön sorba írható.
+
+icons:
+  - name: Tracebook
+    x: 30
+    y: 30
+    important: true
+    appicon: assets/tracebook.png
+    launch: tracebook
+
+  - name: Notes
+    x: 30
+    y: 130
+    important: false
+    appicon: assets/notes.png
+    launch: notes
+
+  - name: Amail
+    x: 30
+    y: 230
+    important: true
+    appicon: assets/amail.png
+    launch: amail
