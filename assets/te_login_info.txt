@@ -1,0 +1,3 @@
+Te vagy <h>a nyomozó</h>, aki este 8:30-kor otthon ül a gép előtt.
+Az ügy: <h>digitális lábnyom</h> – valaki nyomot hagyott az interneten.
+Ez a szöveg példa: a <h>…</h> közé írt részek kiemelve jelennek meg.
