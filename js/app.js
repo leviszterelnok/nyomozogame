@@ -40,6 +40,7 @@
   var bootLog = $('#boot-log');
   var progressBar = $('#progress-bar');
   var desktopIcons = $('#desktop-icons');
+  var iconEls = [];   // az asztali ikonok (gomb, kép-keret, adat) a rácsos elrendezéshez
   var desktopScreen = $('#screen-desktop');
 
   // ---------- Adatok (js/data.js) ----------
@@ -108,6 +109,7 @@
     Object.keys(screens).forEach(function (key) {
       screens[key].classList.toggle('active', key === name);
     });
+    if (name === 'desktop') layoutDesktop();
   }
 
   // ---------- 1. Monitor bekapcsolása ----------
@@ -251,6 +253,7 @@
   // Ikonok a data.js desktop.icons listája alapján, rácson (a sorrend számít)
   function renderDesktopIcons() {
     desktopIcons.textContent = '';
+    iconEls.length = 0;
     var icons = data.desktop.icons || [];
 
     icons.forEach(function (icon) {
@@ -260,11 +263,6 @@
       btn.setAttribute('data-launch', icon.launch || '');
       btn.title = icon.name || '';
 
-      // Rácspozíció (nem kötelező): x = oszlop, y = sor, 0-tól számolva (data.js desktop.icons)
-      if (typeof icon.x === 'number' && typeof icon.y === 'number') {
-        btn.style.gridColumn = String(icon.x + 1);
-        btn.style.gridRow = String(icon.y + 1);
-      }
 
       // Kép: ha nincs vagy nem tölthető be, a szürke alap marad
       var wrap = document.createElement('span');
@@ -285,7 +283,9 @@
 
       btn.addEventListener('click', function () { launchApp(icon); });
       desktopIcons.appendChild(btn);
+      iconEls.push({ btn: btn, wrap: wrap, icon: icon });
     });
+    layoutDesktop();
     if (window.Mail) Mail.applyDots();
   }
 
@@ -300,6 +300,76 @@
 
   // Asztal mérete (desktop.width, desktop.height): szám = %, "px" végű szöveg = pixel.
   // Az asztal a kijelző közepére kerül.
+  // Asztali rács (data.js desktop.cols x desktop.rows): a cellák az asztal méretéből adódnak.
+  // Az ikon mérete a cellából jön (nem nyúlik), és csak a rácson belülre kerülhet.
+  function layoutDesktop() {
+    var d = data.desktop || {};
+    var cols = Math.max(1, parseInt(d.cols, 10) || 9);
+    var rows = Math.max(1, parseInt(d.rows, 10) || 6);
+    var GAP = 4, PAD = 8;   // a CSS-ben: .desktop-icons padding 8px
+    var W = desktopIcons.clientWidth - PAD * 2;
+    var H = desktopIcons.clientHeight - PAD * 2;
+    if (W <= 0 || H <= 0) return;   // az asztal még nem látszik
+
+    var cellW = Math.floor((W - GAP * (cols - 1)) / cols);
+    var cellH = Math.floor((H - GAP * (rows - 1)) / rows);
+    // Az ikon a cella kisebbik méretének ~60%-a, a felirat helyével együtt
+    var size = Math.max(16, Math.min(Math.floor(cellW * 0.6), cellH - 22));
+
+    desktopIcons.style.gridTemplateColumns = 'repeat(' + cols + ', ' + cellW + 'px)';
+    desktopIcons.style.gridTemplateRows = 'repeat(' + rows + ', ' + cellH + 'px)';
+    desktopIcons.style.gap = GAP + 'px';
+
+    var taken = {};
+    function place(p, c, r) {
+      p.btn.style.display = '';
+      p.btn.style.gridColumn = String(c + 1);
+      p.btn.style.gridRow = String(r + 1);
+      p.btn.style.width = cellW + 'px';
+      p.btn.style.height = cellH + 'px';
+      p.btn.style.overflow = 'hidden';
+      p.wrap.style.width = size + 'px';
+      p.wrap.style.height = size + 'px';
+      taken[c + ',' + r] = true;
+    }
+
+    // 1. A megadott x, y pozíciók. Ami a rácson kívül esik, rejtve marad.
+    var auto = [];
+    iconEls.forEach(function (p) {
+      var x = p.icon.x, y = p.icon.y;
+      if (typeof x === 'number' && typeof y === 'number') {
+        if (x >= 0 && y >= 0 && x < cols && y < rows) {
+          place(p, x, y);
+        } else {
+          p.btn.style.display = 'none';
+          console.warn('[asztal] a rácson kívül, kihagyva: ' + (p.icon.name || ''));
+        }
+      } else {
+        auto.push(p);
+      }
+    });
+
+    // 2. A többi ikon a következő szabad cellába kerül (oszloponként, felülről lefelé)
+    auto.forEach(function (p) {
+      var spot = null;
+      for (var c = 0; c < cols && !spot; c++) {
+        for (var r = 0; r < rows && !spot; r++) {
+          if (!taken[c + ',' + r]) spot = [c, r];
+        }
+      }
+      if (spot) {
+        place(p, spot[0], spot[1]);
+      } else {
+        p.btn.style.display = 'none';
+        console.warn('[asztal] nincs szabad hely, kihagyva: ' + (p.icon.name || ''));
+      }
+    });
+  }
+
+  window.addEventListener('resize', function () {
+    if (screens.desktop.classList.contains('active')) layoutDesktop();
+  });
+
   function applyDesktopSize() {
     var d = data.desktop || {};
     var cssSize = function (v) {

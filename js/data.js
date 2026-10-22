@@ -48,6 +48,10 @@ var GAME_DATA = {
     // Az asztal a kijelző közepére kerül.
     width: "100%",
     height: "100%",
+    // Rács: hány oszlop (cols) és sor (rows) fér az asztalra. Az ikonok mérete ebből adódik,
+    // nem nyúlnak, és a rácson kívülre eső ikon rejtve marad.
+    cols: 9,
+    rows: 6,
     // x, y (nem kötelező): az ikon rácsmezője, 0-tól számolva (x = oszlop, y = sor).
     // Ha nincs megadva, az ikon a sorrend szerint kerül a következő szabad helyre.
     icons: [
