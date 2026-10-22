@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.23 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.24 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -47,6 +47,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
 - **v0.2.4** – Prototípus: `tools/3d-monitor/` (index.html, style.css, monitor-3d.js). Three.js r128 CDN-ről (classic script, file:// alatt is fut). Kódból épített régi dobozos monitor, asztal, könyvespolc és távoli lámpa. Kattintásos kijelölés (raycast), képernyő-sík körvonala SVG-ben (`window.Monitor3D.screenInfo()`). A játék még a képpontos háttérrel fut.
+- **v0.2.24** – A bejelentkező doboz, az avatar, a gombok és az info popup kinézete visszaáll a régi, retro stílusra. A popup helye (az i-gomb jobbján) és animációja változatlan.
 - **v0.2.23** – Az info popup az i gombtól jobbra nyílik (a bejelentkező dobozon kívül is kiérhet). A bejelentkező doboz könnyebb: áttetsző, kerekített, kisebb avatar, lágyabb beviteli mezők és gombok.
 - **v0.2.22** – Az info szöveg popupban nyílik az info gombból (`#info-popup`, `setInfoOpen` a `js/app.js`-ben). Fix méret (340×280 px), a szöveg görgethető. Bezárás: × gomb, kattintás a popupon kívül, Esc.
 - **v0.2.21** – Az info doboz fix magasságú (120 px) és görgethető (`.info-text`, billentyűzetről is: `tabindex`). Az info szövege Beke Imréről szól (`js/data.js` → `info`).
