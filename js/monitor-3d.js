@@ -486,24 +486,28 @@
   );
   wire.position.set(0, 0.14, 0);
   cageGroup.add(wire);
-  cyl(0.022, 0.016, 0.012, 16, new THREE.MeshStandardMaterial({ color: 0xd8d2c0, roughness: 0.4 }), 0.1, 0.03, 0.06, cageGroup);
 
   // Ketrec belső pontjai (a ketrec helyi koordinátái): tálka, kerék
-  var BOWL = { x: 0.1, z: 0.06 };
-  var WHEEL = { x: -0.07, y: 0.1, z: -0.07 };
+  var BOWL = { x: 0.08, z: -0.03 };
+  var EAT = { x: BOWL.x, z: 0.045 };                          // a hörcsög a tál ELŐTT áll, nem benne
+  var WHEEL = { x: -0.07, y: 0.125, z: -0.04, r: 0.085 };     // a kerék közepe és sugara
 
-  // Futókerék a ketrec hátsó sarkában (forog, ha a hörcsög fut benne)
+  // Nagyobb tál, ételtel
+  var bowlMat = new THREE.MeshStandardMaterial({ color: 0xd8d2c0, roughness: 0.4 });
+  cyl(0.036, 0.03, 0.02, 24, bowlMat, BOWL.x, 0.036, BOWL.z, cageGroup);
+  cyl(0.031, 0.031, 0.003, 24, new THREE.MeshStandardMaterial({ color: 0x8a6a3a, roughness: 0.9 }), BOWL.x, 0.0475, BOWL.z, cageGroup);
+
+  // Futókerék a ketrec bal oldalán, két tartóoszlop közt: a hörcsög a kerékben fut
   var wheelMat = new THREE.MeshStandardMaterial({ color: 0xbfa27a, roughness: 0.6 });
   var wheelGroup = new THREE.Group();
   wheelGroup.position.set(WHEEL.x, WHEEL.y, WHEEL.z);
   cageGroup.add(wheelGroup);
-  wheelGroup.add(new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.004, 8, 24), wheelMat));
-  for (var sp = 0; sp < 4; sp++) {
-    var spoke = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.005, 0.005), wheelMat);
-    spoke.rotation.z = sp * Math.PI / 4;
-    wheelGroup.add(spoke);
-  }
-  cyl(0.004, 0.004, 0.08, 8, wheelMat, WHEEL.x, 0.06, WHEEL.z, cageGroup);
+  // Maga a kerék (nincs küllő, így a hörcsög szabadon fut benne)
+  wheelGroup.add(new THREE.Mesh(new THREE.TorusGeometry(WHEEL.r, 0.006, 10, 40), wheelMat));
+  // Két tartóoszlop a kerék mellett (a kerék szélétől kis résre, hogy ne érjen hozzájuk)
+  var postX = WHEEL.r + 0.015;
+  cyl(0.006, 0.006, WHEEL.y, 8, wheelMat, WHEEL.x - postX, WHEEL.y / 2, WHEEL.z, cageGroup);
+  cyl(0.006, 0.006, WHEEL.y, 8, wheelMat, WHEEL.x + postX, WHEEL.y / 2, WHEEL.z, cageGroup);
 
   var hamster = new THREE.Group();
   hamster.position.set(0, 0.028, 0);   // az ágyon ül
@@ -541,15 +545,22 @@
   // ---- Hörcsög viselkedése: sétál, eszik a tálból, kerékben fut, mosakodik ----
   var CAGE_X = 0.1, CAGE_Z = 0.06;     // a mozgás határa (a ketrec belsejében)
   var HAMSTER_Y = 0.028;               // az ágy felszíne fölött
-  var hMode = 'idle', hUntil = 0, hTx = 0, hTz = 0, hLast = 0, hSpin = 0;
+  var WHEEL_RUN_Y = 0.072;             // a hörcsög magassága a kerék alján futva
+  var hMode = 'idle', hUntil = 0, hTx = 0, hTz = 0, hLast = 0, hSpin = 0, hBaseY = HAMSTER_Y;
 
-  // Új célpont a ketrecen belül (a kerék sarkát kihagyjuk)
+  // Tiltott terület a járáshoz: a tál és a kerék (a hörcsög nem gázol át rajtuk)
+  function hBlocked(x, z) {
+    if (Math.hypot(x - BOWL.x, z - BOWL.z) < 0.07) return true;
+    return Math.abs(x - WHEEL.x) < 0.1 && Math.abs(z - WHEEL.z) < 0.06;
+  }
+
+  // Új célpont a ketrecen belül (a tál és a kerék környéke kimarad)
   function hPickTarget() {
     var x, z;
     do {
       x = (Math.random() * 2 - 1) * CAGE_X;
       z = (Math.random() * 2 - 1) * CAGE_Z;
-    } while (x < -0.02 && z < -0.02);
+    } while (hBlocked(x, z));
     hTx = x;
     hTz = z;
   }
@@ -616,20 +627,20 @@
       bob = hStepTo(hTx, hTz, now, dt);
       if (hDist(hTx, hTz) < 0.01) hUntil = now;   // célba ért: következő tevékenység
     } else if (hMode === 'eat') {
-      if (hDist(BOWL.x, BOWL.z) > 0.01) {
-        bob = hStepTo(BOWL.x, BOWL.z, now, dt);
+      if (hDist(EAT.x, EAT.z) > 0.01) {
+        bob = hStepTo(EAT.x, EAT.z, now, dt);
       } else {
+        hamster.rotation.y = Math.PI;               // a tál felé néz, a tál előtt áll
         yaw = 0;
         headX = 0.7 + Math.sin(now * 14) * 0.08;   // a tálba hajol és rágcsál
       }
     } else if (hMode === 'wheel') {
-      var runX = WHEEL.x, runZ = WHEEL.z + 0.07;
-      if (hDist(runX, runZ) > 0.01) {
-        bob = hStepTo(runX, runZ, now, dt);
+      if (hDist(WHEEL.x, WHEEL.z) > 0.01) {
+        bob = hStepTo(WHEEL.x, WHEEL.z, now, dt);
       } else {
         hamster.rotation.y = 0;
         yaw = 0;
-        bob = Math.abs(Math.sin(now * 18)) * 0.006;   // fut a helyén
+        bob = Math.abs(Math.sin(now * 18)) * 0.004;   // fut a kerékben
       }
       hSpin += dt * 9;
       wheelGroup.rotation.z = hSpin;
@@ -639,7 +650,10 @@
       headZ = Math.max(0, Math.sin(now * 2.2)) * 0.2;   // mosakodik: lassú, ritmusos dörzsölés
     }
 
-    hamster.position.y = HAMSTER_Y + bob;
+    // A kerékben a hörcsög a kerék alján fut (magasabbra emelkedik), egyébként a talajon
+    var inWheel = hMode === 'wheel' && hDist(WHEEL.x, WHEEL.z) <= 0.01;
+    hBaseY += ((inWheel ? WHEEL_RUN_Y : HAMSTER_Y) - hBaseY) * (1 - Math.exp(-dt * 6));
+    hamster.position.y = hBaseY + bob;
     hHead.rotation.set(headX, yaw, headZ);
   }
 
