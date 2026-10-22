@@ -27,9 +27,15 @@
       <div class="login-box">
         <div class="avatar-wrap">
           <img id="avatar" src="assets/nyomozo_fej.png" alt="Nyomozó profilképe">
-          <button id="info-btn" class="info-btn" type="button" aria-label="Információ a nyomozóról" aria-expanded="false" aria-controls="info-text">i</button>
+          <button id="info-btn" class="info-btn" type="button" aria-label="Információ a nyomozóról" aria-expanded="false" aria-controls="info-popup">i</button>
         </div>
-        <p id="info-text" class="info-text" hidden tabindex="0"></p>
+        <div id="info-popup" class="info-popup" role="dialog" aria-label="Információ a nyomozóról" hidden>
+          <div class="info-popup-bar">
+            <span>Információ</span>
+            <button id="info-close" type="button" aria-label="Bezárás">×</button>
+          </div>
+          <div id="info-text" class="info-text" tabindex="0"></div>
+        </div>
 
         <!-- Nem <form>: a böngésző jelszókezelője így nem ajánl jelszót és nem ugrik fel -->
         <div id="login-form" class="login-form">

@@ -32,6 +32,8 @@
   var offError = $('#off-error');
   var infoBtn = $('#info-btn');
   var infoText = $('#info-text');
+  var infoPopup = $('#info-popup');
+  var infoClose = $('#info-close');
   var loginForm = $('#login-form');
   var passwordInput = $('#password');
   var loginError = $('#login-error');
@@ -141,11 +143,23 @@
     infoText.appendChild(document.createTextNode(text.slice(last)));
   }
 
-  infoBtn.addEventListener('click', function () {
-    var willOpen = infoText.hidden;
-    if (willOpen) renderInfo();
-    infoText.hidden = !willOpen;
-    infoBtn.setAttribute('aria-expanded', String(willOpen));
+  // Info popup: az info gombból nyílik; bezárható az × gombbal, a doboz mellé kattintva vagy Esc-kel
+  function setInfoOpen(open) {
+    if (open) renderInfo();
+    infoPopup.hidden = !open;
+    infoBtn.setAttribute('aria-expanded', String(open));
+    if (open) infoText.focus();
+  }
+  infoBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    setInfoOpen(infoPopup.hidden);
+  });
+  infoClose.addEventListener('click', function () { setInfoOpen(false); });
+  document.addEventListener('click', function (e) {
+    if (!infoPopup.hidden && !infoPopup.contains(e.target)) setInfoOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !infoPopup.hidden) setInfoOpen(false);
   });
 
   // ---------- 3. Bejelentkezés ----------
