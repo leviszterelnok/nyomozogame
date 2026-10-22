@@ -137,10 +137,10 @@
   }
 
   // ---------- Nézetek ----------
+  // A főoldal üres: a bejegyzéseket és a fiókokat csak keresésre lehet megtalálni.
+  // (A mainPosts a keresésben él tovább; ha ide kell tartalom, itt lehet megjeleníteni.)
   function showMain() {
     view.textContent = '';
-    view.appendChild(el('h2', 'tb-h', T.mainTitle));
-    view.appendChild(postList(sortedPosts(mainPosts), T.noPostsAtAll));
     view.scrollTop = 0;
   }
 
