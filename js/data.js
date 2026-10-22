@@ -98,22 +98,35 @@ var GAME_DATA = {
     // posts (nem kötelező): a felhasználó saját bejegyzései. Ezek csak a profilján látszanak,
     // a főoldalon nem, csak akkor, ha rákeresel a felhasználóra. A szerző automatikusan ő lesz.
     users: [
-      { username: "kovacs_anna", name: "Kovács Anna", avatar: "assets/profil_anna.png", friends: ["szabo_bence", "nagy_lili"] },
-      { username: "szabo_bence", name: "Szabó Bence", avatar: "assets/profil_bence.png", friends: ["kovacs_anna"] },
-      { username: "nagy_lili",   name: "Nagy Lili",   avatar: "",                        friends: ["kovacs_anna", "szabo_bence"],
+      { username: "balog_tibor", name: "Balog Tibor", avatar: "", friends: ["fazekas_zoltan", "szabo_beatrix", "kovacs_daniel"] },
+      { username: "fazekas_zoltan", name: "Fazekas Zoltán", avatar: "", friends: ["horvath_mark", "varga_peter"],
         posts: [
-          { id: 101, date: "2026-10-21 10:00", text: "Ez a bejegyzés csak Lili profilján látszik, a főoldalon nem." }
-        ] }
+          { id: 201, date: "2026-10-21 01:30", text: "Jó volt a speedforneed Varga Péterrel!" },
+          { id: 202, date: "2026-10-21 20:40", text: "Jó volt a tegnapi napom..." },
+          { id: 203, date: "2026-10-21 07:05", text: "7:00 kor valamiért törölve lettek a kamerák" }
+        ] },
+      { username: "szabo_beatrix", name: "Szabó Beatrix", avatar: "", friends: ["notar_marika", "mezei_eva"] },
+      { username: "kovacs_daniel", name: "Kovács Dániel", avatar: "", friends: [],
+        posts: [
+          { id: 401, date: "2026-10-18 12:00", text: "Fő építész vagyok. Az ismerősök nem számítanak." }
+        ] },
+      { username: "kovacs_rita", name: "Kovács Rita", avatar: "", friends: [] },
+      { username: "notar_marika", name: "Nótár Marika", avatar: "", friends: [] },
+      { username: "mezei_eva", name: "Mezei Éva", avatar: "", friends: [] },
+      { username: "varga_peter", name: "Varga Péter", avatar: "", friends: ["fazekas_zoltan"] },
+      { username: "horvath_mark", name: "Horváth Márk", avatar: "", friends: [] }
     ],
     // Főoldali bejegyzések: mindig ezek látszanak a főoldalon. A szövegbe <img src="assets/kep.png"> is írható.
     // Bejegyzés nem törölhető. A szerző profilján is megjelennek.
     main_menu_posts: [
-      { id: 1, author: "kovacs_anna", date: "2026-10-19 18:02",
-        text: "Új kedvenc kávézó a belvárosban! <img src=\"assets/kep_kave.png\"> Ha valaki arra jár, szóljon." },
-      { id: 2, author: "szabo_bence", date: "2026-10-20 09:15",
-        text: "Ma reggel 6:30-kor futottam. A telefonom a térképen is elmentette az útvonalat, pedig nem kértem." },
-      { id: 3, author: "nagy_lili", date: "2026-10-20 21:40",
-        text: "Gondolkodjatok el, mielőtt kiposztoltok egy képet: a fotón látszik a házszám vagy a rendszám is?" }
+      { id: 801, author: "balog_tibor", date: "2026-10-20 08:00",
+        text: "A hónap dolgozója: Kovács Rita. Gratulálunk!" },
+      { id: 501, author: "kovacs_rita", date: "2026-10-21 17:30",
+        text: "Jó volt a mai @horvath_mark stream" },
+      { id: 601, author: "notar_marika", date: "2026-10-21 07:40",
+        text: "A mai reggelem... megérkeztem munkába, és már reggel egyből elrontotta a napomat Kovács Rita, ott volt a folyosón." },
+      { id: 701, author: "mezei_eva", date: "2026-10-18 09:00",
+        text: "Álláspozíció-jelentkezések nyíltak cégünkhöz. Akit érdekel, forduljon Mezei Éva irodavezetőhöz." }
     ]
   },
 
@@ -136,16 +149,9 @@ var GAME_DATA = {
     notification: { text: "Értesítést kaptál az Amailtól", duration: 4000, dot: true, toast: true },
 
     // Beérkezett levelek
-    mails: [
-      { id: 1, from: "info@suli-portal.example", to: "te@example.com", subject: "Jelszó-visszaállítás kérése", date: "2026-10-21 07:10",
-        body: "Valaki jelszó-visszaállítást kért a fiókodhoz.\nHa nem te voltál, ne kattints semmilyen linkre, és változtasd meg a jelszavadat." },
-      { id: 2, from: "kovacs_anna@example.com", to: "te@example.com", subject: "Holnapi találkozó", date: "2026-10-20 16:30",
-        body: "Szia! Holnap 17:00 jó neked a könyvtár előtt?" }
-    ],
-    // Előre megadott levelek, amiket később lehet küldeni (sendMail)
-    outgoing: [
-      { id: "o1", to: "kovacs_anna@example.com", subject: "Köszönöm", body: "Köszi a segítséget, holnap találkozunk." }
-    ]
+    mails: [],
+    // Piszkozatok (előre megírt, még el nem küldött levelek)
+    outgoing: []
   },
 
   // ---------- Notes ----------
@@ -162,9 +168,80 @@ var GAME_DATA = {
     // Az asztal megjelenése után ennyi ms múlva érkezik az első levél
     introMailDelay: 30000,
     introMail: {
-      from: "info@suli-portal.example",
-      subject: "Üdvözlünk az Amailben",
-      body: "Szia!\n\nEz az első levél a rendszerből. Nézz körül nyugodtan a gépen.\n\nÜdv,\nAz ügyeletes"
+      from: "Balog Tibor <balog.tibor@apex-epitkezes.example>",
+      subject: "Bizalmas: ellopott tervek",
+      body: "Üdvözlöm!\n\nTegnap reggel 7 óra körül ellopták az építkezésünk új terveit. A befektetőink már várják ezeket, és ha a hír kiszivárog, visszalépnek. Kérem, egyelőre maradjon ez köztünk.\n\nDerítse ki, ki lopta el a terveket! A nyomozáshoz kezdjen a Tracebookon: az én profilomon (balog_tibor) három ismerősöm látszik, akik a cégnél dolgoznak.\n\nA választ csak névvel fogadom el. Ha többen voltak benne, mindannyiukat nevezze meg.\n\nTisztelettel:\nBalog Tibor\nApex Építkezés"
     }
+  },
+
+  // ---------- Levelezőpartnerek (js/contacts.js) ----------
+  contacts: {
+    // Alapértelmezett válaszidő (ms): véletlen érték a két szám között
+    replyDelay: [10000, 15000],
+    // Ha a szabad szövegben nincs keresett kulcsszó
+    fallbackReply: "Nem tudok segíteni, nem tudom, miről beszélsz.",
+    // Ismeretlen címzett esetén
+    unknownRecipient: "Ismeretlen címzett.",
+    // Címzett: név vagy e-mail-cím alapján találja meg a játék (kis- és nagybetű, ékezet nem számít).
+    // mode:
+    //   "names"   : csak névvel lehet válaszolni (a megoldás), a listából kell választani; nincs automatikus válasz
+    //   "options" : a játékos csak az options listából választ; a válasz a megadott reply szöveg
+    //   "free"    : szabad szöveg; a replies listában a match kulcsszót keresi (a tárgyban is), különben fallbackReply
+    people: [
+      { name: "Balog Tibor", address: "balog.tibor@apex-epitkezes.example", mode: "names" },
+      { name: "Mezei Éva", address: "mezei.eva@apex-epitkezes.example", mode: "options",
+        options: [
+          { id: "ki_volt_7", label: "Ki volt az irodában 7:00-kor?", subject: "Ki volt 7:00-kor?",
+            reply: "7:00 körül Kovács Rita, Fazekas Zoltán és Nótár Marika volt az irodában." },
+          { id: "kamerak", label: "Mi lett a kamerákkal?", subject: "A kamerák",
+            reply: "Reggel 7 körül megszakadt a felvétel. A rendszer naplójában nem találtam magyarázatot." },
+          { id: "allas", label: "Van nyitott állásposzíció?", subject: "Állásposzíció",
+            reply: "Igen, a jelentkezések megnyíltak. Ha érdekel, küldj egy önéletrajzot." }
+        ] },
+      { name: "Fazekas Zoltán", address: "fazekas.zoltan@apex-epitkezes.example", mode: "free",
+        replies: [
+          { match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Azóta nem dolgozik nálunk." }
+        ] },
+      { name: "Szabó Beatrix", address: "szabo.beatrix@apex-epitkezes.example", mode: "free",
+        replies: [
+          { match: ["horvath mark"], text: "Horváth Márkot? Régi rendszergazda volt. Ennél többet nem tudok róla." }
+        ] },
+      { name: "Kovács Dániel", address: "kovacs.daniel@apex-epitkezes.example", mode: "free",
+        replies: [
+          { match: ["horvath mark"], text: "Horváth Márk? A rendszerekhez nem értek, azt Zoltántól kérdezd." }
+        ] },
+      { name: "Kovács Rita", address: "kovacs.rita@apex-epitkezes.example", mode: "free",
+        replies: [
+          { match: ["horvath mark"], text: "Horváth Márk? Személyesen nem ismerem." }
+        ] },
+      { name: "Nótár Marika", address: "notar.marika@apex-epitkezes.example", mode: "free",
+        replies: [
+          { match: ["horvath mark"], text: "Horváth Márk? Azt hallottam, kirúgták. Többet nem tudok." }
+        ] },
+      { name: "Varga Péter", address: "varga.peter@apex-epitkezes.example", mode: "free",
+        replies: [
+          { match: ["horvath mark"], text: "Horváth Márk? Én szóltam a vezetésnek, hogy rosszat mond a cégről a streamben. Utána kirúgták." }
+        ] },
+      { name: "Horváth Márk", address: "horvath.mark@apex-epitkezes.example", mode: "free",
+        replies: [
+          // Easter egg: a játék másik szereplőjének (a hörcsögnek) a neve
+          { match: ["gombóc"], text: "Gombóc? Honnan tudod a nevét? Ezt csak nagyon kevesen tudják. Beszéljünk." },
+          { match: ["horvath mark"], text: "Igen, én vagyok. Miért kérdezed?" }
+        ] }
+    ]
+  },
+
+  // ---------- Megoldás (js/contacts.js, js/ending.js) ----------
+  solution: {
+    // A helyes nevek: bármelyik elfogadott (több is lehet)
+    culprits: ["Kovács Rita", "Horváth Márk"],
+    // A Balognak írható válasz lehetséges nevei (a többi név téves)
+    answerChoices: ["Fazekas Zoltán", "Szabó Beatrix", "Kovács Dániel", "Kovács Rita", "Nótár Marika", "Varga Péter", "Mezei Éva", "Horváth Márk"],
+    // Jó megoldás: "Király vagy!" képernyő
+    winTitle: "Király vagy!",
+    winText: "Nyertél! A terveket Kovács Rita lopta el, Horváth Márk megbízásából.",
+    // Rossz megoldás: a valódi történet
+    loseTitle: "Ez nem stimmel...",
+    loseText: "Valójában Kovács Rita lopta el a terveket. Horváth Márk, a régi rendszergazda kérte meg rá jó pénzért. Ő kapcsolta ki távolról a kamerákat, mert ismerte a széf jelszavát. A kamerák törlését az tette lehetővé, hogy a régi hozzáférését senki nem vonta vissza."
   }
 };
