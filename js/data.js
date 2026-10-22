@@ -33,9 +33,8 @@ var GAME_DATA = {
   // Info gomb szövege a profilkép mellett.
   // A <h>…</h> közé írt rész kiemelve jelenik meg.
   info:
-    "Te vagy <h>a nyomozó</h>, aki este 8:30-kor otthon ül a gép előtt.\n" +
-    "Az ügy: <h>digitális lábnyom</h> – valaki nyomot hagyott az interneten.\n" +
-    "Ez a szöveg példa: a <h>…</h> közé írt részek kiemelve jelennek meg.",
+    "Beke Imre — Magánnyomozó\n" +
+    "Beke Imre 1970. szeptember 28-án született, és tíz év technikai rendőri munka után nyitotta meg saját, padlástéri magánnyomozói irodáját — ahol egyetlen állandó társa Gombóc, a hörcsöge. Pályafutása során a Kibervédelmi Osztályon szerzett tapasztalatával a legösszetettebb digitális és vállalati ügyekre szakosodott, hírnevét pedig borotvaéles logikájának és a számítógépes rendszerek rejtett kiskapuinak köszönheti: ő derítette fel a Kékkúti Bank belső adócsalási rendszerét a régi tesztfájlok elemzésével, ő leplezte le a magángyűjteményből eltűnt festmény ügyében a manipulatív videófelvétellel trükköző biztonsági őrt, és ő azonosította a Belvárosi Zsarolási Ügyben a vállalati adatokat kiszivárogtató tettest is. Szaktudásának és diszkréciójának köszönhetően a legbonyolultabb, nagy téttel bíró rejtélyek elismert szakértőjévé vált.",
 
   // Asztali ikonok
   // A sorrend határozza meg a rácson az elhelyezést (felülről lefelé, oszloponként).

@@ -190,6 +190,10 @@ html, body {
   line-height: 1.4;
   text-align: left;
   white-space: pre-line;
+  height: 120px;            /* fix magasság: a hosszú szöveg a dobozon belül görgethető */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
 }
 .info-text[hidden] { display: none; }
 .info-text mark {
