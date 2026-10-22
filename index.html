@@ -9,11 +9,14 @@
 <body>
   <!-- A 3D jelenet: a monitor, az asztal, a könyvespolc és a lámpa -->
   <div id="stage"></div>
+  <div id="tooltip" class="tooltip" hidden></div>
 
   <!-- Three.js r128 (klasszikus script, file:// alatt is működik) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <!-- Three.js CSS3DRenderer (r128): a játék képernyője a monitor síkján -->
   <script src="https://unpkg.com/three@0.128.0/examples/js/renderers/CSS3DRenderer.js"></script>
+  <!-- Játék adatai (a hörcsög neve is itt van: config.hamster) -->
+  <script src="js/data.js"></script>
   <script src="js/monitor-3d.js"></script>
 </body>
 </html>

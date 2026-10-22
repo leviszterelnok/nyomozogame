@@ -25,8 +25,9 @@
   stage.appendChild(renderer.domElement);
 
   var scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0a0908);
-  scene.fog = new THREE.FogExp2(0x0a0908, 0.1);
+  // Meleg, nyugodt este: barna-narancs tónusok, kevés köd
+  scene.background = new THREE.Color(0x1e150f);
+  scene.fog = new THREE.FogExp2(0x2a1d14, 0.05);
 
   // Szélesebb látószög, a kamera közel a képernyőhöz, a képernyő közepére nézve
   // Közeli kamera, széles látószög. Az egér a nézetet mozgatja (lásd lent).
@@ -102,8 +103,8 @@
   var beigeDark = new THREE.MeshStandardMaterial({ color: 0xa89f84, roughness: 0.6 });
   var black = new THREE.MeshStandardMaterial({ color: 0x151515, roughness: 0.7 });
   var wood = new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.6 });
-  var floorMat = new THREE.MeshStandardMaterial({ color: 0x1d150f, roughness: 0.9 });
-  var wallMat = new THREE.MeshStandardMaterial({ color: 0x241c15, roughness: 0.95 });
+  var floorMat = new THREE.MeshStandardMaterial({ color: 0x5a3b26, roughness: 0.9 });
+  var wallMat = new THREE.MeshStandardMaterial({ color: 0x6b4f3a, roughness: 0.95 });
   var ledMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, emissive: 0x00ff88, emissiveIntensity: 0 });
   // Kikapcsolt képernyő: fekete üveg
   var screenOffMat = new THREE.MeshStandardMaterial({ color: 0x020202, roughness: 0.2 });
@@ -179,30 +180,31 @@
   }
 
   // ---- Helyiség ----
+  var ROOM_H = 2.7;   // belmagasság (m): a padló és a mennyezet távolsága
   var floor = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), floorMat);
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   scene.add(floor);
 
-  var backWall = new THREE.Mesh(new THREE.PlaneGeometry(10, 4), wallMat);
-  backWall.position.set(0, 2, -3.2);
+  var backWall = new THREE.Mesh(new THREE.PlaneGeometry(10, ROOM_H), wallMat);
+  backWall.position.set(0, ROOM_H / 2, -3.2);
   backWall.receiveShadow = true;
   scene.add(backWall);
 
   // Oldalsó falak és mennyezet: zárt, sötét szoba
-  var sideWallL = new THREE.Mesh(new THREE.PlaneGeometry(6.5, 4), wallMat);
+  var sideWallL = new THREE.Mesh(new THREE.PlaneGeometry(6.5, ROOM_H), wallMat);
   sideWallL.rotation.y = Math.PI / 2;
-  sideWallL.position.set(-2.6, 2, -1.2);
+  sideWallL.position.set(-2.6, ROOM_H / 2, -1.2);
   sideWallL.receiveShadow = true;
   scene.add(sideWallL);
-  var sideWallR = new THREE.Mesh(new THREE.PlaneGeometry(6.5, 4), wallMat);
+  var sideWallR = new THREE.Mesh(new THREE.PlaneGeometry(6.5, ROOM_H), wallMat);
   sideWallR.rotation.y = -Math.PI / 2;
-  sideWallR.position.set(2.6, 2, -1.2);
+  sideWallR.position.set(2.6, ROOM_H / 2, -1.2);
   sideWallR.receiveShadow = true;
   scene.add(sideWallR);
   var ceiling = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 6.5), wallMat);
   ceiling.rotation.x = Math.PI / 2;
-  ceiling.position.set(0, 4, -1.2);
+  ceiling.position.set(0, ROOM_H, -1.2);
   scene.add(ceiling);
 
   // Falikép a jobb oldali falon: sötét, festett tájkép
@@ -217,13 +219,22 @@
     g.arc(w * 0.7, h * 0.35, 28, 0, Math.PI * 2);
     g.fill();
   }, true);
+  // Falikép fakerettel: a keret és a kép egy csoportban, a csoport a jobb falra néz
+  var paintingGroup = new THREE.Group();
+  paintingGroup.position.set(2.575, 1.6, -1.5);
+  paintingGroup.rotation.y = -Math.PI / 2;
+  scene.add(paintingGroup);
   var painting = new THREE.Mesh(
     new THREE.PlaneGeometry(0.8, 0.6),
     new THREE.MeshStandardMaterial({ map: paintingTex, roughness: 0.8 })
   );
-  painting.rotation.y = -Math.PI / 2;
-  painting.position.set(2.57, 1.6, -1.5);
-  scene.add(painting);
+  painting.position.set(0, 0, 0.012);
+  paintingGroup.add(painting);
+  var frameWoodMat = new THREE.MeshStandardMaterial({ color: 0x6b4a2a, roughness: 0.5 });
+  box(0.92, 0.06, 0.03, frameWoodMat, 0, 0.33, 0, paintingGroup);
+  box(0.92, 0.06, 0.03, frameWoodMat, 0, -0.33, 0, paintingGroup);
+  box(0.06, 0.6, 0.03, frameWoodMat, -0.43, 0, 0, paintingGroup);
+  box(0.06, 0.6, 0.03, frameWoodMat, 0.43, 0, 0, paintingGroup);
 
   // Könyvespolc: polcok és könyvek (egy közös doboz-geometria, színes anyagokkal)
   var planks = [0.1, 0.6, 1.1, 1.6, 2.1];
@@ -458,12 +469,62 @@
   // Bal oldali szekrény a falnál
   box(0.5, 1.6, 0.9, wood, -2.35, 0.8, -1.2);
 
+  // ---- Hörcsög ketrecben, az asztal bal végén (kamu, dísz) ----
+  // A neve a data.js config.hamster.name mezőben van; hoverre ezt írja ki.
+  var hamsterCfg = (typeof GAME_DATA !== 'undefined' && GAME_DATA.config && GAME_DATA.config.hamster) || {};
+  var hamsterName = hamsterCfg.name || 'Hörcsög';
+
+  var cageGroup = new THREE.Group();
+  cageGroup.position.set(-0.95, 0.75, 0.05);
+  scene.add(cageGroup);
+  box(0.34, 0.02, 0.22, new THREE.MeshStandardMaterial({ color: 0xc9c2ae, roughness: 0.6 }), 0, 0.01, 0, cageGroup);
+  box(0.3, 0.008, 0.18, new THREE.MeshStandardMaterial({ color: 0xd2ae72, roughness: 1 }), 0, 0.024, 0, cageGroup);
+  var wire = new THREE.Mesh(
+    new THREE.BoxGeometry(0.34, 0.24, 0.22, 12, 8, 8),
+    new THREE.MeshBasicMaterial({ color: 0xe6e0d0, wireframe: true, transparent: true, opacity: 0.55 })
+  );
+  wire.position.set(0, 0.14, 0);
+  cageGroup.add(wire);
+  cyl(0.022, 0.016, 0.012, 16, new THREE.MeshStandardMaterial({ color: 0xd8d2c0, roughness: 0.4 }), 0.1, 0.03, 0.06, cageGroup);
+
+  var hamster = new THREE.Group();
+  hamster.position.set(0, 0.028, 0);   // az ágyon ül
+  cageGroup.add(hamster);
+  var furMat = new THREE.MeshStandardMaterial({ color: 0xd9a766, roughness: 0.9 });
+  var bellyMat = new THREE.MeshStandardMaterial({ color: 0xf3e0bc, roughness: 0.9 });
+  var eyeMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.3 });
+  var noseMat = new THREE.MeshStandardMaterial({ color: 0xe09a9a, roughness: 0.5 });
+
+  var hBody = addMesh(new THREE.SphereGeometry(0.05, 20, 16), furMat, 0, 0.04, 0, hamster);
+  hBody.scale.set(1, 0.85, 1.25);
+  addMesh(new THREE.SphereGeometry(0.035, 16, 12), bellyMat, 0, 0.03, 0.02, hamster).scale.set(1, 0.7, 1.1);
+  var hHead = new THREE.Group();       // a fej forgatható (néz körül)
+  hHead.position.set(0, 0.075, 0.05);
+  hamster.add(hHead);
+  addMesh(new THREE.SphereGeometry(0.036, 18, 14), furMat, 0, 0, 0, hHead);
+  [-1, 1].forEach(function (s) {
+    addMesh(new THREE.SphereGeometry(0.015, 12, 10), furMat, s * 0.027, 0.03, 0, hHead).scale.set(1, 1, 0.5);
+    addMesh(new THREE.SphereGeometry(0.0045, 8, 6), eyeMat, s * 0.014, 0.012, 0.032, hHead);
+  });
+  var hNose = addMesh(new THREE.SphereGeometry(0.0035, 8, 6), noseMat, 0, -0.004, 0.038, hHead);
+  addMesh(new THREE.SphereGeometry(0.012, 10, 8), furMat, 0, -0.03, -0.06, hamster);   // farok
+  [-1, 1].forEach(function (s) {
+    addMesh(new THREE.SphereGeometry(0.012, 10, 8), furMat, s * 0.022, -0.022, 0.04, hamster).scale.set(1, 0.5, 1.3);
+  });
+
+  // Halvány meleg fény a ketrecre: kicsit megvilágítja
+  var cageLight = new THREE.SpotLight(0xffd39a, 1.4, 1.4, 0.7, 0.6, 2);
+  cageLight.position.set(-0.95, 1.3, 0.3);
+  scene.add(cageLight);
+  cageLight.target.position.set(-0.95, 0.8, 0.05);
+  scene.add(cageLight.target);
+
   // ---- Fények ----
-  // Hideg, halvány alapfény: sötét könyvtár
-  scene.add(new THREE.AmbientLight(0x2a3142, 0.25));
+  // Meleg, egyenletes alapfény: nyugodt szobai hangulat
+  scene.add(new THREE.AmbientLight(0xffe2b8, 0.5));
 
   // Meleg fény a távoli lámpából (árnyékot is vet)
-  var lampLight = new THREE.PointLight(0xffb36b, 3.2, 6, 2);
+  var lampLight = new THREE.PointLight(0xffc07a, 4.2, 7, 2);
   lampLight.position.set(1.45, 1.1, -2.6);
   lampLight.castShadow = true;
   lampLight.shadow.mapSize.set(512, 512);
@@ -538,6 +599,23 @@
         setGameMode(true);
       }
     }
+  });
+
+  // ---- Hörcsög hover: a neve a data.js config.hamster.name mezőből ----
+  var tooltip = document.getElementById('tooltip');
+  canvas.addEventListener('pointermove', function (e) {
+    var r = canvas.getBoundingClientRect();
+    mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+    mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    var over = raycaster.intersectObject(hamster, true).length > 0;
+    tooltip.hidden = !over;
+    if (over) {
+      tooltip.textContent = hamsterName;
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top = (e.clientY + 14) + 'px';
+    }
+    canvas.style.cursor = over ? 'help' : '';
   });
 
   // ---- Képernyő-sík adatai (kijelölés) ----
@@ -617,6 +695,11 @@
     var mouseLook = camBase.clone().add(dir);
     camera.position.lerpVectors(camBase, focusPos, focusAmt);
     camera.lookAt(mouseLook.lerp(screenPos, focusAmt));
+
+    // Kamu hörcsög: lassú légzés, fejfordítás, orrrángás (a dísz élőnek hat)
+    hBody.scale.y = 0.85 + Math.sin(t * 2.2) * 0.012;
+    hHead.rotation.y = Math.sin(t * 0.45) * 0.35 + Math.sin(t * 1.7) * 0.05;
+    hNose.scale.setScalar(1 + Math.max(0, Math.sin(t * 6.0)) * 0.25);
 
     // Finom CRT-villogás
     screenMat.emissiveIntensity = 0.85 + Math.sin(t * 37) * 0.02 + Math.sin(t * 1.3) * 0.02;

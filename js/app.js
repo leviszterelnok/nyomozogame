@@ -99,6 +99,7 @@
   applyImages();
   applyPowerButton();
   applyDesktopBackground();
+  applyDesktopSize();
 
   // ---------- Képernyőváltás ----------
   function showScreen(name) {
@@ -245,6 +246,12 @@
       btn.setAttribute('data-launch', icon.launch || '');
       btn.title = icon.name || '';
 
+      // Rácspozíció (nem kötelező): x = oszlop, y = sor, 0-tól számolva (data.js desktop.icons)
+      if (typeof icon.x === 'number' && typeof icon.y === 'number') {
+        btn.style.gridColumn = String(icon.x + 1);
+        btn.style.gridRow = String(icon.y + 1);
+      }
+
       // Kép: ha nincs vagy nem tölthető be, a szürke alap marad
       var wrap = document.createElement('span');
       wrap.className = 'icon-img';
@@ -275,6 +282,24 @@
     } else {
       console.log('[launch] ' + (icon.launch || icon.name || '(nincs launch)'));
     }
+  }
+
+  // Asztal mérete (desktop.width, desktop.height): szám = %, "px" végű szöveg = pixel.
+  // Az asztal a kijelző közepére kerül.
+  function applyDesktopSize() {
+    var d = data.desktop || {};
+    var cssSize = function (v) {
+      if (typeof v === 'string' && /(px|%)$/.test(v)) return v;
+      if (typeof v === 'number') return v + '%';
+      return '100%';
+    };
+    desktopScreen.style.left = '50%';
+    desktopScreen.style.top = '50%';
+    desktopScreen.style.right = 'auto';
+    desktopScreen.style.bottom = 'auto';
+    desktopScreen.style.transform = 'translate(-50%, -50%)';
+    desktopScreen.style.width = cssSize(d.width);
+    desktopScreen.style.height = cssSize(d.height);
   }
 
   // Asztal háttere (desktop.background): szín vagy kép

@@ -21,6 +21,9 @@ var GAME_DATA = {
     // background: a kijelző háttere: szín (pl. "#000") vagy kép (pl. "assets/hatter.png").
     area: { x1: 17.2, y1: 6.4, x2: 83.8, y2: 75.0, background: "#000" },
 
+    // Hörcsög a ketrecben (3D monitor főoldal, tools nélkül): hoverre ezt a nevet írja ki.
+    hamster: { name: "Gombóc" },
+
     // Bekapcsoló gomb: a közepe (x, y) az ablak %-ában (vagy "px"), size: átmérő pixelben.
     // A monitor-kép alján kell lennie, ehhez igazítsd.
     powerButton: { x: 50.1, y: 81.4, size: 48 }
@@ -42,11 +45,17 @@ var GAME_DATA = {
   desktop: {
     // Asztal háttere: szín (pl. "#008080") vagy kép (pl. "assets/hatter.png")
     background: "#008080",
+    // Asztal mérete: width, height. Szám = a kijelző %-a, "640px" alakú szöveg = pixel.
+    // Az asztal a kijelző közepére kerül.
+    width: "100%",
+    height: "100%",
+    // x, y (nem kötelező): az ikon rácsmezője, 0-tól számolva (x = oszlop, y = sor).
+    // Ha nincs megadva, az ikon a sorrend szerint kerül a következő szabad helyre.
     icons: [
-      { name: "Tracebook", important: true,  appicon: "assets/tracebook.png", launch: "tracebook" },
-      { name: "Notes",     important: true,  appicon: "assets/notes.png",     launch: "notes" },
-      { name: "Amail",     important: true,  appicon: "assets/amail.png",     launch: "amail" },
-      { name: "Trash",     important: false, appicon: "assets/trash.png",     launch: "nothing" }
+      { name: "Tracebook", important: true,  appicon: "assets/tracebook.png", launch: "tracebook", x: 0, y: 0 },
+      { name: "Notes",     important: true,  appicon: "assets/notes.png",     launch: "notes",     x: 0, y: 1 },
+      { name: "Amail",     important: true,  appicon: "assets/amail.png",     launch: "amail",     x: 0, y: 2 },
+      { name: "Trash",     important: false, appicon: "assets/trash.png",     launch: "nothing",   x: 0, y: 3 }
     ]
   },
 

@@ -18,3 +18,18 @@ html, body {
 #stage canvas {
   display: block;
 }
+
+/* Tooltip (hörcsög neve): meleg papír-szín, nem blokkolja az egeret */
+.tooltip {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  background: #f4ead2;
+  color: #3a2a1a;
+  border: 1px solid #6b4f3a;
+  padding: 4px 8px;
+  font: 13px Tahoma, Verdana, sans-serif;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+[hidden] { display: none !important; }
