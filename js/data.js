@@ -33,7 +33,7 @@ var GAME_DATA = {
   // Info gomb szövege a profilkép mellett.
   // A <h>…</h> közé írt rész kiemelve jelenik meg.
   info:
-    "Beke Imre — Magánnyomozó\n" +
+    "<h>Beke Imre — Magánnyomozó</h>\n" +
     "Beke Imre <h>1970. szeptember</h> 28-án született, és tíz év technikai rendőri munka után nyitotta meg saját, padlástéri magánnyomozói irodáját — ahol egyetlen állandó társa <h>Gombóc</h>, a hörcsöge. Pályafutása során a Kibervédelmi Osztályon szerzett tapasztalatával a legösszetettebb digitális és vállalati ügyekre szakosodott, hírnevét pedig borotvaéles logikájának és a számítógépes rendszerek rejtett kiskapuinak köszönheti: ő derítette fel a Kékkúti Bank belső adócsalási rendszerét a régi tesztfájlok elemzésével, ő leplezte le a magángyűjteményből eltűnt festmény ügyében a manipulatív videófelvétellel trükköző biztonsági őrt, és ő azonosította a Belvárosi Zsarolási Ügyben a vállalati adatokat kiszivárogtató tettest is. Szaktudásának és diszkréciójának köszönhetően a legbonyolultabb, nagy téttel bíró rejtélyek elismert szakértőjévé vált.",
 
   // Asztali ikonok
