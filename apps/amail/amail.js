@@ -28,6 +28,7 @@
   var subjectInput = document.getElementById('am-subject');
   var textInput = document.getElementById('am-text');
   var statusEl = document.getElementById('am-status');
+  var newBtn = document.getElementById('am-new');
 
   // Névválasztó vagy kérdésválasztó (a címzett módjától függ): a szöveg helyett jelenik meg
   var textLabel = textInput.parentNode;
@@ -83,7 +84,7 @@
     // Névválasztónál több név is kijelölhető (Ctrl/Cmd-del), a többinél egy elem
     pickInput.multiple = mode === 'names';
     pickInput.size = mode === 'names' ? 6 : 1;
-    pickLabel.firstChild.textContent = mode === 'names' ? 'Nevek (több is) ' : 'Válasz ';
+    pickLabel.firstChild.textContent = mode === 'names' ? 'Nevek (Ctrl + kattintás: több is) ' : 'Válasz ';
     if (mode === 'names') {
       GAME_DATA.solution.answerChoices.forEach(function (n) { pickInput.appendChild(new Option(n, n)); });
     } else if (mode === 'options') {
@@ -183,12 +184,32 @@
     return row;
   }
 
+  // Új levél: a címzett, a tárgy és a szöveg kézzel írható
+  function openNew() {
+    currentDraft = null;
+    list.hidden = true;
+    detail.hidden = false;
+    replyBtn.hidden = true;
+    sendDraftBtn.hidden = true;
+    metaEl.textContent = '';
+    bodyEl.textContent = '';
+    toInput.value = '';
+    toInput.readOnly = false;
+    subjectInput.value = '';
+    textInput.value = '';
+    compose.hidden = false;
+    statusEl.textContent = '';
+    updateCompose();
+    toInput.focus();
+  }
+
   // Válasz: a feladó lesz a címzett, a tárgy elé "Re:" kerül (ha még nincs)
   function openReply() {
     if (!currentDraft) return;
     var subj = currentDraft.subject || '';
     // A feladó neve (cím nélkül) lesz a címzett, így a játék is felismeri
     toInput.value = (currentDraft.from || '').replace(/\s*<[^>]*>\s*$/, '');
+    toInput.readOnly = true;   // válaszkor a címzett nem változtatható (új levélnél igen)
     subjectInput.value = /^re:/i.test(subj) ? subj : 'Re: ' + subj;
     textInput.value = '';
     compose.hidden = false;
@@ -211,6 +232,7 @@
 
   backBtn.addEventListener('click', function () { showList(); });
   replyBtn.addEventListener('click', openReply);
+  newBtn.addEventListener('click', openNew);
 
   sendDraftBtn.addEventListener('click', function () {
     if (!currentDraft) return;

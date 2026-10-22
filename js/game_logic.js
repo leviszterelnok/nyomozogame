@@ -43,6 +43,13 @@ var Game = (function () {
     if (started) return;
     started = true;
     after(CFG.introMailDelay != null ? CFG.introMailDelay : 30000, sendIntroMail);
+
+    // Későbbi levelek (game.scheduledMails): a megadott idő után érkeznek
+    (CFG.scheduledMails || []).forEach(function (s) {
+      after(s.delay || 0, function () {
+        if (window.sendAmail) sendAmail(s.mail);
+      });
+    });
   }
 
   // Minden időzítés leállítása (pl. új játék indításakor)

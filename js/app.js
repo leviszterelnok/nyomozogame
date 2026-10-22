@@ -298,6 +298,28 @@
     }
   }
 
+  // Ikon kivágása: a kép látható része (desktop.imageTrim) tölti ki az ikon helyét, az üres szél nélkül
+  function applyTrim(p, size) {
+    var img = p.wrap.querySelector('img');
+    if (!img) return;
+    var t = ((data.desktop && data.desktop.imageTrim) || {})[p.icon.appicon];
+    if (!t) {
+      img.removeAttribute('style');
+      return;
+    }
+    var bw = t.box[2] - t.box[0], bh = t.box[3] - t.box[1];
+    var k = size / Math.max(bw, bh);                      // nagyítás: a látható rész kitölti az ikont
+    var left = -t.box[0] * k + (size - bw * k) / 2;       // középre igazítva
+    var top = -t.box[1] * k + (size - bh * k) / 2;
+    p.wrap.style.overflow = 'hidden';
+    img.style.position = 'absolute';
+    img.style.width = (t.size[0] * k) + 'px';
+    img.style.height = (t.size[1] * k) + 'px';
+    img.style.left = left + 'px';
+    img.style.top = top + 'px';
+    img.style.objectFit = 'fill';
+  }
+
   // Asztal mérete (desktop.width, desktop.height): szám = %, "px" végű szöveg = pixel.
   // Az asztal a kijelző közepére kerül.
   // Asztali rács (data.js desktop.cols x desktop.rows): a cellák az asztal méretéből adódnak.
@@ -330,6 +352,7 @@
       p.wrap.style.margin = '4px auto 3px';   // hely a sárga kiemelő keretnek (outline) a kép körül
       p.wrap.style.width = size + 'px';
       p.wrap.style.height = size + 'px';
+      applyTrim(p, size);
       taken[c + ',' + r] = true;
     }
 
