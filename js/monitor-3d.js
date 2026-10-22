@@ -507,6 +507,7 @@
 
   var hamster = new THREE.Group();
   hamster.position.set(0, 0.028, 0);   // az ágyon ül
+  hamster.scale.setScalar(0.82);       // kicsit kisebb hörcsög a ketrechez képest
   cageGroup.add(hamster);
   var furMat = new THREE.MeshStandardMaterial({ color: 0xd9a766, roughness: 0.9 });
   var bellyMat = new THREE.MeshStandardMaterial({ color: 0xf3e0bc, roughness: 0.9 });
@@ -579,11 +580,37 @@
     return Math.abs(Math.sin(now * 16)) * 0.004;
   }
 
+  // Fejmozgás: ritka fordulások, megállások közöttük, és szimatolás (nem folyamatos rázás)
+  var hLook = { yaw: 0, pitch: 0, tYaw: 0, tPitch: 0, next: 0, sniffUntil: 0, sniffing: false };
+  function hLookUpdate(now, dt) {
+    if (now >= hLook.next) {
+      if (Math.random() < 0.25) {
+        // Szimatolás: lefelé dőlve, apró rángatásokkal
+        hLook.sniffUntil = now + 0.8 + Math.random() * 0.6;
+        hLook.tYaw = (Math.random() * 2 - 1) * 0.25;
+        hLook.tPitch = 0.25;
+        hLook.next = hLook.sniffUntil;
+      } else {
+        // Fordulás egy irányba, aztán egy kicsit megáll
+        hLook.tYaw = (Math.random() * 2 - 1) * 0.7;
+        hLook.tPitch = Math.random() * 0.15 - 0.03;
+        hLook.next = now + 1.2 + Math.random() * 2.5;
+      }
+    }
+    var k = 1 - Math.exp(-dt * 9);   // gyors, de nem azonnali fordulás
+    hLook.yaw += (hLook.tYaw - hLook.yaw) * k;
+    hLook.pitch += (hLook.tPitch - hLook.pitch) * k;
+    hLook.sniffing = now < hLook.sniffUntil;
+  }
+
   function hUpdate(now, dt) {
     if (now >= hUntil) hChooseNext(now);
+    hLookUpdate(now, dt);
     var bob = 0;
-    var yaw = Math.sin(now * 0.45) * 0.35 + Math.sin(now * 1.7) * 0.05;   // körbenéz
-    var headX = 0, headZ = 0;
+    var yaw = hLook.yaw;
+    // Légzéssel együtt mozgó fej, szimatolás közben apró rángatással
+    var headX = hLook.pitch + Math.sin(now * 2.2) * 0.01 + (hLook.sniffing ? Math.sin(now * 28) * 0.02 : 0);
+    var headZ = 0;
 
     if (hMode === 'walk') {
       bob = hStepTo(hTx, hTz, now, dt);
@@ -608,8 +635,8 @@
       wheelGroup.rotation.z = hSpin;
     } else if (hMode === 'groom') {
       yaw = 0;
-      headX = 0.25;
-      headZ = Math.sin(now * 7) * 0.25;   // mosakodik: fejét dörzsöli
+      headX = 0.3 + Math.sin(now * 3.5) * 0.06;
+      headZ = Math.max(0, Math.sin(now * 2.2)) * 0.2;   // mosakodik: lassú, ritmusos dörzsölés
     }
 
     hamster.position.y = HAMSTER_Y + bob;
@@ -797,7 +824,7 @@
     hUpdate(t, Math.min(0.1, t - hLast));
     hLast = t;
     hBody.scale.y = 0.85 + Math.sin(t * 2.2) * 0.012;
-    hNose.scale.setScalar(1 + Math.max(0, Math.sin(t * 6.0)) * 0.25);
+    hNose.scale.setScalar(hLook.sniffing ? 1 + Math.max(0, Math.sin(t * 28)) * 0.3 : 1);   // orrrángás csak szimatoláskor
 
     // Finom CRT-villogás
     screenMat.emissiveIntensity = 0.85 + Math.sin(t * 37) * 0.02 + Math.sin(t * 1.3) * 0.02;
