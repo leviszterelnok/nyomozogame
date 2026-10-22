@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.16 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.17 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -47,6 +47,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
 - **v0.2.4** – Prototípus: `tools/3d-monitor/` (index.html, style.css, monitor-3d.js). Three.js r128 CDN-ről (classic script, file:// alatt is fut). Kódból épített régi dobozos monitor, asztal, könyvespolc és távoli lámpa. Kattintásos kijelölés (raycast), képernyő-sík körvonala SVG-ben (`window.Monitor3D.screenInfo()`). A játék még a képpontos háttérrel fut.
+- **v0.2.17** – A szoba fénye gyengébb (lámpa, alapfény, spotlámpa). A hörcsög ketrece 1,4-szeres, benne futókerék és tálka. A hörcsög véletlenszerűen sétál, a tálból eszik, a kerékben fut (a kerék forog), vagy mosakodik (`hUpdate` a `js/monitor-3d.js`-ben).
 - **v0.2.16** – Asztal mérete és ikon-pozíció (`desktop.width/height`, ikonok `x`/`y`). 3D szoba: melegebb, nyugodtabb fény és színek, alacsonyabb belmagasság (`ROOM_H` = 2.7 m), keretes falikép, kamu hörcsög ketrecben az asztal bal végén (lassú légzés, fejfordítás), hoverre a neve (`config.hamster.name`). A főoldal betölti a `js/data.js`-t.
 - **v0.2.15** – 3D monitor: belső keret (kiálló sávok), a kijelző mélyebben ül. Talp, szellőzőrácsok, hátsó dudor. A keretsávok is kattinthatók (játék mód).
 - **v0.2.14** – A jelszómező sima szövegmező, a karaktereket a szkript rejti pontokkal (`secret`, `renderSecret`). A Firefox így nem kezeli jelszómezőként, nincs generálás-javaslat és mentés-popup.

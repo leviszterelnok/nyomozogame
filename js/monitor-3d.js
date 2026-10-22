@@ -475,7 +475,8 @@
   var hamsterName = hamsterCfg.name || 'Hörcsög';
 
   var cageGroup = new THREE.Group();
-  cageGroup.position.set(-0.95, 0.75, 0.05);
+  cageGroup.position.set(-0.9, 0.75, 0.05);
+  cageGroup.scale.setScalar(1.4);   // nagyobb ketrec (a belső részek ezzel együtt skálázódnak)
   scene.add(cageGroup);
   box(0.34, 0.02, 0.22, new THREE.MeshStandardMaterial({ color: 0xc9c2ae, roughness: 0.6 }), 0, 0.01, 0, cageGroup);
   box(0.3, 0.008, 0.18, new THREE.MeshStandardMaterial({ color: 0xd2ae72, roughness: 1 }), 0, 0.024, 0, cageGroup);
@@ -486,6 +487,23 @@
   wire.position.set(0, 0.14, 0);
   cageGroup.add(wire);
   cyl(0.022, 0.016, 0.012, 16, new THREE.MeshStandardMaterial({ color: 0xd8d2c0, roughness: 0.4 }), 0.1, 0.03, 0.06, cageGroup);
+
+  // Ketrec belső pontjai (a ketrec helyi koordinátái): tálka, kerék
+  var BOWL = { x: 0.1, z: 0.06 };
+  var WHEEL = { x: -0.07, y: 0.1, z: -0.07 };
+
+  // Futókerék a ketrec hátsó sarkában (forog, ha a hörcsög fut benne)
+  var wheelMat = new THREE.MeshStandardMaterial({ color: 0xbfa27a, roughness: 0.6 });
+  var wheelGroup = new THREE.Group();
+  wheelGroup.position.set(WHEEL.x, WHEEL.y, WHEEL.z);
+  cageGroup.add(wheelGroup);
+  wheelGroup.add(new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.004, 8, 24), wheelMat));
+  for (var sp = 0; sp < 4; sp++) {
+    var spoke = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.005, 0.005), wheelMat);
+    spoke.rotation.z = sp * Math.PI / 4;
+    wheelGroup.add(spoke);
+  }
+  cyl(0.004, 0.004, 0.08, 8, wheelMat, WHEEL.x, 0.06, WHEEL.z, cageGroup);
 
   var hamster = new THREE.Group();
   hamster.position.set(0, 0.028, 0);   // az ágyon ül
@@ -513,18 +531,97 @@
   });
 
   // Halvány meleg fény a ketrecre: kicsit megvilágítja
-  var cageLight = new THREE.SpotLight(0xffd39a, 1.4, 1.4, 0.7, 0.6, 2);
+  var cageLight = new THREE.SpotLight(0xffd39a, 1.0, 1.4, 0.7, 0.6, 2);
   cageLight.position.set(-0.95, 1.3, 0.3);
   scene.add(cageLight);
   cageLight.target.position.set(-0.95, 0.8, 0.05);
   scene.add(cageLight.target);
 
+  // ---- Hörcsög viselkedése: sétál, eszik a tálból, kerékben fut, mosakodik ----
+  var CAGE_X = 0.1, CAGE_Z = 0.06;     // a mozgás határa (a ketrec belsejében)
+  var HAMSTER_Y = 0.028;               // az ágy felszíne fölött
+  var hMode = 'idle', hUntil = 0, hTx = 0, hTz = 0, hLast = 0, hSpin = 0;
+
+  // Új célpont a ketrecen belül (a kerék sarkát kihagyjuk)
+  function hPickTarget() {
+    var x, z;
+    do {
+      x = (Math.random() * 2 - 1) * CAGE_X;
+      z = (Math.random() * 2 - 1) * CAGE_Z;
+    } while (x < -0.02 && z < -0.02);
+    hTx = x;
+    hTz = z;
+  }
+
+  // Következő tevékenység véletlenszerűen, a jelenlegi idő után
+  function hChooseNext(now) {
+    var r = Math.random();
+    if (r < 0.35) { hMode = 'walk'; hPickTarget(); hUntil = now + 10; }
+    else if (r < 0.55) { hMode = 'eat'; hUntil = now + 6; }
+    else if (r < 0.8) { hMode = 'wheel'; hUntil = now + 7; }
+    else if (r < 0.92) { hMode = 'groom'; hUntil = now + 5; }
+    else { hMode = 'idle'; hUntil = now + 3; }
+  }
+
+  function hDist(tx, tz) {
+    return Math.hypot(tx - hamster.position.x, tz - hamster.position.z);
+  }
+
+  // Egy lépés a cél felé; a visszaadott érték a járás fel-le mozgása
+  function hStepTo(tx, tz, now, dt) {
+    var dx = tx - hamster.position.x, dz = tz - hamster.position.z;
+    var d = Math.sqrt(dx * dx + dz * dz);
+    if (d < 0.004) return 0;
+    var s = Math.min(d, 0.12 * dt);
+    hamster.position.x += dx / d * s;
+    hamster.position.z += dz / d * s;
+    hamster.rotation.y = Math.atan2(dx, dz);
+    return Math.abs(Math.sin(now * 16)) * 0.004;
+  }
+
+  function hUpdate(now, dt) {
+    if (now >= hUntil) hChooseNext(now);
+    var bob = 0;
+    var yaw = Math.sin(now * 0.45) * 0.35 + Math.sin(now * 1.7) * 0.05;   // körbenéz
+    var headX = 0, headZ = 0;
+
+    if (hMode === 'walk') {
+      bob = hStepTo(hTx, hTz, now, dt);
+      if (hDist(hTx, hTz) < 0.01) hUntil = now;   // célba ért: következő tevékenység
+    } else if (hMode === 'eat') {
+      if (hDist(BOWL.x, BOWL.z) > 0.01) {
+        bob = hStepTo(BOWL.x, BOWL.z, now, dt);
+      } else {
+        yaw = 0;
+        headX = 0.7 + Math.sin(now * 14) * 0.08;   // a tálba hajol és rágcsál
+      }
+    } else if (hMode === 'wheel') {
+      var runX = WHEEL.x, runZ = WHEEL.z + 0.07;
+      if (hDist(runX, runZ) > 0.01) {
+        bob = hStepTo(runX, runZ, now, dt);
+      } else {
+        hamster.rotation.y = 0;
+        yaw = 0;
+        bob = Math.abs(Math.sin(now * 18)) * 0.006;   // fut a helyén
+      }
+      hSpin += dt * 9;
+      wheelGroup.rotation.z = hSpin;
+    } else if (hMode === 'groom') {
+      yaw = 0;
+      headX = 0.25;
+      headZ = Math.sin(now * 7) * 0.25;   // mosakodik: fejét dörzsöli
+    }
+
+    hamster.position.y = HAMSTER_Y + bob;
+    hHead.rotation.set(headX, yaw, headZ);
+  }
+
   // ---- Fények ----
   // Meleg, egyenletes alapfény: nyugodt szobai hangulat
-  scene.add(new THREE.AmbientLight(0xffe2b8, 0.5));
+  scene.add(new THREE.AmbientLight(0xffe2b8, 0.36));
 
   // Meleg fény a távoli lámpából (árnyékot is vet)
-  var lampLight = new THREE.PointLight(0xffc07a, 4.2, 7, 2);
+  var lampLight = new THREE.PointLight(0xffc07a, 2.8, 7, 2);
   lampLight.position.set(1.45, 1.1, -2.6);
   lampLight.castShadow = true;
   lampLight.shadow.mapSize.set(512, 512);
@@ -696,9 +793,10 @@
     camera.position.lerpVectors(camBase, focusPos, focusAmt);
     camera.lookAt(mouseLook.lerp(screenPos, focusAmt));
 
-    // Kamu hörcsög: lassú légzés, fejfordítás, orrrángás (a dísz élőnek hat)
+    // Kamu hörcsög: viselkedés, légzés, orrrángás
+    hUpdate(t, Math.min(0.1, t - hLast));
+    hLast = t;
     hBody.scale.y = 0.85 + Math.sin(t * 2.2) * 0.012;
-    hHead.rotation.y = Math.sin(t * 0.45) * 0.35 + Math.sin(t * 1.7) * 0.05;
     hNose.scale.setScalar(1 + Math.max(0, Math.sin(t * 6.0)) * 0.25);
 
     // Finom CRT-villogás
