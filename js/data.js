@@ -58,7 +58,9 @@ var GAME_DATA = {
       { name: "Tracebook", important: true,  appicon: "assets/tracebook.png", launch: "tracebook", x: 0, y: 0 },
       { name: "Notes",     important: true,  appicon: "assets/notes.png",     launch: "notes",     x: 0, y: 1 },
       { name: "Amail",     important: true,  appicon: "assets/amail.png",     launch: "amail",     x: 0, y: 2 },
-      { name: "Trash",     important: false, appicon: "assets/trash.png",     launch: "nothing",   x: 0, y: 3 }
+      { name: "Trash",     important: false, appicon: "assets/trash.png",     launch: "nothing",   x: 0, y: 3 },
+
+      { name: "CraftMine",     important: false, appicon: "assets/craftmine.png",     launch: "nothing",   x: 8, y: 0 }
     ]
   },
 
