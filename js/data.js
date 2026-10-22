@@ -44,6 +44,20 @@ var GAME_DATA = {
   desktop: {
     // Asztal háttere: szín (pl. "#008080") vagy kép (pl. "assets/hatter.png")
     background: "#008080",
+    // Ikonok látható része: a képek üres szélét a játék levágja, így az ikon kitölti a helyét.
+    // Kulcs: az ikon képe (appicon). box: [x1, y1, x2, y2] a látható rész pixelben; size: a kép mérete.
+    imageTrim: {
+      "assets/tracebook.png":     { size: [500, 500], box: [129, 120, 371, 379] },
+      "assets/notes.png":         { size: [500, 500], box: [65, 62, 435, 438] },
+      "assets/amail.png":         { size: [500, 500], box: [13, 11, 487, 486] },
+      "assets/trash.png":         { size: [500, 500], box: [129, 121, 371, 427] },
+      "assets/craftmine.png":     { size: [676, 369], box: [185, 9, 491, 360] },
+      "assets/speedforneed.png":  { size: [676, 369], box: [214, 59, 462, 310] },
+      "assets/extreme_mario.png": { size: [676, 369], box: [213, 50, 462, 285] },
+      "assets/manhit.png":        { size: [676, 369], box: [191, 33, 485, 339] },
+      "assets/csakrajongók.png":  { size: [500, 500], box: [129, 101, 358, 352] },
+      "assets/szoveg.png":        { size: [676, 369], box: [281, 76, 400, 237] }
+    },
     // Asztal mérete: width, height. Szám = a kijelző %-a, "640px" alakú szöveg = pixel.
     // Az asztal a kijelző közepére kerül.
     width: "100%",
@@ -64,7 +78,7 @@ var GAME_DATA = {
       { name: "SpeedforNeed",     important: false, appicon: "assets/speedforneed.png",     launch: "nothing",   x: 8, y: 1 },
       { name: "ExtremeMario",     important: false, appicon: "assets/extreme_mario.png",     launch: "nothing",   x: 8, y: 2 },
       { name: "Manhit",     important: false, appicon: "assets/manhit.png",     launch: "nothing",   x: 8, y: 3 },
-      { name: "Csakrajongók",     important: false, appicon: "assets/csakrajongok.png",     launch: "nothing",   x: 8, y: 4 },
+      { name: "Csakrajongók",     important: false, appicon: "assets/csakrajongók.png",     launch: "nothing",   x: 8, y: 4 },
       { name: "Csalókódok",     important: false, appicon: "assets/szoveg.png",     launch: "nothing",   x: 8, y: 5 }
     ]
   },
@@ -125,6 +139,8 @@ var GAME_DATA = {
         text: "Jó volt a mai @horvath_mark stream" },
       { id: 601, author: "notar_marika", date: "2026-10-21 07:40",
         text: "A mai reggelem... megérkeztem munkába, és már reggel egyből elrontotta a napomat Kovács Rita, ott volt a folyosón." },
+      { id: 602, author: "notar_marika", date: "2026-10-21 19:20",
+        text: "Folytatom, mert még mindig dühös vagyok. Kovács Rita a folyosón állt, a telefonját nézte, és úgy tett, mintha nem hallaná, hogy köszönök neki. Fazekas Zoltán pont akkor jött ki a szerverszobából, és csak annyit mondott: „Most nem érek rá.” Azóta sem tudom, mit kerestek ott reggel hét körül. A nap további része is ilyen volt: a kávégépben nem volt tej, a közös meghajtón nem találtam azt a táblázatot, amit Mezei Éva kért, és délután még arról is kérdeztek, miért ilyen fáradt a hangom. Ha valakinek van ötlete, mit lehet ilyenkor csinálni, szóljon nyugodtan. Már egy fél napom ráment erre az egészre." },
       { id: 701, author: "mezei_eva", date: "2026-10-18 09:00",
         text: "Álláspozíció-jelentkezések nyíltak cégünkhöz. Akit érdekel, forduljon Mezei Éva irodavezetőhöz." }
     ]
@@ -171,7 +187,20 @@ var GAME_DATA = {
       from: "Balog Tibor <balog.tibor@apex-epitkezes.example>",
       subject: "Bizalmas: ellopott tervek",
       body: "Üdvözlöm!\n\nTegnap reggel 7 óra körül ellopták az építkezésünk új terveit. A befektetőink már várják ezeket, és ha a hír kiszivárog, visszalépnek. Kérem, egyelőre maradjon ez köztünk.\n\nDerítse ki, ki lopta el a terveket! A nyomozáshoz kezdjen a Tracebookon: az én profilomon (balog_tibor) három ismerősöm látszik, akik a cégnél dolgoznak.\n\nA választ csak névvel fogadom el. Ha többen voltak benne, mindannyiukat nevezze meg.\n\nTisztelettel:\nBalog Tibor\nApex Építkezés"
-    }
+    },
+    // Későbbi levelek, a játék indulásától számolt idő (ms) után. Az Amailben a küldés után is érkezhetnek.
+    scheduledMails: [
+      { delay: 90000, mail: {
+          from: "Szabó Beatrix <szabo.beatrix@apex-epitkezes.example>",
+          subject: "Felvétel van",
+          body: "Szia! Átnéztem az irodai kamerák mentését. Van egy felvétel a reggeli órákból, amit senki nem nézett meg. Mezei Éva is írt nekem erről:\n\n„Beatrix, nem tudom, mit kérdezett Balog úr, de a 7 órás részt nem érdemes elfelejteni.”\n\nKérdezd meg tőle, mit lát a felvételen.\n\nBeatrix"
+      } },
+      { delay: 100000, mail: {
+          from: "Mezei Éva <mezei.eva@apex-epitkezes.example>",
+          subject: "Felvétel",
+          body: "Szia! Beatrix szólt, hogy van felvétel. Ha kérdezel tőlem valamit, válaszolj erre a levélre, és válassz a felkínált kérdések közül."
+      } }
+    ]
   },
 
   // ---------- Levelezőpartnerek (js/contacts.js) ----------

@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.28 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.29 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -49,6 +49,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
 - **v0.2.4** – Prototípus: `tools/3d-monitor/` (index.html, style.css, monitor-3d.js). Three.js r128 CDN-ről (classic script, file:// alatt is fut). Kódból épített régi dobozos monitor, asztal, könyvespolc és távoli lámpa. Kattintásos kijelölés (raycast), képernyő-sík körvonala SVG-ben (`window.Monitor3D.screenInfo()`). A játék még a képpontos háttérrel fut.
+- **v0.2.29** – Tracebook: a fiókok nem kattinthatók (szerző, ismerősök), profil csak keresésre nyílik. Asztal: az ikonok képének üres szélét levágja a játék (`desktop.imageTrim`, a látható rész kitölti az ikont). Amail: új levél írása (Új levél gomb), válaszkor a címzett nem módosítható; több név kijelölése Ctrl + kattintással. Időzített levelek (`game.scheduledMails`): Beatrix a felvételről, majd Mezei Éva levele, amire válaszolni lehet. Tracebook: Nótár Marika folytatása a posztjához. Javítás: a csakrajongók ikon fájlneve egyezik a fájllal.
 - **v0.2.28** – Több helyes megoldás (`solution.culprits`): a Balognak mindkét nevet (Kovács Rita és Horváth Márk) meg kell adni, egy név nem elég. Easter egg: Horváth Márk a „Gombóc” (a hörcsög) nevére válaszol. A korábbi „Horváth Máté” Horváth Márk lett (Tracebook-profil, ismerősök, bejegyzések). Levelezés: az Amail küldése a játékban él (`js/contacts.js`). Balog az első levél (30 mp), névválasz a megoldás (`solution`): jó névre "Király vagy!", rosszra a valódi történet (`js/ending.js`). Mezei Éva: csak előre megadott kérdésekre válaszol (`contacts.people[].options`). Szabad szöveges levelekre kulcsszó alapján válaszol (pl. Horváth Márk), 10–15 mp késleltetéssel. Tracebook: valódi felhasználók és bejegyzések. Az Amail a címzettet névvel vagy címmel fogadja.
 - **v0.2.27** – Asztali ikonok: a fontos ikon sárga kerete a rácsos elrendezésben is látszik (a gomb nem vágja le, a kép köré hely kerül).
 - **v0.2.26** – Info kiemelés: a címsor (`<h>`) is kiemelt, a kiemelés vékony sárga sáv a szöveg alján (`.info-text mark`).
@@ -91,6 +92,8 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 - `tracebook.main_menu_posts`: a főoldali bejegyzések (`id`, `author`, `date`, `text`). Mindig ezek látszanak a főoldalon, a szerzőjük profilján is megjelennek. A szövegbe `<img src="assets/kep.png">` írható. `tracebook.texts`: minden felirat, a nem létező felhasználó üzenete (`notFound`) és az időtartama (`notFoundMs`, ms).
 - `amail.mails`: beérkezett levelek. `amail.outgoing`: piszkozatok. `amail.texts`: feliratok.
 - `contacts`: levelezőpartnerek (`people`: név, cím, `mode` = `names` / `options` / `free`, válaszok, `replyDelay`). Balog (`names`) nem válaszol automatikusan.
+- `game.scheduledMails`: időzített levelek (`delay` ms a játék indulása után, `mail`).
+- `desktop.imageTrim`: ikonképek látható része (`box`, `size`). Ha új ikonképet cserélsz, a `box` értékét újra ki kell számolni (a kép átlátszó szélét kell levágni).
 - `solution`: a helyes nevek (`culprits`, több is lehet), a választható nevek (`answerChoices`), a "Király vagy!" és a valódi történet szövege.
 - `notes`: cím és feliratok.
 

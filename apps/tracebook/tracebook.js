@@ -115,10 +115,8 @@
     var author = userByUsername(p.author);
 
     head.appendChild(avatar(author, false));
-    var link = el('button', 'tb-link', author ? author.name : p.author);
-    link.type = 'button';
-    link.addEventListener('click', function () { showProfile(p.author); });
-    head.appendChild(link);
+    // A szerző neve nem link: fiókot csak a keresésben lehet megnyitni
+    head.appendChild(el('strong', 'tb-author', author ? author.name : p.author));
     head.appendChild(el('time', 'tb-date', p.date));
 
     var body = el('div', 'tb-post-text');
@@ -181,10 +179,8 @@
       user.friends.forEach(function (fname) {
         var f = userByUsername(fname);
         var li = el('li');
-        var b = el('button', null, f ? f.name : fname);
-        b.type = 'button';
-        b.addEventListener('click', function () { showProfile(fname); });
-        li.appendChild(b);
+        // Az ismerős neve nem link: a profilt csak keresésre lehet megnyitni
+        li.appendChild(el('span', 'tb-friend-name', f ? f.name : fname));
         list.appendChild(li);
       });
       view.appendChild(list);
