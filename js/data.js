@@ -99,7 +99,7 @@ var GAME_DATA = {
     // a főoldalon nem, csak akkor, ha rákeresel a felhasználóra. A szerző automatikusan ő lesz.
     users: [
       { username: "balog_tibor", name: "Balog Tibor", avatar: "", friends: ["fazekas_zoltan", "szabo_beatrix", "kovacs_daniel"] },
-      { username: "fazekas_zoltan", name: "Fazekas Zoltán", avatar: "", friends: ["horvath_mate", "varga_peter"],
+      { username: "fazekas_zoltan", name: "Fazekas Zoltán", avatar: "", friends: ["horvath_mark", "varga_peter"],
         posts: [
           { id: 201, date: "2026-10-21 01:30", text: "Jó volt a speedforneed Varga Péterrel!" },
           { id: 202, date: "2026-10-21 20:40", text: "Jó volt a tegnapi napom..." },
@@ -114,7 +114,7 @@ var GAME_DATA = {
       { username: "notar_marika", name: "Nótár Marika", avatar: "", friends: [] },
       { username: "mezei_eva", name: "Mezei Éva", avatar: "", friends: [] },
       { username: "varga_peter", name: "Varga Péter", avatar: "", friends: ["fazekas_zoltan"] },
-      { username: "horvath_mate", name: "Horváth Máté", avatar: "", friends: [] }
+      { username: "horvath_mark", name: "Horváth Márk", avatar: "", friends: [] }
     ],
     // Főoldali bejegyzések: mindig ezek látszanak a főoldalon. A szövegbe <img src="assets/kep.png"> is írható.
     // Bejegyzés nem törölhető. A szerző profilján is megjelennek.
@@ -122,7 +122,7 @@ var GAME_DATA = {
       { id: 801, author: "balog_tibor", date: "2026-10-20 08:00",
         text: "A hónap dolgozója: Kovács Rita. Gratulálunk!" },
       { id: 501, author: "kovacs_rita", date: "2026-10-21 17:30",
-        text: "Jó volt a mai @horvath_mate stream" },
+        text: "Jó volt a mai @horvath_mark stream" },
       { id: 601, author: "notar_marika", date: "2026-10-21 07:40",
         text: "A mai reggelem... megérkeztem munkába, és már reggel egyből elrontotta a napomat Kovács Rita, ott volt a folyosón." },
       { id: 701, author: "mezei_eva", date: "2026-10-18 09:00",
@@ -222,22 +222,22 @@ var GAME_DATA = {
         replies: [
           { match: ["horvath mark"], text: "Horváth Márk? Én szóltam a vezetésnek, hogy rosszat mond a cégről a streamben. Utána kirúgták." }
         ] },
-      { name: "Horváth Máté", address: "horvath.mate@apex-epitkezes.example", mode: "free",
+      { name: "Horváth Márk", address: "horvath.mark@apex-epitkezes.example", mode: "free",
         replies: [
-          { match: ["horvath mark"], text: "Horváth Márk? Nem ismerem. Én Máté vagyok, a streamemet sokan összekeverik vele." }
+          { match: ["horvath mark"], text: "Igen, én vagyok. Miért kérdezed?" }
         ] }
     ]
   },
 
   // ---------- Megoldás (js/contacts.js, js/ending.js) ----------
   solution: {
-    // A helyes név: ezt kell a Balognak küldött válaszban megadni
-    culprit: "Kovács Rita",
+    // A helyes nevek: bármelyik elfogadott (több is lehet)
+    culprits: ["Kovács Rita", "Horváth Márk"],
     // A Balognak írható válasz lehetséges nevei (a többi név téves)
-    answerChoices: ["Fazekas Zoltán", "Szabó Beatrix", "Kovács Dániel", "Kovács Rita", "Nótár Marika", "Varga Péter", "Horváth Máté", "Mezei Éva", "Horváth Márk"],
+    answerChoices: ["Fazekas Zoltán", "Szabó Beatrix", "Kovács Dániel", "Kovács Rita", "Nótár Marika", "Varga Péter", "Mezei Éva", "Horváth Márk"],
     // Jó megoldás: "Király vagy!" képernyő
     winTitle: "Király vagy!",
-    winText: "Nyertél! Kovács Rita lopta el a terveket.",
+    winText: "Nyertél! A terveket Kovács Rita lopta el, Horváth Márk megbízásából.",
     // Rossz megoldás: a valódi történet
     loseTitle: "Ez nem stimmel...",
     loseText: "Valójában Kovács Rita lopta el a terveket. Horváth Márk, a régi rendszergazda kérte meg rá jó pénzért. Ő kapcsolta ki távolról a kamerákat, mert ismerte a széf jelszavát. A kamerák törlését az tette lehetővé, hogy a régi hozzáférését senki nem vonta vissza."

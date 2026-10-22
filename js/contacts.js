@@ -57,7 +57,7 @@
     if (!valid) return { ok: false, reason: 'Csak nevet válassz a listából.' };
 
     answered = true;
-    var correct = picked === norm(S.culprit);
+    var correct = (S.culprits || []).some(function (c) { return norm(c) === picked; });
     setTimeout(function () {
       if (window.Ending) {
         Ending.show(correct
