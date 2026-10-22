@@ -170,7 +170,7 @@ var GAME_DATA = {
     introMail: {
       from: "Balog Tibor <balog.tibor@apex-epitkezes.example>",
       subject: "Bizalmas: ellopott tervek",
-      body: "Üdvözlöm!\n\nTegnap reggel 7 óra körül ellopták az építkezésünk új terveit. A befektetőink már várják ezeket, és ha a hír kiszivárog, visszalépnek. Kérem, egyelőre maradjon ez köztünk.\n\nDerítse ki, ki lopta el a terveket! A nyomozáshoz kezdjen a Tracebookon: az én profilomon (balog_tibor) három ismerősöm látszik, akik a cégnél dolgoznak.\n\nA választ csak névvel fogadom el. Melyik nevet mondja a tettesnek?\n\nTisztelettel:\nBalog Tibor\nApex Építkezés"
+      body: "Üdvözlöm!\n\nTegnap reggel 7 óra körül ellopták az építkezésünk új terveit. A befektetőink már várják ezeket, és ha a hír kiszivárog, visszalépnek. Kérem, egyelőre maradjon ez köztünk.\n\nDerítse ki, ki lopta el a terveket! A nyomozáshoz kezdjen a Tracebookon: az én profilomon (balog_tibor) három ismerősöm látszik, akik a cégnél dolgoznak.\n\nA választ csak névvel fogadom el. Ha többen voltak benne, mindannyiukat nevezze meg.\n\nTisztelettel:\nBalog Tibor\nApex Építkezés"
     }
   },
 
@@ -224,6 +224,8 @@ var GAME_DATA = {
         ] },
       { name: "Horváth Márk", address: "horvath.mark@apex-epitkezes.example", mode: "free",
         replies: [
+          // Easter egg: a játék másik szereplőjének (a hörcsögnek) a neve
+          { match: ["gombóc"], text: "Gombóc? Honnan tudod a nevét? Ezt csak nagyon kevesen tudják. Beszéljünk." },
           { match: ["horvath mark"], text: "Igen, én vagyok. Miért kérdezed?" }
         ] }
     ]

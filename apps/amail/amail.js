@@ -80,6 +80,10 @@
     var p = currentPerson();
     var mode = p ? p.mode : 'free';
     pickInput.textContent = '';
+    // Névválasztónál több név is kijelölhető (Ctrl/Cmd-del), a többinél egy elem
+    pickInput.multiple = mode === 'names';
+    pickInput.size = mode === 'names' ? 6 : 1;
+    pickLabel.firstChild.textContent = mode === 'names' ? 'Nevek (több is) ' : 'Válasz ';
     if (mode === 'names') {
       GAME_DATA.solution.answerChoices.forEach(function (n) { pickInput.appendChild(new Option(n, n)); });
     } else if (mode === 'options') {
@@ -217,11 +221,13 @@
     e.preventDefault();
     var p = currentPerson();
     var pick = p && (p.mode === 'names' || p.mode === 'options');
+    var chosen = Array.prototype.filter.call(pickInput.options, function (o) { return o.selected; })
+      .map(function (o) { return o.text; });
     sendMail({
       to: toInput.value.trim(),
       subject: subjectInput.value.trim(),
-      // Névválasztónál a név, kérdésválasztónál a kérdés szövege megy el
-      body: pick ? pickInput.options[pickInput.selectedIndex].text : textInput.value,
+      // Névválasztónál a kijelölt nevek (vesszővel), kérdésválasztónál a kérdés szövege megy el
+      body: pick ? chosen.join(', ') : textInput.value,
       optionId: p && p.mode === 'options' ? pickInput.value : undefined
     });
   });

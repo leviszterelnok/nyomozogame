@@ -50,14 +50,19 @@
   }
 
   // Megoldás: a név a listából való; a helyes név "Király vagy!", a rossz a valódi történetet mutatja
-  function answerWithName(name) {
+  // A nevek vesszővel vagy "és"-sel sorolhatók fel; csak akkor helyes, ha pontosan a helyes nevek vannak benne
+  function answerWithName(text) {
     if (answered) return { ok: false, reason: 'Már válaszoltál.' };
-    var picked = norm(name);
-    var valid = (S.answerChoices || []).some(function (c) { return norm(c) === picked; });
+    var names = String(text || '').split(/,|\s+és\s+/).map(norm).filter(function (n) { return n; });
+    var choices = (S.answerChoices || []).map(norm);
+    var valid = names.length > 0 && names.every(function (n) { return choices.indexOf(n) !== -1; });
     if (!valid) return { ok: false, reason: 'Csak nevet válassz a listából.' };
 
+    var picked = names.filter(function (n, i) { return names.indexOf(n) === i; }).sort();
+    var want = (S.culprits || []).map(norm).sort();
     answered = true;
-    var correct = (S.culprits || []).some(function (c) { return norm(c) === picked; });
+    var correct = picked.length === want.length &&
+      picked.every(function (n, i) { return n === want[i]; });
     setTimeout(function () {
       if (window.Ending) {
         Ending.show(correct
