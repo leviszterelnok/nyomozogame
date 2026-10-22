@@ -60,7 +60,12 @@ var GAME_DATA = {
       { name: "Amail",     important: true,  appicon: "assets/amail.png",     launch: "amail",     x: 0, y: 2 },
       { name: "Trash",     important: false, appicon: "assets/trash.png",     launch: "nothing",   x: 0, y: 3 },
 
-      { name: "CraftMine",     important: false, appicon: "assets/craftmine.png",     launch: "nothing",   x: 8, y: 0 }
+      { name: "CraftMine",     important: false, appicon: "assets/craftmine.png",     launch: "nothing",   x: 8, y: 0 },
+      { name: "SpeedforNeed",     important: false, appicon: "assets/speedforneed.png",     launch: "nothing",   x: 8, y: 1 },
+      { name: "ExtremeMario",     important: false, appicon: "assets/extreme_mario.png",     launch: "nothing",   x: 8, y: 2 },
+      { name: "Manhit",     important: false, appicon: "assets/manhit.png",     launch: "nothing",   x: 8, y: 3 },
+      { name: "Csakrajongók",     important: false, appicon: "assets/csakrajongok.png",     launch: "nothing",   x: 8, y: 4 },
+      { name: "Csalókódok",     important: false, appicon: "assets/szoveg.png",     launch: "nothing",   x: 8, y: 5 }
     ]
   },
 
