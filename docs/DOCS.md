@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.19 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.20 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -47,6 +47,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
 - **v0.2.4** – Prototípus: `tools/3d-monitor/` (index.html, style.css, monitor-3d.js). Three.js r128 CDN-ről (classic script, file:// alatt is fut). Kódból épített régi dobozos monitor, asztal, könyvespolc és távoli lámpa. Kattintásos kijelölés (raycast), képernyő-sík körvonala SVG-ben (`window.Monitor3D.screenInfo()`). A játék még a képpontos háttérrel fut.
+- **v0.2.20** – Az alapfény gyengébb (0,36 → 0,2).
 - **v0.2.19** – Nagyobb tál ételtel. Evéskor a hörcsög a tál előtt áll és a tálba hajol. A kerék nincs küllőkkel: a hörcsög a kerék alján fut benne, a kerék két tartóoszlop közt áll. A járás kikerüli a tálat és a kereket (`hBlocked`).
 - **v0.2.18** – A hörcsög kisebb (0,82-es skála a ketrechez képest). A fejmozgás ritka, ugrásszerű fordulásokból, megállásokból és szimatolásból áll (`hLookUpdate`), a légzéssel együtt mozog, az orra csak szimatoláskor rángat. A mosakodás lassú, ritmusos.
 - **v0.2.17** – A szoba fénye gyengébb (lámpa, alapfény, spotlámpa). A hörcsög ketrece 1,4-szeres, benne futókerék és tálka. A hörcsög véletlenszerűen sétál, a tálból eszik, a kerékben fut (a kerék forog), vagy mosakodik (`hUpdate` a `js/monitor-3d.js`-ben).

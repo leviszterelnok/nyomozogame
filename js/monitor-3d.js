@@ -659,7 +659,7 @@
 
   // ---- Fények ----
   // Meleg, egyenletes alapfény: nyugodt szobai hangulat
-  scene.add(new THREE.AmbientLight(0xffe2b8, 0.36));
+  scene.add(new THREE.AmbientLight(0xffe2b8, 0.2));
 
   // Meleg fény a távoli lámpából (árnyékot is vet)
   var lampLight = new THREE.PointLight(0xffc07a, 2.8, 7, 2);
