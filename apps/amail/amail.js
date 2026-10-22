@@ -1,9 +1,10 @@
 /*
  * Amail – levelek listája, szűrés, levél megnyitása, válasz.
- * Adatok: js/data.js → GAME_DATA.amail (mails, outgoing, texts).
+ * Adatok: js/data.js → GAME_DATA.amail (mails, outgoing, texts), GAME_DATA.contacts.
  *
- * A küldés még nincs kész: a sendMail() most csak a konzolba ír,
- * és a "még nincs bekötve" üzenetet mutatja. Később itt kell a valódi küldést megírni.
+ * A küldést a játék dolgozza fel (js/contacts.js): az Amail "amail:send" üzenetet küld,
+ * a választ "amail:status" üzenetben kapja vissza. A címzett szerint a válasz
+ * szabad szöveg, névválasztó vagy kérdésválasztó (contacts.people[].mode).
  */
 (function () {
   'use strict';
@@ -28,6 +29,16 @@
   var textInput = document.getElementById('am-text');
   var statusEl = document.getElementById('am-status');
 
+  // Névválasztó vagy kérdésválasztó (a címzett módjától függ): a szöveg helyett jelenik meg
+  var textLabel = textInput.parentNode;
+  var pickLabel = document.createElement('label');
+  var pickInput = document.createElement('select');
+  pickInput.setAttribute('aria-label', 'Válasz');
+  pickLabel.appendChild(document.createTextNode('Válasz '));
+  pickLabel.appendChild(pickInput);
+  pickLabel.hidden = true;
+  compose.insertBefore(pickLabel, textLabel);
+
   var tab = 'inbox';        // 'inbox' | 'drafts'
   var currentDraft = null;  // a megnyitott levél (lista-elem)
 
@@ -41,13 +52,44 @@
   sendDraftBtn.textContent = T.send;
   document.getElementById('am-send').textContent = T.send;
 
-  // ---------- Küldés (még nincs kész) ----------
-  // mail: { to, subject, body }. Visszaad egy eredményt: { ok, reason }.
+  // ---------- Küldés: a játék dolgozza fel (js/contacts.js) ----------
+  // mail: { to, subject, body, optionId }. Az eredményt "amail:status" üzenetben kapjuk vissza.
   function sendMail(mail) {
-    console.log('[sendMail]', mail);
-    return { ok: false, reason: T.sendStub };
+    window.parent.postMessage({ type: 'amail:send', mail: mail }, '*');
   }
-  window.sendMail = sendMail;
+
+  // ---------- Címzett és beviteli mód ----------
+  function norm(s) {
+    return String(s || '').toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/\s+/g, ' ').trim();
+  }
+
+  // A beírt címzett (név vagy cím) alapján a játék szereplője
+  function currentPerson() {
+    var key = norm(toInput.value);
+    var people = GAME_DATA.contacts.people;
+    for (var i = 0; i < people.length; i++) {
+      if (norm(people[i].name) === key || norm(people[i].address) === key) return people[i];
+    }
+    return null;
+  }
+
+  // A címzett módja szerint: névválasztó, kérdésválasztó vagy szövegdoboz
+  function updateCompose() {
+    var p = currentPerson();
+    var mode = p ? p.mode : 'free';
+    pickInput.textContent = '';
+    if (mode === 'names') {
+      GAME_DATA.solution.answerChoices.forEach(function (n) { pickInput.appendChild(new Option(n, n)); });
+    } else if (mode === 'options') {
+      p.options.forEach(function (o) { pickInput.appendChild(new Option(o.label, o.id)); });
+    }
+    var pick = mode === 'names' || mode === 'options';
+    pickLabel.hidden = !pick;
+    textLabel.hidden = pick;
+  }
+  toInput.addEventListener('input', updateCompose);
 
   // ---------- Segédfüggvények ----------
   function el(tag, cls, text) {
@@ -141,12 +183,15 @@
   function openReply() {
     if (!currentDraft) return;
     var subj = currentDraft.subject || '';
-    toInput.value = currentDraft.from || '';
+    // A feladó neve (cím nélkül) lesz a címzett, így a játék is felismeri
+    toInput.value = (currentDraft.from || '').replace(/\s*<[^>]*>\s*$/, '');
     subjectInput.value = /^re:/i.test(subj) ? subj : 'Re: ' + subj;
     textInput.value = '';
     compose.hidden = false;
     statusEl.textContent = '';
-    textInput.focus();
+    updateCompose();
+    if (!textLabel.hidden) textInput.focus();
+    else pickInput.focus();
   }
 
   // ---------- Események ----------
@@ -165,25 +210,32 @@
 
   sendDraftBtn.addEventListener('click', function () {
     if (!currentDraft) return;
-    var r = sendMail({ to: currentDraft.to, subject: currentDraft.subject, body: currentDraft.body });
-    statusEl.textContent = r && r.ok ? 'Elküldve.' : (r && r.reason) || T.sendStub;
+    sendMail({ to: currentDraft.to, subject: currentDraft.subject, body: currentDraft.body });
   });
 
   compose.addEventListener('submit', function (e) {
     e.preventDefault();
-    var r = sendMail({
+    var p = currentPerson();
+    var pick = p && (p.mode === 'names' || p.mode === 'options');
+    sendMail({
       to: toInput.value.trim(),
       subject: subjectInput.value.trim(),
-      body: textInput.value
+      // Névválasztónál a név, kérdésválasztónál a kérdés szövege megy el
+      body: pick ? pickInput.options[pickInput.selectedIndex].text : textInput.value,
+      optionId: p && p.mode === 'options' ? pickInput.value : undefined
     });
-    statusEl.textContent = r && r.ok ? 'Elküldve.' : (r && r.reason) || T.sendStub;
   });
 
-  // A játék (sendAmail) frissíti a listát: a szülő ablak küldi a levelek listáját
+  // A játéktól jön: a levelek listája (amail:list) és a küldés eredménye (amail:status)
   window.addEventListener('message', function (e) {
-    if (e.source === window.parent && e.data && e.data.type === 'amail:list') {
+    if (e.source !== window.parent || !e.data) return;
+    if (e.data.type === 'amail:list') {
       D.mails = e.data.mails || [];
       renderList();
+    }
+    if (e.data.type === 'amail:status') {
+      statusEl.textContent = e.data.ok ? 'Elküldve.' : (e.data.reason || T.sendStub);
+      if (e.data.ok && !textLabel.hidden) textInput.value = '';
     }
   });
 

@@ -1,0 +1,49 @@
+/* Végkép (js/ending.js): "Király vagy!" vagy a valódi történet */
+
+.ending {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(360px, 90vw);
+  height: fit-content;
+  padding: 16px 18px;
+  z-index: 1000;
+  background: #d4d0c8;
+  border: 2px outset #fff;
+  box-shadow: 4px 4px 0 #000;
+  font: 13px Tahoma, sans-serif;
+  color: #000;
+  text-align: center;
+}
+
+.ending h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.ending p {
+  margin: 0 0 14px;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.ending button {
+  font: 13px Tahoma, sans-serif;
+  padding: 4px 18px;
+  background: #d4d0c8;
+  border: 2px outset #fff;
+  cursor: pointer;
+}
+
+.ending button:focus {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+.ending-win h2 {
+  color: #006400;
+}
+
+.ending-lose h2 {
+  color: #800000;
+}
