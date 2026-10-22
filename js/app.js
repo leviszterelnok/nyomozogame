@@ -314,7 +314,7 @@
     var cellW = Math.floor((W - GAP * (cols - 1)) / cols);
     var cellH = Math.floor((H - GAP * (rows - 1)) / rows);
     // Az ikon a cella kisebbik méretének ~60%-a, a felirat helyével együtt
-    var size = Math.max(16, Math.min(Math.floor(cellW * 0.6), cellH - 22));
+    var size = Math.max(16, Math.min(Math.floor(cellW * 0.6), cellH - 26));
 
     desktopIcons.style.gridTemplateColumns = 'repeat(' + cols + ', ' + cellW + 'px)';
     desktopIcons.style.gridTemplateRows = 'repeat(' + rows + ', ' + cellH + 'px)';
@@ -327,7 +327,7 @@
       p.btn.style.gridRow = String(r + 1);
       p.btn.style.width = cellW + 'px';
       p.btn.style.height = cellH + 'px';
-      p.btn.style.overflow = 'hidden';
+      p.wrap.style.margin = '4px auto 3px';   // hely a sárga kiemelő keretnek (outline) a kép körül
       p.wrap.style.width = size + 'px';
       p.wrap.style.height = size + 'px';
       taken[c + ',' + r] = true;

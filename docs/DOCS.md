@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.26 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.27 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -47,6 +47,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
 - **v0.2.4** – Prototípus: `tools/3d-monitor/` (index.html, style.css, monitor-3d.js). Three.js r128 CDN-ről (classic script, file:// alatt is fut). Kódból épített régi dobozos monitor, asztal, könyvespolc és távoli lámpa. Kattintásos kijelölés (raycast), képernyő-sík körvonala SVG-ben (`window.Monitor3D.screenInfo()`). A játék még a képpontos háttérrel fut.
+- **v0.2.27** – Asztali ikonok: a fontos ikon sárga kerete a rácsos elrendezésben is látszik (a gomb nem vágja le, a kép köré hely kerül).
 - **v0.2.26** – Info kiemelés: a címsor (`<h>`) is kiemelt, a kiemelés vékony sárga sáv a szöveg alján (`.info-text mark`).
 - **v0.2.25** – Asztali rács: `desktop.cols` × `desktop.rows` (alap 9×6). A cellák méretét az asztal mérete adja, az ikon mérete a cellából jön és nem nyúlik. Az `x`/`y` pozíció a rácson belül van; ami kilógna, rejtve marad (`layoutDesktop` a `js/app.js`-ben).
 - **v0.2.24** – A bejelentkező doboz, az avatar, a gombok és az info popup kinézete visszaáll a régi, retro stílusra. A popup helye (az i-gomb jobbján) és animációja változatlan.
