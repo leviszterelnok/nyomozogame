@@ -307,10 +307,12 @@
       img.removeAttribute('style');
       return;
     }
+    // A belső méret a keret (border) nélkül: a kép ehhez igazodik, így nem vágódik le szél
+    var W = p.wrap.clientWidth || size, H = p.wrap.clientHeight || size;
     var bw = t.box[2] - t.box[0], bh = t.box[3] - t.box[1];
-    var k = size / Math.max(bw, bh);                      // nagyítás: a látható rész kitölti az ikont
-    var left = -t.box[0] * k + (size - bw * k) / 2;       // középre igazítva
-    var top = -t.box[1] * k + (size - bh * k) / 2;
+    var k = Math.min(W / bw, H / bh);                     // a látható rész a belső méretbe fér
+    var left = -t.box[0] * k + (W - bw * k) / 2;          // középre igazítva
+    var top = -t.box[1] * k + (H - bh * k) / 2;
     p.wrap.style.overflow = 'hidden';
     img.style.position = 'absolute';
     img.style.width = (t.size[0] * k) + 'px';
