@@ -81,16 +81,35 @@
     container.appendChild(document.createTextNode(text.slice(last)));
   }
 
-  // Profilkép: ha nincs vagy nem tölthető be, szürke kör marad
+  // Alap profilkép (ha nincs saját): a felhasználónévből generált, tükrözött pixeles minta,
+  // régies, GitHub-szerű identicon. Ugyanaz a név mindig ugyanazt a mintát kapja.
+  function identiconUrl(username) {
+    var seed = 0;
+    for (var i = 0; i < username.length; i++) seed = (seed * 31 + username.charCodeAt(i)) >>> 0;
+    function rnd() { seed = (seed * 1103515245 + 12345) >>> 0; return seed / 4294967296; }
+    var fill = 'hsl(' + Math.floor(rnd() * 360) + ',40%,38%)';
+    var cells = '';
+    for (var y = 0; y < 5; y++) {
+      for (var x = 0; x < 3; x++) {
+        if (rnd() < 0.5) {
+          cells += '<rect x="' + (x * 20) + '" y="' + (y * 20) + '" width="20" height="20"/>';
+          if (x < 2) cells += '<rect x="' + ((4 - x) * 20) + '" y="' + (y * 20) + '" width="20" height="20"/>';
+        }
+      }
+    }
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
+      '<rect width="100" height="100" fill="#d9d4c7"/><g fill="' + fill + '">' + cells + '</g></svg>';
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+
+  // Profilkép: a saját kép, ha van; különben az identicon
   function avatar(user, big) {
     var wrap = el('div', 'tb-avatar' + (big ? ' big' : ''));
-    if (user && user.avatar) {
-      var img = el('img');
-      img.alt = '';
-      img.src = user.avatar;
-      img.onerror = function () { img.remove(); };
-      wrap.appendChild(img);
-    }
+    var img = el('img');
+    img.alt = '';
+    img.src = (user && user.avatar) ? user.avatar : identiconUrl(user ? user.username : 'ismeretlen');
+    img.onerror = function () { img.remove(); };
+    wrap.appendChild(img);
     return wrap;
   }
 
@@ -169,9 +188,25 @@
   // ---------- Nézetek ----------
   // A főoldal üres: a bejegyzéseket és a fiókokat csak keresésre lehet megtalálni.
   // (A mainPosts a keresésben él tovább; ha ide kell tartalom, itt lehet megjeleníteni.)
+  // Az eddig megnyitott profilok: csak profil megnyitása után kerülnek a főoldalra
+  var recentUsers = [];
   function renderMain() {
     view.textContent = '';
-    view.appendChild(el('p', 'tb-empty', T.homeEmpty));
+    if (recentUsers.length === 0) {
+      view.appendChild(el('p', 'tb-empty', T.homeEmpty));
+    } else {
+      view.appendChild(el('h3', 'tb-h', 'Korábban megnyitott profilok'));
+      var list = el('div', 'tb-recent');
+      recentUsers.forEach(function (username) {
+        var u = userByUsername(username);
+        if (!u) return;
+        var b = el('button', 'tb-recent-item', u.name + ' (@' + u.username + ')');
+        b.type = 'button';
+        b.addEventListener('click', function () { navigate({ type: 'profile', username: u.username }, false); });
+        list.appendChild(b);
+      });
+      view.appendChild(list);
+    }
     view.scrollTop = 0;
   }
 
@@ -190,6 +225,11 @@
       showToast(T.notFound);
       return;
     }
+
+    // Megnyitott profil: a főoldali listára kerül (a legutóbbi elöl, legfeljebb 8)
+    recentUsers = recentUsers.filter(function (n) { return n !== username; });
+    recentUsers.unshift(username);
+    recentUsers = recentUsers.slice(0, 8);
 
     view.textContent = '';
     view.appendChild(backButton());

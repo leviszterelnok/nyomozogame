@@ -118,13 +118,16 @@ var GAME_DATA = {
       { username: "fazekas_zoltan", name: "Fazekas Zoltán", avatar: "", friends: ["horvath_mark", "varga_peter"],
         posts: [
           { id: 201, date: "2026-10-21 01:30", text: "Jó volt a speedforneed Varga Péterrel!" },
-          { id: 202, date: "2026-10-21 20:40", text: "Jó volt a tegnapi napom..." },
-          { id: 203, date: "2026-10-21 07:05", text: "7:00 kor valamiért törölve lettek a kamerák" }
+          { id: 202, date: "2026-10-21 20:40", text: "Jó volt a tegnapi napom... Reggel hét körül értem be, és valamiért a kamerák már törölve voltak. Utána minden rendben ment." }
         ] },
-      { username: "szabo_beatrix", name: "Szabó Beatrix", avatar: "", friends: ["notar_marika", "mezei_eva"] },
+      { username: "szabo_beatrix", name: "Szabó Beatrix", avatar: "", friends: ["notar_marika", "mezei_eva"],
+        posts: [
+          { id: 301, date: "2026-10-18 10:00", text: "Felvétel van a céghez. Akit érdekel, jelentkezzen!" }
+        ] },
       { username: "kovacs_daniel", name: "Kovács Dániel", avatar: "", friends: [],
         posts: [
-          { id: 401, date: "2026-10-18 12:00", text: "Fő építész vagyok. Az ismerősök nem számítanak." }
+          { id: 401, date: "2026-10-18 12:00", text: "Fő építész vagyok. Az ismerősök nem számítanak." },
+          { id: 402, date: "2026-10-19 09:00", text: "Nem bírom az új rendszergazdád. Horváth Márk sokkal jobb volt." }
         ] },
       { username: "kovacs_rita", name: "Kovács Rita", avatar: "", friends: [] },
       { username: "notar_marika", name: "Nótár Marika", avatar: "", friends: [] },
@@ -140,9 +143,7 @@ var GAME_DATA = {
       { id: 501, author: "kovacs_rita", date: "2026-10-21 17:30",
         text: "Jó volt a mai @horvath_mark stream" },
       { id: 601, author: "notar_marika", date: "2026-10-21 07:40",
-        text: "A mai reggelem... megérkeztem munkába, és már reggel egyből elrontotta a napomat Kovács Rita, ott volt a folyosón." },
-      { id: 602, author: "notar_marika", date: "2026-10-21 19:20",
-        text: "Folytatom, mert még mindig dühös vagyok. Kovács Rita a folyosón állt, a telefonját nézte, és úgy tett, mintha nem hallaná, hogy köszönök neki. Fazekas Zoltán pont akkor jött ki a szerverszobából, és csak annyit mondott: „Most nem érek rá.” Azóta sem tudom, mit kerestek ott reggel hét körül. A nap további része is ilyen volt: a kávégépben nem volt tej, a közös meghajtón nem találtam azt a táblázatot, amit Mezei Éva kért, és délután még arról is kérdeztek, miért ilyen fáradt a hangom. Ha valakinek van ötlete, mit lehet ilyenkor csinálni, szóljon nyugodtan. Már egy fél napom ráment erre az egészre." },
+        text: "A mai reggelem... megérkeztem munkába, és már reggel egyből elrontotta a napomat Kovács Rita: a folyosón állt, a telefonját nézte, és úgy tett, mintha nem hallaná, hogy köszönök neki. Fazekas Zoltán pont akkor jött ki a szerverszobából, és csak annyit mondott: „Most nem érek rá.” Azóta sem tudom, mit kerestek ott reggel hét körül. Ha valakinek van ötlete, mit lehet ilyenkor csinálni, szóljon nyugodtan." },
       { id: 701, author: "mezei_eva", date: "2026-10-18 09:00",
         text: "Álláspozíció-jelentkezések nyíltak cégünkhöz. Akit érdekel, forduljon Mezei Éva irodavezetőhöz." }
     ]
@@ -188,7 +189,7 @@ var GAME_DATA = {
     introMail: {
       from: "Balog Tibor <balog.tibor@apex-epitkezes.example>",
       subject: "Bizalmas: ellopott tervek",
-      body: "Üdvözlöm!\n\nTegnap reggel 7 óra körül ellopták az építkezésünk új terveit. A befektetőink már várják ezeket, és ha a hír kiszivárog, visszalépnek. Kérem, egyelőre maradjon ez köztünk.\n\nDerítse ki, ki lopta el a terveket! A nyomozáshoz kezdjen a Tracebookon: az én profilomon (balog_tibor) három ismerősöm látszik, akik a cégnél dolgoznak.\n\nA választ csak névvel fogadom el. Ha többen voltak benne, mindannyiukat nevezze meg.\n\nTisztelettel:\nBalog Tibor\nApex Építkezés"
+      body: "Üdvözlöm!\n\nEllopták az építkezésünk új terveit. A befektetőink már várják ezeket, és ha a hír kiszivárog, visszalépnek. Kérem, egyelőre maradjon ez köztünk.\n\nDerítse ki, ki lopta el a terveket! A nyomozáshoz kezdjen a Tracebookon: az én profilomon (balog_tibor) három ismerősöm látszik, akik a cégnél dolgoznak.\n\nA választ csak névvel fogadom el. Ha többen voltak benne, mindannyiukat nevezze meg.\n\nTisztelettel:\nBalog Tibor\nApex Építkezés"
     },
     // Későbbi levelek, a játék indulásától számolt idő (ms) után. Az Amailben a küldés után is érkezhetnek.
     // Csak Balog ír magától. A többi szereplőnek a játékosnak kell írnia (Amail).
@@ -243,7 +244,7 @@ var GAME_DATA = {
         ] },
       { name: "Varga Péter", address: "varga.peter@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Én szóltam a vezetésnek, hogy rosszat mond a cégről a streamben. Utána kirúgták." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Ő volt a régi rendszergazdánk. Én szóltam a vezetésnek, hogy a streamjében rosszat mondott a cégről, és emiatt kirúgták." }
         ] },
       { name: "Horváth Márk", address: "horvath.mark@apex-epitkezes.example", mode: "free",
         replies: [

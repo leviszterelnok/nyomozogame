@@ -178,6 +178,8 @@
   // A jelszó a szövegmezőben pontokkal látszik; a valódi értéket a secret tárolja
   // (a böngésző így nem kezeli jelszóként, nincs jelszókezelő popup).
   var secret = '';
+  // Hibás próbálkozások száma: az első hiba után megjelenik a jelszó formátumának tippje
+  var failCount = 0;
   function renderSecret() {
     passwordInput.value = new Array(secret.length + 1).join('•');
   }
@@ -198,7 +200,10 @@
     } else {
       secret = '';
       renderSecret();
-      loginError.textContent = 'Hibás jelszó.';
+      failCount++;
+      loginError.textContent = failCount >= 1
+        ? 'Hibás jelszó. Tipp: a jelszó 6 számjegyből áll, csak számokat tartalmaz.'
+        : 'Hibás jelszó.';
       shakeLoginBox();
     }
   }
