@@ -83,6 +83,13 @@
 
   // Szabad szöveg: kulcsszó alapján válasz, különben a fallback
   function answerFree(p, mail) {
+    // Téma kiválasztva: a témához tartozó válasz jön, nem a kulcsszó
+    if (mail.optionId) {
+      var topic = (p.replies || []).filter(function (r) { return r.id === mail.optionId; })[0];
+      if (!topic) return { ok: false, reason: 'Válassz a listából.' };
+      scheduleReply(p, 'Re: ' + (mail.subject || ''), topic.text);
+      return { ok: true, reason: 'Elküldve.' };
+    }
     var text = norm((mail.subject || '') + ' ' + (mail.body || ''));
     if (!norm(mail.body)) return { ok: false, reason: 'Írj szöveget.' };
     var hit = (p.replies || []).filter(function (r) {

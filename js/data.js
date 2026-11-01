@@ -105,6 +105,7 @@ var GAME_DATA = {
       noFriends: "Nincs még ismerős.",
       noPosts: "Ettől a felhasználótól még nincs bejegyzés.",
       noPostsAtAll: "Még nincs bejegyzés.",
+      homeEmpty: "Nincs itt semmi érdekes.",
       notFound: "Nem találtuk meg azt a felhasználót",
       notFoundMs: 3000
     },
@@ -225,37 +226,39 @@ var GAME_DATA = {
           { id: "kamerak", label: "Mi lett a kamerákkal?", subject: "A kamerák",
             reply: "Reggel 7 körül megszakadt a felvétel. A rendszer naplójában nem találtam magyarázatot." },
           { id: "allas", label: "Van nyitott állásposzíció?", subject: "Állásposzíció",
-            reply: "Igen, a jelentkezések megnyíltak. Ha érdekel, küldj egy önéletrajzot." }
+            reply: "Igen, a jelentkezések megnyíltak. Ha érdekel, küldj egy önéletrajzot." },
+          { id: "felvetel", label: "Felvételek 7 órakor", subject: "Felvételek 7 órakor",
+            reply: "Reggel 7 óra körül megszakad a felvétel. Egy percig nincs kép, utána újra működik." }
         ] },
       { name: "Fazekas Zoltán", address: "fazekas.zoltan@apex-epitkezes.example", mode: "free",
         replies: [
-          { match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Azóta nem dolgozik nálunk." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Azóta nem dolgozik nálunk." }
         ] },
       { name: "Szabó Beatrix", address: "szabo.beatrix@apex-epitkezes.example", mode: "free",
         replies: [
-          { match: ["horvath mark"], text: "Horváth Márkot? Régi rendszergazda volt. Ennél többet nem tudok róla." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márkot? Régi rendszergazda volt. Ennél többet nem tudok róla." }
         ] },
       { name: "Kovács Dániel", address: "kovacs.daniel@apex-epitkezes.example", mode: "free",
         replies: [
-          { match: ["horvath mark"], text: "Horváth Márk? A rendszerekhez nem értek, azt Zoltántól kérdezd." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A rendszerekhez nem értek, azt Zoltántól kérdezd." }
         ] },
       { name: "Kovács Rita", address: "kovacs.rita@apex-epitkezes.example", mode: "free",
         replies: [
-          { match: ["horvath mark"], text: "Horváth Márk? Személyesen nem ismerem." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Személyesen nem ismerem." }
         ] },
       { name: "Nótár Marika", address: "notar.marika@apex-epitkezes.example", mode: "free",
         replies: [
-          { match: ["horvath mark"], text: "Horváth Márk? Azt hallottam, kirúgták. Többet nem tudok." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Azt hallottam, kirúgták. Többet nem tudok." }
         ] },
       { name: "Varga Péter", address: "varga.peter@apex-epitkezes.example", mode: "free",
         replies: [
-          { match: ["horvath mark"], text: "Horváth Márk? Én szóltam a vezetésnek, hogy rosszat mond a cégről a streamben. Utána kirúgták." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Én szóltam a vezetésnek, hogy rosszat mond a cégről a streamben. Utána kirúgták." }
         ] },
       { name: "Horváth Márk", address: "horvath.mark@apex-epitkezes.example", mode: "free",
         replies: [
           // Easter egg: a játék másik szereplőjének (a hörcsögnek) a neve
           { match: ["gombóc"], text: "Gombóc? Honnan tudod a nevét? Ezt csak nagyon kevesen tudják. Beszéljünk." },
-          { match: ["horvath mark"], text: "Igen, én vagyok. Miért kérdezed?" }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Igen, én vagyok. Miért kérdezed?" }
         ] }
     ]
   },
