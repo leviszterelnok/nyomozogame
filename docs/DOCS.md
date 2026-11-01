@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.32 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.33 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -46,6 +46,8 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 - **Betöltő szövegei:** `js/app.js` → `BOOT_LINES`.
 
 ## Változásnapló
+
+- **v0.2.33** – Tracebook: a „Korábban megnyitott profilok” lista localStorage-ban él, bezárás után is megmarad (legfeljebb 8). Mezei Éva felvétel-bejegyzése törölve; Szabó Beatrix bejegyzése most Mezei Éva irodavezetőnél érdeklődésre utal. Dániel „főépítész” bejegyzése törölve. Minden Horváth Márk-válasz elmondja, hogy Varga Péter elárulta: streamen rosszat beszélt a cégről, ezért rúgták ki.
 
 - **v0.2.32** – Bejelentkezés: az első hibás jelszó után tipp jelenik meg (6 számjegy, csak számok). Tracebook: nincs saját profilkép → névből generált pixeles identicon. Megnyitott profilok a főoldalon (csak megnyitás után, legfeljebb 8). Amail: küldés után 4 mp-ig tiltott a küldés gomb (spam ellen). Szöveg: Balog nyitóüzenete nem említi az időpontot; Fazekas kamera-törlése a napleírásába került; Nótár Marika reggeli üzenete egy bejegyzés; Szabó Beatrix felvétel-bejegyzés; Kovács Dániel új rendszergazda-bejegyzés; Varga Péter válasza elmondja, miért lett kirúgva Horváth Márk.
 

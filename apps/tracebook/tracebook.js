@@ -189,7 +189,18 @@
   // A főoldal üres: a bejegyzéseket és a fiókokat csak keresésre lehet megtalálni.
   // (A mainPosts a keresésben él tovább; ha ide kell tartalom, itt lehet megjeleníteni.)
   // Az eddig megnyitott profilok: csak profil megnyitása után kerülnek a főoldalra
-  var recentUsers = [];
+  // A lista a böngészőben (localStorage) tárolódik, így a Tracebook bezárása után is megmarad
+  var RECENT_KEY = 'nyomozo.tracebook.recent';
+  function loadRecent() {
+    try {
+      var v = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+      return Array.isArray(v) ? v.filter(function (n) { return typeof n === 'string'; }).slice(0, 8) : [];
+    } catch (e) { return []; }
+  }
+  function saveRecent() {
+    try { localStorage.setItem(RECENT_KEY, JSON.stringify(recentUsers)); } catch (e) { /* nincs tárolás: csak az oldal élettartamáig marad */ }
+  }
+  var recentUsers = loadRecent();
   function renderMain() {
     view.textContent = '';
     if (recentUsers.length === 0) {
@@ -230,6 +241,7 @@
     recentUsers = recentUsers.filter(function (n) { return n !== username; });
     recentUsers.unshift(username);
     recentUsers = recentUsers.slice(0, 8);
+    saveRecent();
 
     view.textContent = '';
     view.appendChild(backButton());

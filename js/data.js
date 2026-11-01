@@ -122,11 +122,10 @@ var GAME_DATA = {
         ] },
       { username: "szabo_beatrix", name: "Szabó Beatrix", avatar: "", friends: ["notar_marika", "mezei_eva"],
         posts: [
-          { id: 301, date: "2026-10-18 10:00", text: "Felvétel van a céghez. Akit érdekel, jelentkezzen!" }
+          { id: 301, date: "2026-10-18 10:00", text: "Felvétel van a céghez. Akit érdekel, érdeklődjön Mezei Éva irodavezetőnél." }
         ] },
       { username: "kovacs_daniel", name: "Kovács Dániel", avatar: "", friends: [],
         posts: [
-          { id: 401, date: "2026-10-18 12:00", text: "Fő építész vagyok. Az ismerősök nem számítanak." },
           { id: 402, date: "2026-10-19 09:00", text: "Nem bírom az új rendszergazdád. Horváth Márk sokkal jobb volt." }
         ] },
       { username: "kovacs_rita", name: "Kovács Rita", avatar: "", friends: [] },
@@ -143,9 +142,7 @@ var GAME_DATA = {
       { id: 501, author: "kovacs_rita", date: "2026-10-21 17:30",
         text: "Jó volt a mai @horvath_mark stream" },
       { id: 601, author: "notar_marika", date: "2026-10-21 07:40",
-        text: "A mai reggelem... megérkeztem munkába, és már reggel egyből elrontotta a napomat Kovács Rita: a folyosón állt, a telefonját nézte, és úgy tett, mintha nem hallaná, hogy köszönök neki. Fazekas Zoltán pont akkor jött ki a szerverszobából, és csak annyit mondott: „Most nem érek rá.” Azóta sem tudom, mit kerestek ott reggel hét körül. Ha valakinek van ötlete, mit lehet ilyenkor csinálni, szóljon nyugodtan." },
-      { id: 701, author: "mezei_eva", date: "2026-10-18 09:00",
-        text: "Álláspozíció-jelentkezések nyíltak cégünkhöz. Akit érdekel, forduljon Mezei Éva irodavezetőhöz." }
+        text: "A mai reggelem... megérkeztem munkába, és már reggel egyből elrontotta a napomat Kovács Rita: a folyosón állt, a telefonját nézte, és úgy tett, mintha nem hallaná, hogy köszönök neki. Fazekas Zoltán pont akkor jött ki a szerverszobából, és csak annyit mondott: „Most nem érek rá.” Azóta sem tudom, mit kerestek ott reggel hét körül. Ha valakinek van ötlete, mit lehet ilyenkor csinálni, szóljon nyugodtan." }
     ]
   },
 
@@ -224,23 +221,23 @@ var GAME_DATA = {
         ] },
       { name: "Fazekas Zoltán", address: "fazekas.zoltan@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Azóta nem dolgozik nálunk." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért kirúgták. Azóta nem dolgozik nálunk." }
         ] },
       { name: "Szabó Beatrix", address: "szabo.beatrix@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márkot? Régi rendszergazda volt. Ennél többet nem tudok róla." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márkot? Régi rendszergazda volt. Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért rúgták ki. Ennél többet nem tudok róla." }
         ] },
       { name: "Kovács Dániel", address: "kovacs.daniel@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A rendszerekhez nem értek, azt Zoltántól kérdezd." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért rúgták ki. A rendszerekhez nem értek, azt Zoltántól kérdezd." }
         ] },
       { name: "Kovács Rita", address: "kovacs.rita@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Személyesen nem ismerem." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Személyesen nem ismerem. Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért rúgták ki." }
         ] },
       { name: "Nótár Marika", address: "notar.marika@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Azt hallottam, kirúgták. Többet nem tudok." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért rúgták ki. Többet nem tudok." }
         ] },
       { name: "Varga Péter", address: "varga.peter@apex-epitkezes.example", mode: "free",
         replies: [
