@@ -106,6 +106,7 @@ var GAME_DATA = {
       noPosts: "Ettől a felhasználótól még nincs bejegyzés.",
       noPostsAtAll: "Még nincs bejegyzés.",
       homeEmpty: "Nincs itt semmi érdekes.",
+      back: "← Vissza",
       notFound: "Nem találtuk meg azt a felhasználót",
       notFoundMs: 3000
     },
@@ -190,18 +191,8 @@ var GAME_DATA = {
       body: "Üdvözlöm!\n\nTegnap reggel 7 óra körül ellopták az építkezésünk új terveit. A befektetőink már várják ezeket, és ha a hír kiszivárog, visszalépnek. Kérem, egyelőre maradjon ez köztünk.\n\nDerítse ki, ki lopta el a terveket! A nyomozáshoz kezdjen a Tracebookon: az én profilomon (balog_tibor) három ismerősöm látszik, akik a cégnél dolgoznak.\n\nA választ csak névvel fogadom el. Ha többen voltak benne, mindannyiukat nevezze meg.\n\nTisztelettel:\nBalog Tibor\nApex Építkezés"
     },
     // Későbbi levelek, a játék indulásától számolt idő (ms) után. Az Amailben a küldés után is érkezhetnek.
-    scheduledMails: [
-      { delay: 90000, mail: {
-          from: "Szabó Beatrix <szabo.beatrix@apex-epitkezes.example>",
-          subject: "Felvétel van",
-          body: "Szia! Átnéztem az irodai kamerák mentését. Van egy felvétel a reggeli órákból, amit senki nem nézett meg. Mezei Éva is írt nekem erről:\n\n„Beatrix, nem tudom, mit kérdezett Balog úr, de a 7 órás részt nem érdemes elfelejteni.”\n\nKérdezd meg tőle, mit lát a felvételen.\n\nBeatrix"
-      } },
-      { delay: 100000, mail: {
-          from: "Mezei Éva <mezei.eva@apex-epitkezes.example>",
-          subject: "Felvétel",
-          body: "Szia! Beatrix szólt, hogy van felvétel. Ha kérdezel tőlem valamit, válaszolj erre a levélre, és válassz a felkínált kérdések közül."
-      } }
-    ]
+    // Csak Balog ír magától. A többi szereplőnek a játékosnak kell írnia (Amail).
+    scheduledMails: []
   },
 
   // ---------- Levelezőpartnerek (js/contacts.js) ----------
