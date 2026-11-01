@@ -101,10 +101,40 @@
     toastTimer = setTimeout(function () { toast.hidden = true; }, T.notFoundMs);
   }
 
+  // ---------- Navigáció (verem) ----------
+  // A korábbi nézetek a stack-ban vannak; a "Vissza" gomb mindig az előzőre visz.
+  var stack = [];   // előző nézetek, legutóbbi a végén
+  var current = null; // az épp látható nézet: {type, ...}
+
+  // Nézet kirajzolása (állapot nélkül)
+  function render(s) {
+    if (s.type === 'profile') renderProfile(s.username);
+    else if (s.type === 'results') renderResults(s.term, s.posts);
+    else renderMain();
+  }
+
+  // Új nézet. push = true: az aktuális nézet a verembe kerül (pl. ismerős profilja);
+  // push = false: új keresés vagy főoldal, a verem törlődik.
+  function navigate(s, push) {
+    if (push && current) stack.push(current);
+    if (!push) stack = [];
+    current = s;
+    render(s);
+  }
+
+  function goBack() {
+    if (!stack.length) {
+      navigate({ type: 'main' }, false);
+      return;
+    }
+    current = stack.pop();
+    render(current);
+  }
+
   function backButton() {
-    var b = el('button', 'tb-back', T.backToMain);
+    var b = el('button', 'tb-back', stack.length ? T.back : T.backToMain);
     b.type = 'button';
-    b.addEventListener('click', function () { showMain(); });
+    b.addEventListener('click', goBack);
     return b;
   }
 
@@ -139,13 +169,13 @@
   // ---------- Nézetek ----------
   // A főoldal üres: a bejegyzéseket és a fiókokat csak keresésre lehet megtalálni.
   // (A mainPosts a keresésben él tovább; ha ide kell tartalom, itt lehet megjeleníteni.)
-  function showMain() {
+  function renderMain() {
     view.textContent = '';
     view.appendChild(el('p', 'tb-empty', T.homeEmpty));
     view.scrollTop = 0;
   }
 
-  function showResults(term, posts) {
+  function renderResults(term, posts) {
     view.textContent = '';
     view.appendChild(backButton());
     view.appendChild(el('h2', 'tb-h', T.searchResultTitle + term));
@@ -153,10 +183,10 @@
     view.scrollTop = 0;
   }
 
-  function showProfile(username) {
+  function renderProfile(username) {
     var user = userByUsername(username);
     if (!user) {
-      showMain();
+      navigate({ type: 'main' }, false);
       showToast(T.notFound);
       return;
     }
@@ -183,7 +213,7 @@
         // Az ismerős gombja a saját profiljára visz (ha létezik a fiók)
         var fb = el('button', 'tb-friend-name', f ? f.name : fname);
         fb.type = 'button';
-        if (f) fb.addEventListener('click', function () { showProfile(f.username); });
+        if (f) fb.addEventListener('click', function () { navigate({ type: 'profile', username: f.username }, true); });
         else fb.disabled = true;
         li.appendChild(fb);
         list.appendChild(li);
@@ -205,14 +235,14 @@
     var t = term.trim();
     clearBtn.hidden = t === '';
     if (t === '') {
-      showMain();
+      navigate({ type: 'main' }, false);
       return;
     }
 
-    // Pontos felhasználónév / név: a profilra visz
+    // Pontos felhasználónév / név: a profilra visz (új keresés, a verem törlődik)
     var user = userByExactName(t);
     if (user) {
-      showProfile(user.username);
+      navigate({ type: 'profile', username: user.username }, false);
       return;
     }
 
@@ -222,9 +252,9 @@
       return p.text.toLowerCase().indexOf(low) !== -1;
     }));
     if (found.length) {
-      showResults(t, found);
+      navigate({ type: 'results', term: t, posts: found }, false);
     } else {
-      showMain();
+      navigate({ type: 'main' }, false);
       showToast(T.notFound);
     }
   }
@@ -237,9 +267,9 @@
   clearBtn.addEventListener('click', function () {
     input.value = '';
     clearBtn.hidden = true;
-    showMain();
+    navigate({ type: 'main' }, false);
     input.focus();
   });
 
-  showMain();
+  navigate({ type: 'main' }, false);
 })();
