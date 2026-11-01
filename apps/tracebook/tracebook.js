@@ -141,6 +141,7 @@
   // (A mainPosts a keresésben él tovább; ha ide kell tartalom, itt lehet megjeleníteni.)
   function showMain() {
     view.textContent = '';
+    view.appendChild(el('p', 'tb-empty', T.homeEmpty));
     view.scrollTop = 0;
   }
 
@@ -179,8 +180,12 @@
       user.friends.forEach(function (fname) {
         var f = userByUsername(fname);
         var li = el('li');
-        // Az ismerős neve nem link: a profilt csak keresésre lehet megnyitni
-        li.appendChild(el('span', 'tb-friend-name', f ? f.name : fname));
+        // Az ismerős gombja a saját profiljára visz (ha létezik a fiók)
+        var fb = el('button', 'tb-friend-name', f ? f.name : fname);
+        fb.type = 'button';
+        if (f) fb.addEventListener('click', function () { showProfile(f.username); });
+        else fb.disabled = true;
+        li.appendChild(fb);
         list.appendChild(li);
       });
       view.appendChild(list);

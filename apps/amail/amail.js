@@ -76,24 +76,43 @@
     return null;
   }
 
-  // A címzett módja szerint: névválasztó, kérdésválasztó vagy szövegdoboz
+  // Szabad szöveges címzetteknek is van témaválasztójuk (pl. "Ki Horváth Márk?")
+  function topicsOf(p) {
+    return (p.replies || []).filter(function (r) { return r.id && r.label; });
+  }
+
+  // A címzett módja szerint: névválasztó, téma (kérdésválasztó) vagy szövegdoboz
   function updateCompose() {
     var p = currentPerson();
     var mode = p ? p.mode : 'free';
+    var topics = p && mode === 'free' ? topicsOf(p) : [];
     pickInput.textContent = '';
     // Névválasztónál több név is kijelölhető (Ctrl/Cmd-del), a többinél egy elem
     pickInput.multiple = mode === 'names';
     pickInput.size = mode === 'names' ? 6 : 1;
-    pickLabel.firstChild.textContent = mode === 'names' ? 'Nevek (Ctrl + kattintás: több is) ' : 'Válasz ';
+    pickLabel.firstChild.textContent = mode === 'names' ? 'Nevek (Ctrl + kattintás: több is) ' : 'Téma ';
     if (mode === 'names') {
       GAME_DATA.solution.answerChoices.forEach(function (n) { pickInput.appendChild(new Option(n, n)); });
     } else if (mode === 'options') {
       p.options.forEach(function (o) { pickInput.appendChild(new Option(o.label, o.id)); });
+    } else if (topics.length) {
+      pickInput.appendChild(new Option('— szabad szöveg —', ''));
+      topics.forEach(function (t) { pickInput.appendChild(new Option(t.label, t.id)); });
     }
-    var pick = mode === 'names' || mode === 'options';
-    pickLabel.hidden = !pick;
-    textLabel.hidden = pick;
+    pickInput.selectedIndex = 0;
+    pickLabel.hidden = !(mode === 'names' || mode === 'options' || topics.length);
+    syncText();
   }
+
+  // A szöveges doboz csak akkor látszik, ha nincs téma kiválasztva
+  function syncText() {
+    var p = currentPerson();
+    var mode = p ? p.mode : 'free';
+    var fixed = mode === 'names' || mode === 'options';
+    var topicPicked = !pickLabel.hidden && pickInput.value !== '';
+    textLabel.hidden = fixed || topicPicked;
+  }
+  pickInput.addEventListener('change', syncText);
   toInput.addEventListener('input', updateCompose);
 
   // ---------- Segédfüggvények ----------
@@ -242,15 +261,17 @@
   compose.addEventListener('submit', function (e) {
     e.preventDefault();
     var p = currentPerson();
-    var pick = p && (p.mode === 'names' || p.mode === 'options');
+    var mode = p ? p.mode : 'free';
+    // Ha a szöveges doboz rejtett, névválasztó vagy téma van kiválasztva
+    var useTopic = textLabel.hidden;
     var chosen = Array.prototype.filter.call(pickInput.options, function (o) { return o.selected; })
       .map(function (o) { return o.text; });
     sendMail({
       to: toInput.value.trim(),
       subject: subjectInput.value.trim(),
-      // Névválasztónál a kijelölt nevek (vesszővel), kérdésválasztónál a kérdés szövege megy el
-      body: pick ? chosen.join(', ') : textInput.value,
-      optionId: p && p.mode === 'options' ? pickInput.value : undefined
+      // Névválasztónál a kijelölt nevek (vesszővel), témánál a téma szövege megy el
+      body: useTopic ? chosen.join(', ') : textInput.value,
+      optionId: useTopic && mode !== 'names' ? pickInput.value : undefined
     });
   });
 
