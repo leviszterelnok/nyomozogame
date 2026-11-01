@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.31 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.32 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -46,6 +46,8 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 - **Betöltő szövegei:** `js/app.js` → `BOOT_LINES`.
 
 ## Változásnapló
+
+- **v0.2.32** – Bejelentkezés: az első hibás jelszó után tipp jelenik meg (6 számjegy, csak számok). Tracebook: nincs saját profilkép → névből generált pixeles identicon. Megnyitott profilok a főoldalon (csak megnyitás után, legfeljebb 8). Amail: küldés után 4 mp-ig tiltott a küldés gomb (spam ellen). Szöveg: Balog nyitóüzenete nem említi az időpontot; Fazekas kamera-törlése a napleírásába került; Nótár Marika reggeli üzenete egy bejegyzés; Szabó Beatrix felvétel-bejegyzés; Kovács Dániel új rendszergazda-bejegyzés; Varga Péter válasza elmondja, miért lett kirúgva Horváth Márk.
 
 - **v0.2.1** – Tracebook: a főoldal csak `main_menu_posts` bejegyzéseket mutat. A felhasználók saját bejegyzései (`users[].posts`) csak a profilon látszanak. Notes: a többi apphoz igazított (szürke, Tahoma) stílus.
 - **v0.2.4** – Prototípus: `tools/3d-monitor/` (index.html, style.css, monitor-3d.js). Three.js r128 CDN-ről (classic script, file:// alatt is fut). Kódból épített régi dobozos monitor, asztal, könyvespolc és távoli lámpa. Kattintásos kijelölés (raycast), képernyő-sík körvonala SVG-ben (`window.Monitor3D.screenInfo()`). A játék még a képpontos háttérrel fut.

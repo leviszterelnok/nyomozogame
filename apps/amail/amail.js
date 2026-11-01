@@ -55,7 +55,21 @@
 
   // ---------- Küldés: a játék dolgozza fel (js/contacts.js) ----------
   // mail: { to, subject, body, optionId }. Az eredményt "amail:status" üzenetben kapjuk vissza.
+  // Spam-védelem: küldés után rövid ideig a küldés gombok le vannak tiltva
+  var SEND_COOLDOWN_MS = 4000;
+  var sendLocked = false;
+  var sendUnlockTimer = null;
+  function setSendLocked(on) {
+    sendLocked = on;
+    sendDraftBtn.disabled = on;
+    document.getElementById('am-send').disabled = on;
+  }
+
   function sendMail(mail) {
+    if (sendLocked) return;
+    setSendLocked(true);
+    clearTimeout(sendUnlockTimer);
+    sendUnlockTimer = setTimeout(function () { setSendLocked(false); }, SEND_COOLDOWN_MS);
     window.parent.postMessage({ type: 'amail:send', mail: mail }, '*');
   }
 

@@ -169,6 +169,14 @@ html, body {
 
 .tb-empty { color: #666; font-style: italic; }
 
+/* Korábban megnyitott profilok a főoldalon */
+.tb-recent { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.tb-recent-item {
+  background: none; border: 1px solid #bbb; padding: 4px 10px;
+  font: inherit; cursor: pointer; text-align: left;
+}
+.tb-recent-item:hover { background: #eee; }
+
 /* Értesítés a jobb alsó sarokban */
 .tb-toast {
   position: absolute;
