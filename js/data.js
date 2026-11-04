@@ -126,7 +126,7 @@ var GAME_DATA = {
         ] },
       { username: "kovacs_daniel", name: "Kovács Dániel", avatar: "", friends: [],
         posts: [
-          { id: 402, date: "2026-10-19 09:00", text: "Nem bírom az új rendszergazdád. Horváth Márk sokkal jobb volt." }
+          { id: 402, date: "2026-10-19 09:00", text: "Nem bírom az új rendszergazdát. Horváth Márk sokkal jobb volt." }
         ] },
       { username: "kovacs_rita", name: "Kovács Rita", avatar: "", friends: [] },
       { username: "notar_marika", name: "Nótár Marika", avatar: "", friends: [] },
@@ -160,9 +160,9 @@ var GAME_DATA = {
       sendStub: "A küldés még nincs bekötve."
     },
     // A játékos saját címe (sendAmail alapértelmezett címzettje)
-    owner: "te@example.com",
+    owner: "beke_imre@amail.com",
     // Értesítés új levélnél (sendAmail felülírhatja): {from}, {subject} behelyettesíthető
-    notification: { text: "Értesítést kaptál az Amailtól", duration: 4000, dot: true, toast: true },
+    notification: { text: "Amail: Leveled jött!", duration: 4000, dot: true, toast: true },
 
     // Beérkezett levelek
     mails: [],
