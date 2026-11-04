@@ -212,12 +212,6 @@ var GAME_DATA = {
         options: [
           { id: "ki_volt_7", label: "Ki volt az irodában 7:00-kor?", subject: "Ki volt 7:00-kor?",
             reply: "7:00 körül Kovács Rita, Fazekas Zoltán és Nótár Marika volt az irodában." },
-          { id: "kamerak", label: "Mi lett a kamerákkal?", subject: "A kamerák",
-            reply: "Reggel 7 körül megszakadt a felvétel. A rendszer naplójában nem találtam magyarázatot." },
-          { id: "allas", label: "Van nyitott állásposzíció?", subject: "Állásposzíció",
-            reply: "Igen, a jelentkezések megnyíltak. Ha érdekel, küldj egy önéletrajzot." },
-          { id: "felvetel", label: "Felvételek 7 órakor", subject: "Felvételek 7 órakor",
-            reply: "Reggel 7 óra körül megszakad a felvétel. Egy percig nincs kép, utána újra működik." }
         ] },
       { name: "Fazekas Zoltán", address: "fazekas.zoltan@apex-epitkezes.example", mode: "free",
         replies: [
