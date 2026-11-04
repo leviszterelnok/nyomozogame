@@ -140,7 +140,7 @@ var GAME_DATA = {
       { id: 801, author: "balog_tibor", date: "2026-10-20 08:00",
         text: "A hónap dolgozója: Kovács Rita. Gratulálunk!" },
       { id: 501, author: "kovacs_rita", date: "2026-10-21 17:30",
-        text: "Jó volt a mai @horvath_mark stream" },
+        text: "Más is nagyon szereti Horváth Márk reggeli rádiós műsorát?" },
       { id: 601, author: "notar_marika", date: "2026-10-21 07:40",
         text: "A mai reggelem... megérkeztem munkába, és már reggel egyből elrontotta a napomat Kovács Rita: a folyosón állt, a telefonját nézte, és úgy tett, mintha nem hallaná, hogy köszönök neki. Fazekas Zoltán pont akkor jött ki a szerverszobából, és csak annyit mondott: „Most nem érek rá.” Azóta sem tudom, mit kerestek ott reggel hét körül. Ha valakinek van ötlete, mit lehet ilyenkor csinálni, szóljon nyugodtan." }
     ]
@@ -215,27 +215,27 @@ var GAME_DATA = {
         ] },
       { name: "Fazekas Zoltán", address: "fazekas.zoltan@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért kirúgták. Azóta nem dolgozik nálunk." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Varga Péter elárulta, hogy rádióban szidta a céget, ezért kirúgták. Azóta nem dolgozik nálunk." }
         ] },
       { name: "Szabó Beatrix", address: "szabo.beatrix@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márkot? Régi rendszergazda volt. Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért rúgták ki. Ennél többet nem tudok róla." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márkot? Régi rendszergazda volt. Varga Péter elárulta, hogy rádióban szidta a céget, ezért rúgták ki. Ennél többet nem tudok róla." }
         ] },
       { name: "Kovács Dániel", address: "kovacs.daniel@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért rúgták ki. A rendszerekhez nem értek, azt Zoltántól kérdezd." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? A régi rendszergazdánk volt. Varga Péter elárulta, hogy rádióban szidta a céget, ezért rúgták ki. A rendszerekhez nem értek, azt Zoltántól kérdezd." }
         ] },
       { name: "Kovács Rita", address: "kovacs.rita@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Személyesen nem ismerem. Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért rúgták ki." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Személyesen nem ismerem. Varga Péter elárulta, hogy rádióban szidta a céget, ezért rúgták ki." }
         ] },
       { name: "Nótár Marika", address: "notar.marika@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Varga Péter elárulta, hogy streamen rosszat beszélt a cégről, ezért rúgták ki. Többet nem tudok." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Varga Péter elárulta, hogy rádióban szidta a céget, ezért rúgták ki. Többet nem tudok." }
         ] },
       { name: "Varga Péter", address: "varga.peter@apex-epitkezes.example", mode: "free",
         replies: [
-          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Ő volt a régi rendszergazdánk. Én szóltam a vezetésnek, hogy a streamjében rosszat mondott a cégről, és emiatt kirúgták." }
+          { id: "horvath", label: "Ki Horváth Márk?", match: ["horvath mark"], text: "Horváth Márk? Ő volt a régi rendszergazdánk. Én szóltam a vezetésnek, hogy rádióban szidta a céget, és emiatt kirúgták." }
         ] },
       { name: "Horváth Márk", address: "horvath.mark@apex-epitkezes.example", mode: "free",
         replies: [
