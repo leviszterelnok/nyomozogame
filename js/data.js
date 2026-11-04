@@ -20,7 +20,7 @@ var GAME_DATA = {
     // Alapértelmezés: a teljes ablak (0,0 -> 100,100).
     // background: az ASZTAL háttere: szín (pl. "#008080") vagy kép (pl. "assets/hatter.png").
     // loginBackground: a BEJELENTKEZŐ képernyő háttere, különállítható: szín vagy kép (ha hiányzik, fekete).
-    area: { x1: 17.2, y1: 6.4, x2: 83.8, y2: 75.0, background: "assets/background.png", loginBackground: "assets/background.png" },
+    area: { x1: 17.2, y1: 6.4, x2: 83.8, y2: 75.0, background: "assets/background.png", loginBackground: "#000000" },
 
     // Hörcsög a ketrecben (3D monitor főoldal, tools nélkül): hoverre ezt a nevet írja ki.
     hamster: { name: "Gombóc" },
