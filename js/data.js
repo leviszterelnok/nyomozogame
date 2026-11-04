@@ -18,8 +18,9 @@ var GAME_DATA = {
     // Játéktér területe: honnan (x1, y1) hová (x2, y2) tart a képernyő.
     // Számok = a böngészőablak %-a (pl. 10 = 10%). "120px" alakú szöveg = pixel.
     // Alapértelmezés: a teljes ablak (0,0 -> 100,100).
-    // background: a kijelző háttere: szín (pl. "#000") vagy kép (pl. "assets/hatter.png").
-    area: { x1: 17.2, y1: 6.4, x2: 83.8, y2: 75.0, background: "assets/background.png" },
+    // background: az ASZTAL háttere: szín (pl. "#008080") vagy kép (pl. "assets/hatter.png").
+    // loginBackground: a BEJELENTKEZŐ képernyő háttere, különállítható: szín vagy kép (ha hiányzik, fekete).
+    area: { x1: 17.2, y1: 6.4, x2: 83.8, y2: 75.0, background: "assets/background.png", loginBackground: "assets/background.png" },
 
     // Hörcsög a ketrecben (3D monitor főoldal, tools nélkül): hoverre ezt a nevet írja ki.
     hamster: { name: "Gombóc" },
@@ -42,7 +43,7 @@ var GAME_DATA = {
   // appicon   : az ikon képe (assets/ alatt). Ha hiányzik, szürke alap látszik.
   // launch    : az app azonosítója. Jelenleg csak a konzolba íródik.
   desktop: {
-    // Asztal háttere: szín (pl. "#008080") vagy kép (pl. "assets/hatter.png")
+    // Tartalék: csak akkor használt, ha a config.area.background nincs megadva (az asztal háttere ott állítandó).
     background: "#008080",
     // Ikonok látható része: a képek üres szélét a játék levágja, így az ikon kitölti a helyét.
     // Kulcs: az ikon képe (appicon). box: [x1, y1, x2, y2] a látható rész pixelben; size: a kép mérete.

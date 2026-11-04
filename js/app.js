@@ -66,8 +66,9 @@
     stage.style.width = 'calc(' + r + ' - ' + l + ')';
     stage.style.height = 'calc(' + b + ' - ' + t + ')';
 
-    // Kijelző háttere: szín vagy kép (képnél a fájl neve .png/.jpg/... végű)
-    var bg = a.background || '#000';
+    // Bejelentkező képernyő háttere (area.loginBackground): szín vagy kép.
+    // Az asztal háttere külön van kezelve (applyDesktopBackground, area.background).
+    var bg = a.loginBackground || '#000';
     stage.style.background = /\.(png|jpe?g|gif|webp)$/i.test(bg)
       ? 'url("' + bg + '") center / cover no-repeat'
       : bg;
@@ -416,9 +417,10 @@
     desktopScreen.style.height = cssSize(d.height);
   }
 
-  // Asztal háttere (desktop.background): szín vagy kép
+  // Asztal háttere: szín vagy kép. Elsőként config.area.background, ha az nincs, desktop.background.
   function applyDesktopBackground() {
-    var bg = (data.desktop && data.desktop.background) || '#008080';
+    var a = (data.config && data.config.area) || {};
+    var bg = a.background || (data.desktop && data.desktop.background) || '#008080';
     desktopScreen.style.background = /\.(png|jpe?g|gif|webp)$/i.test(bg)
       ? 'url("' + bg + '") center / cover no-repeat'
       : bg;
