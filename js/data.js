@@ -19,7 +19,7 @@ var GAME_DATA = {
     // Számok = a böngészőablak %-a (pl. 10 = 10%). "120px" alakú szöveg = pixel.
     // Alapértelmezés: a teljes ablak (0,0 -> 100,100).
     // background: a kijelző háttere: szín (pl. "#000") vagy kép (pl. "assets/hatter.png").
-    area: { x1: 17.2, y1: 6.4, x2: 83.8, y2: 75.0, background: "assets/backround.png" },
+    area: { x1: 17.2, y1: 6.4, x2: 83.8, y2: 75.0, background: "assets/background.png" },
 
     // Hörcsög a ketrecben (3D monitor főoldal, tools nélkül): hoverre ezt a nevet írja ki.
     hamster: { name: "Gombóc" },
