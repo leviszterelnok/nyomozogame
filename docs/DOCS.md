@@ -1,6 +1,6 @@
 # Nyomozós játék – dokumentáció
 
-**Verzió:** v0.2.33 (alap: monitor → bejelentkezés → betöltő → asztal)
+**Verzió:** v0.2.34 (alap: monitor → bejelentkezés → betöltő → asztal)
 **Téma:** digitális lábnyom
 **Technológia:** tiszta HTML, CSS, JavaScript – nincs build, nincs külső könyvtár
 
@@ -83,6 +83,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 - **v0.2.3** – Új `js/game_logic.js` (`Game`): az asztal megjelenésétől indul, az első levelet 30 mp múlva küldi (`game.introMailDelay`, `game.introMail` a data.js-ben). Haladás: `Game.setFlag` / `Game.hasFlag`.
 - **v0.2.2** – Asztali ikonok kisebbek, rácson (x/y már nincs). Új `js/mail.js`: `sendAmail(mail, opts)` levelet ad a beérkezetthez; piros pötty az Amail ikonján, szöveges értesítés a jobb alsó sarokban. Az értesítés szövege és ideje `amail.notification`-ben vagy `sendAmail` opts-ban állítható. Az Amail megnyitásakor a pötty eltűnik.
 - **v0.2.0** – Asztal háttere (`desktop.background`). Ablakkezelő (`js/wm.js`, `css/wm.css`): húzható, átméretezhető ablakok, csak az asztal területén belül, apponként 1 ablak. Három app külön mappában (`apps/tracebook`, `apps/amail`, `apps/notes`), mindegyik külön HTML/CSS/JS. Tracebook: főoldal, keresés, profil, bejegyzések (`tracebook.main_menu_posts`, felhasználónként `users[].posts`). Amail: lista, szűrés, levél nézet, válasz, `sendMail()` (még nincs bekötve). Notes: egyfájlos jegyzet, localStorage-ba mentve.
+- **v0.2.34** – Háttérkezelés szétválasztva: `config.area.background` az asztal hátterét adja, `config.area.loginBackground` a bejelentkező képernyő hátterét (`js/app.js` → `applyArea`, `applyDesktopBackground`). `desktop.background` csak tartalék.
 - **v0.1.5** – Bekapcsoló gomb helye és mérete a `config.powerButton`-ban. A gomb jól látható (sötét alap, fehér keret). A képpont-mérő bekerült: `tools/kepponto-mero.html`.
 - **v0.1.4** – Javítás: a kijelző háttere alapból átlátszó, így a monitor-kép látszik. A kikapcsolt monitor (`#screen-off`) fekete.
 - **v0.1.3** – A monitor-kép (`config.images.backdrop`) mindig látszik, a bekapcsoló gomb hozzá igazodik. A kijelző (`config.area`) háttere beállítható (`background`). Fontos ikon: sárga outline, nem "!" jelölés. Nem fontos ikon: szürke kijelölés. Minden kép a `data.js`-ben szerkeszthető.
@@ -92,7 +93,7 @@ Az adatok a `js/data.js` fájlban vannak, nincs `fetch()`.
 
 ## Appok adatai (js/data.js)
 
-- `desktop.background`: asztal háttere.
+- `config.area.background`: asztal háttere. `config.area.loginBackground`: bejelentkező képernyő háttere. `desktop.background`: csak tartalék, ha az előbbi hiányzik.
 - `apps`: az appok címe, fájlja és kezdeti mérete. Új app: itt és a `desktop.icons`-ban.
 - `tracebook.users`: felhasználók (`username`, `name`, `avatar`, `friends`, opcionálisan `posts`). A `posts` a felhasználó saját bejegyzései: csak a profilján látszanak, a főoldalon és a szövegkeresésben nem.
 - `tracebook.main_menu_posts`: a főoldali bejegyzések (`id`, `author`, `date`, `text`). Mindig ezek látszanak a főoldalon, a szerzőjük profilján is megjelennek. A szövegbe `<img src="assets/kep.png">` írható. `tracebook.texts`: minden felirat, a nem létező felhasználó üzenete (`notFound`) és az időtartama (`notFoundMs`, ms).
